@@ -24,6 +24,8 @@ import { getProcessById } from '~/lib/services/spawn';
 import type { Process } from '~/types';
 
 import { PackagePlus } from 'lucide-react';
+import ConnectButton from '../connect-button';
+import { sendMessage } from '~/lib/services/message';
 
 const ProcessSpawner = () => {
   const { code } = useEditor();
@@ -135,12 +137,20 @@ const ProcessSpawner = () => {
       <AddProcess />
       <Button
         onClick={async () => {
-          const res = await api.run(code);
-          console.log(res);
+          const process = activeProcess?.txId ?? null;
+          if (!process) {
+            toast.error('Process not found');
+            return;
+          }
+          const res = await sendMessage({ data: code, process });
+          toast.success('Message Sent', {
+            description: <p className='break-all'>Response: {res}.</p>,
+          });
         }}
       >
         Run
       </Button>
+      <ConnectButton />
     </div>
   );
 };

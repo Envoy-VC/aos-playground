@@ -26,6 +26,7 @@ import {
 import { darkTheme, lightTheme } from '~/lib/themes';
 import { Link } from 'react-router-dom';
 import ProcessSpawner from '../process-spawner';
+import Messages from '../messages';
 
 const CodeSandbox = () => {
   const { code, setCode } = useEditor();
@@ -120,7 +121,6 @@ const CodeSandbox = () => {
           </div>
           <Editor
             language='lua'
-            height='100%'
             value={code}
             onMount={handleMount}
             options={{
@@ -138,7 +138,7 @@ const CodeSandbox = () => {
           collapsible
           collapsedSize={1}
         >
-          messages
+          <Messages />
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
