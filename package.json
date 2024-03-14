@@ -13,17 +13,37 @@
     "format": "prettier . --write --cache"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.4",
     "@irys/sdk": "^0.1.16",
+    "@monaco-editor/react": "^4.6.0",
+    "@permaweb/ao-loader": "^0.0.23",
+    "@permaweb/aoconnect": "^0.0.48",
+    "@radix-ui/react-dialog": "^1.0.5",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-menubar": "^1.0.4",
+    "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-slot": "^1.0.2",
+    "arweave-wallet-kit": "^1.0.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "lucide-react": "^0.358.0",
+    "monaco-editor": "^0.47.0",
+    "next-themes": "^0.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.4",
+    "react-hook-form": "^7.51.0",
+    "react-resizable-panels": "^2.0.13",
     "react-router-dom": "^6.22.3",
+    "sonner": "^1.4.3",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
-    "vite-tsconfig-paths": "^4.3.2"
+    "usehooks-ts": "^3.0.1",
+    "vaul": "^0.9.0",
+    "vite-plugin-comlink": "^4.0.2",
+    "vite-tsconfig-paths": "^4.3.2",
+    "zod": "^3.22.4",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/node": "^20.11.27",
@@ -46,7 +66,9 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.2",
     "vite": "^5.1.6",
-    "vite-plugin-image-optimizer": "^1.1.7"
+    "vite-plugin-image-optimizer": "^1.1.7",
+    "vite-plugin-top-level-await": "^1.4.1",
+    "vite-plugin-wasm": "^3.3.0"
   },
   "config": {
     "commitizen": {

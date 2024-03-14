@@ -3,13 +3,23 @@ import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import UnheadVite from '@unhead/addons/vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import { comlink } from 'vite-plugin-comlink';
 
 import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '',
-  plugins: [react(), UnheadVite(), tsconfigPaths(), ViteImageOptimizer()],
+  plugins: [
+    react(),
+    tsconfigPaths(),
+    comlink(),
+    UnheadVite(),
+    ViteImageOptimizer(),
+  ],
+  worker: {
+    plugins: () => [comlink()],
+  },
   server: {
     port: 3000,
   },
