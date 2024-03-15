@@ -18,8 +18,9 @@ const Messages = () => {
         process:
           activeProcess?.txId ?? '5SGJUlPwlenkyuG9-xWh0Rcf0azm8XEd5RBTiutgWAg',
         limit: 100,
-        sort: 'DESC',
+        sort: 'ASC',
       });
+      console.log(newMessages);
       return newMessages;
     },
     {
@@ -28,13 +29,14 @@ const Messages = () => {
   );
   if (data)
     return (
-      <ScrollArea className='h-full border p-4'>
+      <ScrollArea className='h-full px-4 pt-2'>
         <div className='overflow-scroll'>
           {data.edges.map((e) => {
             const res = e.node.Output.data;
             const data = typeof res === 'string' ? res : res.output;
             return (
               <div>
+                aos&gt;{'\t'}
                 <Ansi className=' whitespace-pre-line'>{String(data)}</Ansi>
               </div>
             );

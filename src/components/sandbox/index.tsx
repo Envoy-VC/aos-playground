@@ -27,9 +27,10 @@ import { darkTheme, lightTheme } from '~/lib/themes';
 import { Link } from 'react-router-dom';
 import ProcessSpawner from '../process-spawner';
 import Messages from '../messages';
+import Tabs from '../tabs';
 
 const CodeSandbox = () => {
-  const { code, setCode } = useEditor();
+  const { code, setCode, setMonaco } = useEditor();
   const { theme } = useTheme();
   const monaco = useMonaco();
 
@@ -39,10 +40,11 @@ const CodeSandbox = () => {
 
   const handleMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
     editorRef.current = editor;
-
+    setMonaco(editor);
     const newTheme = theme === 'dark' ? 'ao-dark' : 'ao-light';
     editorRef.current.updateOptions({
       theme: newTheme,
+      fontSize: 15,
     });
   };
 
@@ -65,72 +67,21 @@ const CodeSandbox = () => {
   }, [theme, monaco]);
 
   return (
-    <div className='flex h-screen flex-col gap-4 rounded-xl bg-[#EEEEEE] pb-4 dark:bg-[#0A0A0A]'>
+    <div className='flex h-screen w-full flex-col gap-4'>
+      <Tabs />
       <ResizablePanelGroup direction='vertical'>
         <ResizablePanel minSize={50} defaultSize={75}>
-          <div className='flex flex-col justify-between sm:flex-row sm:items-center'>
-            <Menubar className='w-fit rounded-t-xl border-none bg-[#EEEEEE] dark:bg-[#0A0A0A]'>
-              <MenubarMenu>
-                <MenubarTrigger>File</MenubarTrigger>
-                <MenubarContent>
-                  <MenubarItem>
-                    Open File <MenubarShortcut>⌘O</MenubarShortcut>
-                  </MenubarItem>
-                  <MenubarItem>
-                    Save as <MenubarShortcut>⌘⇧S</MenubarShortcut>
-                  </MenubarItem>
-                  <MenubarSeparator />
-                  <MenubarSub>
-                    <MenubarSubTrigger>Share</MenubarSubTrigger>
-                    <MenubarSubContent>
-                      <MenubarItem>Email link</MenubarItem>
-                      <MenubarItem>Messages</MenubarItem>
-                      <MenubarItem>Notes</MenubarItem>
-                    </MenubarSubContent>
-                  </MenubarSub>
-                  <MenubarSeparator />
-                  <MenubarItem>
-                    Print... <MenubarShortcut>⌘P</MenubarShortcut>
-                  </MenubarItem>
-                </MenubarContent>
-              </MenubarMenu>
-              <MenubarMenu>
-                <MenubarTrigger>Edit</MenubarTrigger>
-                <MenubarContent>
-                  <MenubarItem>
-                    Send message <MenubarShortcut>⌘ Enter</MenubarShortcut>
-                  </MenubarItem>
-                  <MenubarItem>
-                    Open Output <MenubarShortcut>⌘O</MenubarShortcut>
-                  </MenubarItem>
-                  <MenubarSeparator />
-                  <MenubarItem>
-                    Refresh State <MenubarShortcut>⌘⇧R</MenubarShortcut>
-                  </MenubarItem>
-                </MenubarContent>
-              </MenubarMenu>
-              <MenubarMenu>
-                <MenubarTrigger asChild className='cursor-pointer'>
-                  <Link to='/playground' target='_blank'>
-                    Go to Playground ↗
-                  </Link>
-                </MenubarTrigger>
-              </MenubarMenu>
-            </Menubar>
-            <ProcessSpawner />
-          </div>
           <Editor
             language='lua'
             value={code}
             onMount={handleMount}
             options={{
-              fontSize: 15,
               wordWrap: 'on',
             }}
             onChange={(v) => setCode(v ?? '')}
           />
         </ResizablePanel>
-        <ResizableHandle className='bg-blue-200' />
+        <ResizableHandle className='bg-neutral-200 dark:bg-neutral-700' />
         <ResizablePanel
           defaultSize={25}
           maxSize={50}

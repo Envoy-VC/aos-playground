@@ -45,6 +45,26 @@ const ProcessSpawner = () => {
     new URL('./worker', import.meta.url)
   );
 
+  // event handler for command + enter click
+  // React.useEffect(() => {
+  //   const handler = async (e: KeyboardEvent) => {
+  //     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+  //       e.preventDefault();
+  //       const process = activeProcess?.txId ?? null;
+  //       if (!process) {
+  //         toast.error('Process not found');
+  //         return;
+  //       }
+  //       const res = await sendMessage({ data: code, process });
+  //       toast.success('Message Sent', {
+  //         description: <p className='break-all'>Response: {res}.</p>,
+  //       });
+  //     }
+  //   };
+  //   window.addEventListener('keydown', handler);
+  //   return () => window.removeEventListener('keydown', handler);
+  // }, [activeProcess, code]);
+
   const onValChange = (txId: string) => {
     const process = processes.find((p) => p.txId === txId);
     if (process) {

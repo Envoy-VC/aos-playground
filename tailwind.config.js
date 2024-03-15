@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: 'class',
+  darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -20,6 +20,9 @@ module.exports = {
     extend: {
       fontFamily: {
         geist: ['Geist', 'sans-serif'],
+      },
+      colors: {
+        dark: '#1C1E28',
       },
       keyframes: {
         'accordion-down': {

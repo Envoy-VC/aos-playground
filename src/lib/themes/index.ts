@@ -5,7 +5,7 @@ export const darkTheme: monaco.editor.IStandaloneThemeData = {
   inherit: true,
   rules: [
     {
-      background: '0A0A0A',
+      background: '1C1E28',
       token: '',
     },
     {
@@ -237,7 +237,7 @@ export const darkTheme: monaco.editor.IStandaloneThemeData = {
   ],
   colors: {
     'editor.foreground': '#C5C8C6',
-    'editor.background': '#0A0A0A',
+    'editor.background': '#1C1E28',
     'editor.selectionBackground': '#373B41',
     'editor.lineHighlightBackground': '#282A2E',
     'editorCursor.foreground': '#AEAFAD',
