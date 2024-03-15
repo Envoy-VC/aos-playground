@@ -242,6 +242,7 @@ export const darkTheme: monaco.editor.IStandaloneThemeData = {
     'editor.lineHighlightBackground': '#282A2E',
     'editorCursor.foreground': '#AEAFAD',
     'editorWhitespace.foreground': '#4B4E55',
+    'editorGutter.background': '#21232f',
   },
 };
 
@@ -250,7 +251,7 @@ export const lightTheme: monaco.editor.IStandaloneThemeData = {
   inherit: true,
   rules: [
     {
-      background: 'EEEEEEEB',
+      background: 'ffffff',
       token: '',
     },
     {
@@ -358,10 +359,11 @@ export const lightTheme: monaco.editor.IStandaloneThemeData = {
   ],
   colors: {
     'editor.foreground': '#000000',
-    'editor.background': '#EEEEEEEB',
+    'editor.background': '#ffffff',
     'editor.selectionBackground': '#BAD6FD',
     'editor.lineHighlightBackground': '#0000001A',
     'editorCursor.foreground': '#000000',
     'editorWhitespace.foreground': '#B3B3B3F4',
+    'editorGutter.background': '#f9f9f9',
   },
 };

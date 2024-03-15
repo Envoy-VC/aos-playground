@@ -2,7 +2,7 @@ import React from 'react';
 import type * as monaco from 'monaco-editor';
 import Editor, { useMonaco } from '@monaco-editor/react';
 
-import { useTheme } from '../theme-provider';
+import { useTheme } from '~/components/theme-provider';
 import { useEditor } from '~/lib/stores/editor';
 
 import {
@@ -13,10 +13,9 @@ import {
 
 import { darkTheme, lightTheme } from '~/lib/themes';
 
-import Messages from '../messages';
-import Tabs from '../tabs';
+import { Messages, Tabs } from '~/components';
 
-const CodeSandbox = () => {
+const MainPanel = () => {
   const { code, setCode, setMonaco } = useEditor();
   const { theme } = useTheme();
   const monaco = useMonaco();
@@ -54,10 +53,16 @@ const CodeSandbox = () => {
   }, [theme, monaco]);
 
   return (
-    <div className='flex h-screen w-full flex-col gap-4'>
+    <div className='flex h-screen w-full flex-col'>
       <Tabs />
       <ResizablePanelGroup direction='vertical'>
-        <ResizablePanel minSize={50} defaultSize={75}>
+        <ResizablePanel
+          minSize={10}
+          defaultSize={75}
+          maxSize={100}
+          collapsible
+          collapsedSize={0}
+        >
           <Editor
             language='lua'
             value={code}
@@ -68,13 +73,13 @@ const CodeSandbox = () => {
             onChange={(v) => setCode(v ?? '')}
           />
         </ResizablePanel>
-        <ResizableHandle className='bg-neutral-200 dark:bg-neutral-700' />
+        <ResizableHandle withHandle />
         <ResizablePanel
           defaultSize={25}
-          maxSize={50}
+          maxSize={100}
           minSize={20}
           collapsible
-          collapsedSize={1}
+          collapsedSize={0}
         >
           <Messages />
         </ResizablePanel>
@@ -83,4 +88,4 @@ const CodeSandbox = () => {
   );
 };
 
-export default CodeSandbox;
+export default MainPanel;

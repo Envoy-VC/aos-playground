@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
   Tooltip,
   TooltipContent,
@@ -31,7 +29,7 @@ const Tabs = () => {
   };
 
   return (
-    <div className='flex h-full max-h-[6dvh] flex-row items-center justify-between border-b border-neutral-200 px-4 dark:border-neutral-700'>
+    <div className='flex h-full max-h-[4dvh] flex-row items-center justify-between border-b border-neutral-200 px-4 dark:border-neutral-700'>
       <div className='flex flex-row items-center'>
         <TooltipProvider>
           <Tooltip>
@@ -45,7 +43,7 @@ const Tabs = () => {
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Zoom-out</p>
+              <p>Zoom out</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -61,7 +59,7 @@ const Tabs = () => {
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Zoom-in</p>
+              <p>Zoom in</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

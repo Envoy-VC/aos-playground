@@ -10,13 +10,20 @@ import { useSidebar } from '~/lib/stores';
 import { Files, Bolt, Cpu } from 'lucide-react';
 
 import PlaygroundLogo from '~/components/logo';
+import { cn } from '~/lib/utils';
 
 const IconPanel = () => {
-  const { activeKey, panel, setActiveKey } = useSidebar();
+  const { activeKey, panel, isCollapsed, setActiveKey, setIsCollapsed } =
+    useSidebar();
   return (
-    <div className='h-screen'>
+    <div
+      className={cn(
+        'h-screen border-neutral-200 bg-[#f9f9f9] dark:border-neutral-700 dark:bg-[#21232f]',
+        isCollapsed ? 'border-none' : 'border-r'
+      )}
+    >
       <PlaygroundLogo />
-      <div className='flex h-full w-fit flex-col justify-between border-r border-neutral-200 py-2 dark:border-neutral-700'>
+      <div className={cn('flex h-full w-fit flex-col justify-between py-2')}>
         <div className='flex flex-col gap-3'>
           {sidebarItems.map((item) => {
             const Icon = item.icon;
@@ -29,14 +36,20 @@ const IconPanel = () => {
                         <div className='absolute left-0 top-0 h-full w-[4px] rounded-r-full bg-blue-500'></div>
                       )}
                       <Icon
-                        size={28}
+                        size={24}
                         absoluteStrokeWidth
-                        className='text-neutral-500 dark:text-neutral-300'
+                        className={cn(
+                          item.key === activeKey
+                            ? 'text-neutral-900 dark:text-neutral-50'
+                            : 'text-neutral-500 dark:text-neutral-400'
+                        )}
                         onClick={() => {
                           if (item.key === activeKey) {
                             panel?.isCollapsed()
                               ? panel?.expand()
                               : panel?.collapse();
+
+                            setIsCollapsed(!!panel?.isCollapsed());
                           } else {
                             setActiveKey(item.key);
                           }

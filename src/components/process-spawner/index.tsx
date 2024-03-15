@@ -5,7 +5,7 @@ import { useLocalStorage, useIsMounted } from 'usehooks-ts';
 import { toast } from 'sonner';
 import { useEditor } from '~/lib/stores/editor';
 
-type WorkerModule = typeof import('./worker');
+// type WorkerModule = typeof import('./worker');
 
 import AddProcess from './AddProcess';
 import {
@@ -41,9 +41,9 @@ const ProcessSpawner = () => {
 
   const isMounted = useIsMounted();
 
-  const api = new ComlinkSharedWorker<WorkerModule>(
-    new URL('./worker', import.meta.url)
-  );
+  // const api = new ComlinkSharedWorker<WorkerModule>(
+  //   new URL('./worker', import.meta.url)
+  // );
 
   // event handler for command + enter click
   // React.useEffect(() => {

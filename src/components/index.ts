@@ -1,4 +1,5 @@
 import SEO from './seo';
+import Messages from './messages';
 import Tabs from './tabs';
 
-export { SEO, Tabs };
+export { SEO, Messages, Tabs };
