@@ -6,26 +6,13 @@ import { useTheme } from '../theme-provider';
 import { useEditor } from '~/lib/stores/editor';
 
 import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
-  MenubarTrigger,
-} from '~/components/ui/menubar';
-import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '~/components/ui/resizable';
 
 import { darkTheme, lightTheme } from '~/lib/themes';
-import { Link } from 'react-router-dom';
-import ProcessSpawner from '../process-spawner';
+
 import Messages from '../messages';
 import Tabs from '../tabs';
 

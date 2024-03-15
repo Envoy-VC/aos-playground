@@ -1,22 +1,23 @@
 import { create } from 'zustand';
 
 import { sidebarItems } from '~/components/sidebar';
+import { ImperativePanelHandle } from 'react-resizable-panels';
 
 type Values = (typeof sidebarItems)[number]['key'];
 
 type State = {
   activeKey: Values;
-  isOpen: boolean;
+  panel: ImperativePanelHandle | null;
 };
 
 interface Actions {
   setActiveKey: (activeKey: Values) => void;
-  setIsOpen: (isOpen: boolean) => void;
+  setPanel: (panel: ImperativePanelHandle) => void;
 }
 
-export const useSidebar = create<State & Actions>((set) => ({
+export const useSidebar = create<State & Actions>((set, get) => ({
   activeKey: 'files',
-  isOpen: true,
+  panel: null,
   setActiveKey: (activeKey) => set({ activeKey }),
-  setIsOpen: (isOpen) => set({ isOpen }),
+  setPanel: (panel) => set({ panel }),
 }));
