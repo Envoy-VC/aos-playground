@@ -1,10 +1,14 @@
-import type { Process, Tag } from '~/types';
+import type { Tag } from '~/types';
+import { Process } from '../db';
 
-import { AOS_MODULE, AO_SCHEDULER } from '../utils';
+import { AO_SCHEDULER } from '../utils';
 import { spawn, createDataItemSigner } from '@permaweb/aoconnect';
 
 interface Props {
   name?: string;
+  module?: string;
+  scheduler?: string;
+  owner: string;
 }
 
 const getRandomIntInclusive = (min: number, max: number) => {
@@ -16,24 +20,36 @@ const getRandomIntInclusive = (min: number, max: number) => {
   return Math.floor(randomNumber * (max - min + 1)) + min;
 };
 
-export const spawnProcess = async ({ name }: Props) => {
+export const spawnProcess = async ({
+  name,
+  module,
+  scheduler,
+  owner,
+}: Props) => {
   const randomName = `Playground: ${getRandomIntInclusive(1000, 999999)}`;
   const tags: Tag[] = [
     { name: 'App-Name', value: 'aos' },
     { name: 'Name', value: name ?? randomName },
   ];
 
+  const latestModule = await getLatestModule();
+
   const res = await spawn({
-    module: AOS_MODULE,
-    scheduler: AO_SCHEDULER,
+    module: module ?? latestModule,
+    scheduler: scheduler ?? AO_SCHEDULER,
     tags,
     signer: createDataItemSigner(window.arweaveWallet),
   });
 
-  return {
+  const data: Process = {
     id: res,
     name: name ?? randomName,
+    module: module ?? latestModule,
+    scheduler: scheduler ?? AO_SCHEDULER,
+    owner,
   };
+
+  return data;
 };
 
 export const getProcessById = async (id: string) => {
@@ -104,11 +120,27 @@ export const getProcessById = async (id: string) => {
     tags.find((tag) => tag.name === 'Name')?.value ??
     `Playground: ${getRandomIntInclusive(1000, 999999)}`;
 
+  const module = tags.find((tag) => tag.name === 'Module')?.value ?? '';
+  const scheduler = tags.find((tag) => tag.name === 'Scheduler')?.value ?? '';
+
   const process: Process = {
-    txId: id,
+    id,
     owner: transaction.owner.address,
     name,
+    module,
+    scheduler,
   };
 
   return process;
+};
+
+export const getLatestModule = async () => {
+  try {
+    const res = (await fetch(
+      'https://raw.githubusercontent.com/permaweb/aos/main/package.json'
+    ).then((res) => res.json())) as { aos: { module: string } };
+    return res.aos.module;
+  } catch (error) {
+    throw new Error('Failed to fetch latest module');
+  }
 };
