@@ -25,6 +25,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/components/process-spawner/worker.ts"],
+  "include": ["src", "src/sw/worker.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
