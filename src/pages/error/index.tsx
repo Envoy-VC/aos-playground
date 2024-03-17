@@ -1,0 +1,43 @@
+import { Button } from '~/components/ui/button';
+import { toast } from 'sonner';
+
+import { db } from '~/lib/db';
+
+import { Link } from 'react-router-dom';
+
+const ErrorPage = () => {
+  const reset = async () => {
+    try {
+      await db.delete();
+      toast.success('Cache reset successfully');
+      window.location.reload();
+    } catch (error) {
+      toast.error('Failed to reset cache');
+    }
+  };
+  return (
+    <div className='flex h-screen w-full items-center justify-center'>
+      <div className='flex flex-col items-center gap-2'>
+        <img
+          src='https://cdni.iconscout.com/illustration/premium/thumb/internal-server-error-500-9836402-8036602.png'
+          className='aspect-square w-full max-w-sm'
+        />
+        <div>
+          <h1 className='font-neutral-700 text-xl font-medium'>
+            Oops! Something went wrong
+          </h1>
+        </div>
+        <div className='flex flex-row items-center gap-3'>
+          <Button onClick={reset}>Reset cache</Button>
+          <Button variant='outline' asChild>
+            <Link to='mailto:vedantchainani1084@gmail.com'>
+              Contact Support
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ErrorPage;
