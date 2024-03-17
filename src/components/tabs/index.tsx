@@ -11,7 +11,7 @@ import { useEditor } from '~/lib/stores';
 import { db } from '~/lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 
-import { Play, ZoomIn, ZoomOut } from 'lucide-react';
+import { ZoomIn, ZoomOut } from 'lucide-react';
 import { Button } from '../ui/button';
 import ConnectButton from '../connect-button';
 import Run from './Run';

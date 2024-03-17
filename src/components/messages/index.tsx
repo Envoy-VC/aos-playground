@@ -4,7 +4,6 @@ import { results } from '@permaweb/aoconnect';
 
 import Ansi from 'ansi-to-react';
 
-import { ScrollArea } from '~/components/ui/scroll-area';
 import type { AoResult, AoResults } from '~/types';
 
 import { Process } from '~/lib/db';

@@ -18,7 +18,7 @@ import { cn } from '~/lib/utils';
 import { useCopyToClipboard } from 'usehooks-ts';
 import { useEditor } from '~/lib/stores';
 
-const FilePill = ({ name, path, content, parentFolder }: EditorFile) => {
+const FilePill = ({ name, path, content }: EditorFile) => {
   const renameRef = React.useRef<HTMLInputElement>(null);
   const { setActivePath } = useEditor();
 

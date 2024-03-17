@@ -8,8 +8,6 @@ import { Toaster } from '~/components/ui/sonner';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { useReadLocalStorage, useIsMounted } from 'usehooks-ts';
-
 import ErrorPage from './pages/error';
 
 const queryClient = new QueryClient();
