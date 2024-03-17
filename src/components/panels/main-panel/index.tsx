@@ -4,6 +4,7 @@ import Editor, { useMonaco } from '@monaco-editor/react';
 
 import { useTheme } from '~/components/theme-provider';
 import { useEditor } from '~/lib/stores/editor';
+import { useLiveQuery } from 'dexie-react-hooks';
 
 import {
   ResizableHandle,
@@ -12,13 +13,27 @@ import {
 } from '~/components/ui/resizable';
 
 import { darkTheme, lightTheme } from '~/lib/themes';
+import DefaultPage from './DefaultPage';
 
 import { Messages, Tabs } from '~/components';
+import { db } from '~/lib/db';
 
 const MainPanel = () => {
-  const { code, setCode, setMonaco } = useEditor();
+  const { setMonaco, activePath } = useEditor();
   const { theme } = useTheme();
   const monaco = useMonaco();
+
+  const activeFile = useLiveQuery(async () => {
+    const activeFile = await db.files.get(activePath ?? '');
+    return activeFile;
+  }, [activePath]);
+
+  const onCodeChange = async (code: string) => {
+    try {
+      if (!activePath) return;
+      await db.files.update(activePath, { content: code });
+    } catch (error) {}
+  };
 
   const editorRef = React.useRef<monaco.editor.IStandaloneCodeEditor | null>(
     null
@@ -63,15 +78,20 @@ const MainPanel = () => {
           collapsible
           collapsedSize={0}
         >
-          <Editor
-            language='lua'
-            value={code}
-            onMount={handleMount}
-            options={{
-              wordWrap: 'on',
-            }}
-            onChange={(v) => setCode(v ?? '')}
-          />
+          {activeFile ? (
+            <Editor
+              language={activeFile.language}
+              value={activeFile.content}
+              path={activeFile.path}
+              onMount={handleMount}
+              options={{
+                wordWrap: 'on',
+              }}
+              onChange={(v) => onCodeChange(v ?? '')}
+            />
+          ) : (
+            <DefaultPage />
+          )}
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel

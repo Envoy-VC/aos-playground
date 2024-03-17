@@ -75,6 +75,8 @@ const ExplorerPanel = () => {
     return () => window.removeEventListener('keydown', handleEnter);
   }, [name, isCreating]);
 
+  
+
   return (
     <div className='flex h-screen w-full flex-col gap-4 py-2'>
       <Header>

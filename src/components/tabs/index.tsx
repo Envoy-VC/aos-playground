@@ -5,14 +5,23 @@ import {
   TooltipTrigger,
 } from '~/components/ui/tooltip';
 import { ThemeSwitcher } from '../theme-provider';
+import TabPill from './TabPill';
 
 import { useEditor } from '~/lib/stores';
+import { db } from '~/lib/db';
+import { useLiveQuery } from 'dexie-react-hooks';
 
 import { ZoomIn, ZoomOut } from 'lucide-react';
 import { Button } from '../ui/button';
 import ConnectButton from '../connect-button';
+
 const Tabs = () => {
   const { monaco } = useEditor();
+
+  const tabs = useLiveQuery(async () => {
+    const tabs = await db.tabs.toArray();
+    return tabs;
+  });
 
   const handleZoom = (type: 'in' | 'out') => {
     if (!monaco) return;
@@ -30,7 +39,7 @@ const Tabs = () => {
   };
 
   return (
-    <div className='flex h-full max-h-[4dvh] flex-row items-center justify-between border-b border-neutral-200 px-4 dark:border-neutral-700'>
+    <div className='flex h-[4dvh] flex-row items-center justify-between border-b border-neutral-200 px-4 dark:border-neutral-700'>
       <div className='flex flex-row items-center'>
         <TooltipProvider>
           <Tooltip>
@@ -64,6 +73,9 @@ const Tabs = () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+        <div className='flex flex-row items-center'>
+          {tabs?.map((tab) => <TabPill key={tab.path} path={tab.path} />)}
+        </div>
       </div>
       <div className='flex flex-row items-center gap-2'>
         <ThemeSwitcher />

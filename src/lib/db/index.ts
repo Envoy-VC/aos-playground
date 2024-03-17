@@ -27,6 +27,7 @@ export class Database extends Dexie {
   processes!: Table<Process>;
   files!: Table<EditorFile>;
   folders!: Table<EditorFolder>;
+  tabs!: Table<{ path: string }>;
 
   constructor() {
     super('PlaygroundDB');
@@ -34,6 +35,7 @@ export class Database extends Dexie {
       processes: 'id',
       files: 'path',
       folders: 'path',
+      tabs: 'path',
     });
   }
 }

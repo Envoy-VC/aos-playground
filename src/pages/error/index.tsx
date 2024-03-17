@@ -3,12 +3,11 @@ import { toast } from 'sonner';
 
 import { db } from '~/lib/db';
 
-import { Link } from 'react-router-dom';
-
 const ErrorPage = () => {
   const reset = async () => {
     try {
       await db.delete();
+      window.localStorage.clear();
       toast.success('Cache reset successfully');
       window.location.reload();
     } catch (error) {
@@ -30,9 +29,9 @@ const ErrorPage = () => {
         <div className='flex flex-row items-center gap-3'>
           <Button onClick={reset}>Reset cache</Button>
           <Button variant='outline' asChild>
-            <Link to='mailto:vedantchainani1084@gmail.com'>
+            <a href='mailto:vedantchainani1084@gmail.com' target='_blank'>
               Contact Support
-            </Link>
+            </a>
           </Button>
         </div>
       </div>

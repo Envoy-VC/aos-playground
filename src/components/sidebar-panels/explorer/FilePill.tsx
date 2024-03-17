@@ -15,10 +15,12 @@ import { Input } from '~/components/ui/input';
 
 import { db } from '~/lib/db';
 import { cn } from '~/lib/utils';
-import { useCopyToClipboard } from 'usehooks-ts';
+import { useCopyToClipboard, useLocalStorage } from 'usehooks-ts';
+import { useEditor } from '~/lib/stores';
 
 const FilePill = ({ name, path, content }: EditorFile) => {
   const renameRef = React.useRef<HTMLInputElement>(null);
+  const { setActivePath } = useEditor();
 
   const [, copyToClipboard] = useCopyToClipboard();
 
@@ -35,6 +37,21 @@ const FilePill = ({ name, path, content }: EditorFile) => {
 
   const onRename = async () => {
     await db.files.update(path, { name: newName });
+  };
+
+  const openFile = async () => {
+    try {
+      const tabs = await db.tabs.toArray();
+      const exists = tabs.find((t) => t.path === path) ?? null;
+      const file = await db.files.get(path);
+      if (!file) return;
+      if (!exists) {
+        await db.tabs.add(file, path);
+      }
+      setActivePath(path);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   React.useEffect(() => {
@@ -65,6 +82,7 @@ const FilePill = ({ name, path, content }: EditorFile) => {
               ? 'border border-neutral-300 dark:border-neutral-600'
               : ''
           )}
+          onClick={openFile}
         >
           {getFileIcon(newName) ? (
             <img src={getFileIcon(newName) ?? ''} className='h-4 w-4' />
