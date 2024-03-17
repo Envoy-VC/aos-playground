@@ -11,10 +11,10 @@ import {
 import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 
-import { useCopyToClipboard } from 'usehooks-ts';
+import { useCopyToClipboard, useLocalStorage } from 'usehooks-ts';
 
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db } from '~/lib/db';
+import { Process, db } from '~/lib/db';
 
 import { toast } from 'sonner';
 import { PackageSearch, Clipboard } from 'lucide-react';
@@ -30,10 +30,9 @@ const ProcessPanel = () => {
     return processes;
   }, []);
 
-  const activeProcess = useLiveQuery(async () => {
-    const activeProcess = (await db.activeProcess.toArray()).at(0);
-    return activeProcess;
-  }, [processes]);
+  const [activeProcess, setActiveProcess] = useLocalStorage<
+    Process | undefined
+  >('activeProcess', undefined);
 
   const [, copyToClipboard] = useCopyToClipboard();
 
@@ -43,8 +42,7 @@ const ProcessPanel = () => {
   const onValChange = async (id: string) => {
     const process = await db.processes.filter((val) => val.id === id).first();
     if (process) {
-      await db.activeProcess.clear();
-      await db.activeProcess.add(process, process.id);
+      setActiveProcess(process);
       toast.success(`Process Changed to ${process.name}`);
     } else {
       toast.error('Error', {
@@ -64,12 +62,10 @@ const ProcessPanel = () => {
       const existing = (processes ?? []).find((val) => val.id === process.id);
 
       if (existing) {
-        await db.activeProcess.clear();
-        await db.activeProcess.add(existing, process.id);
+        setActiveProcess(existing);
       } else {
         await db.processes.add(process, process.id);
-        await db.activeProcess.clear();
-        await db.activeProcess.add(process, process.id);
+        setActiveProcess(process);
       }
       toast.success('Process Imported', {
         description: <p className='break-all'>ID: {process.id}.</p>,

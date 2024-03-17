@@ -11,7 +11,9 @@ import {
 } from '~/components/ui/alert-dialog';
 import { Button } from '~/components/ui/button';
 
-import { db } from '~/lib/db';
+import { useLocalStorage } from 'usehooks-ts';
+
+import { db, Process } from '~/lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 import { toast } from 'sonner';
@@ -22,10 +24,9 @@ const DangerZone = () => {
     return processes;
   }, []);
 
-  const activeProcess = useLiveQuery(async () => {
-    const activeProcess = (await db.activeProcess.toArray()).at(0);
-    return activeProcess;
-  }, [processes]);
+  const [activeProcess, setActiveProcess] = useLocalStorage<
+    Process | undefined
+  >('activeProcess', undefined);
 
   const onClick = async (type: 'all' | 'active') => {
     try {
@@ -44,7 +45,7 @@ const DangerZone = () => {
       } else {
         await db.processes.bulkDelete(processes?.map((val) => val.id) ?? []);
       }
-      await db.activeProcess.clear();
+      setActiveProcess(undefined);
     } catch (error) {
       toast.error('Error', {
         description: (error as Error).message ?? 'An error occurred',

@@ -25,7 +25,6 @@ export interface EditorFolder {
 
 export class Database extends Dexie {
   processes!: Table<Process>;
-  activeProcess!: Table<Process>;
   files!: Table<EditorFile>;
   folders!: Table<EditorFolder>;
 
@@ -33,7 +32,6 @@ export class Database extends Dexie {
     super('PlaygroundDB');
     this.version(1).stores({
       processes: 'id',
-      activeProcess: 'id',
       files: 'path',
       folders: 'path',
     });

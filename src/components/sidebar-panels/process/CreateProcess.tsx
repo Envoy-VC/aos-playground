@@ -17,10 +17,11 @@ import {
 } from '~/components/ui/form';
 
 import { useActiveAddress } from 'arweave-wallet-kit';
+import { useLocalStorage } from 'usehooks-ts';
 
 import { spawnProcess } from '~/lib/services/spawn';
 
-import { db } from '~/lib/db';
+import { db, Process } from '~/lib/db';
 
 import { PackagePlus, ChevronRight } from 'lucide-react';
 import { cn } from '~/lib/utils';
@@ -34,6 +35,11 @@ const CreateProcess = () => {
     resolver: zodResolver(createProcessSchema),
   });
 
+  const [, setActiveProcess] = useLocalStorage<Process | undefined>(
+    'activeProcess',
+    undefined
+  );
+
   const onSubmit = async (values: CreateProcessType) => {
     try {
       if (!address) {
@@ -42,8 +48,7 @@ const CreateProcess = () => {
       const res = await spawnProcess({ ...values, owner: address });
 
       db.processes.add(res, res.id);
-      db.activeProcess.clear();
-      db.activeProcess.add(res, res.id);
+      setActiveProcess(res);
 
       toast.success('Process Spawned', {
         description: <p className='break-all'>ID: {res.id}.</p>,

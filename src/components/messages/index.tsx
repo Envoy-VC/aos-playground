@@ -7,14 +7,14 @@ import { ScrollArea } from '~/components/ui/scroll-area';
 
 import type { AoResults } from '~/types';
 
-import { db } from '~/lib/db';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { Process } from '~/lib/db';
+import { useLocalStorage } from 'usehooks-ts';
 
 const Messages = () => {
-  const activeProcess = useLiveQuery(async () => {
-    const activeProcess = (await db.activeProcess.toArray()).at(0);
-    return activeProcess;
-  }, []);
+  const [activeProcess] = useLocalStorage<Process | undefined>(
+    'activeProcess',
+    undefined
+  );
 
   const { data } = useQuery<AoResults>(
     'messages',
