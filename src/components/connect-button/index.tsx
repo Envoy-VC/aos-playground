@@ -27,7 +27,8 @@ const ConnectButton = () => {
     return (
       <Button
         onClick={onProfileClick}
-        className='h-9 px-3 text-sm font-semibold'
+        variant='ghost'
+        className='h-9 px-3 text-sm font-medium'
       >
         {address.slice(0, 5)}...{address.slice(-5)}
       </Button>
@@ -37,7 +38,8 @@ const ConnectButton = () => {
       <div>
         <Button
           onClick={onConnectClick}
-          className='h-9 px-3 text-sm font-semibold'
+          variant='ghost'
+          className='h-9 px-3 text-sm font-medium'
         >
           Connect
         </Button>
