@@ -36,7 +36,7 @@ const Home = () => {
           <ResizablePanel
             ref={sidebarPanel}
             minSize={10}
-            defaultSize={14}
+            defaultSize={18}
             collapsible
             collapsedSize={0}
           >
