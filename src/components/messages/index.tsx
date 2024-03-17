@@ -1,4 +1,3 @@
-import { useReadLocalStorage } from 'usehooks-ts';
 import { useQuery } from 'react-query';
 import { results } from '@permaweb/aoconnect';
 
@@ -6,21 +5,26 @@ import Ansi from 'ansi-to-react';
 
 import { ScrollArea } from '~/components/ui/scroll-area';
 
-import type { AoResults, Process } from '~/types';
+import type { AoResults } from '~/types';
+
+import { db } from '~/lib/db';
+import { useLiveQuery } from 'dexie-react-hooks';
 
 const Messages = () => {
-  const activeProcess = useReadLocalStorage<Process | null>('activeProcess');
+  const activeProcess = useLiveQuery(async () => {
+    const activeProcess = (await db.activeProcess.toArray()).at(0);
+    return activeProcess;
+  }, []);
 
   const { data } = useQuery<AoResults>(
     'messages',
     async () => {
       const newMessages = await results({
         process:
-          activeProcess?.txId ?? '5SGJUlPwlenkyuG9-xWh0Rcf0azm8XEd5RBTiutgWAg',
+          activeProcess?.id ?? '5SGJUlPwlenkyuG9-xWh0Rcf0azm8XEd5RBTiutgWAg',
         limit: 100,
         sort: 'ASC',
       });
-      console.log(newMessages);
       return newMessages;
     },
     {
