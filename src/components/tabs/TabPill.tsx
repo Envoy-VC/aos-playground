@@ -50,13 +50,13 @@ const TabPill = ({ path }: Props) => {
         )}
       >
         <div
-          className='flex flex-row items-center gap-1'
+          className='flex w-full flex-row items-center gap-1'
           onClick={onSetActiveTab}
         >
           <img src={getFileIcon(file.name) ?? ''} className='h-5 w-5'></img>
           <div className='text-base'>{file.name}</div>
         </div>
-        <Button variant='link' className='!m-0 h-fit !p-2' onClick={onRemove}>
+        <Button variant='link' className='!m-0 h-4 w-4 !p-0' onClick={onRemove}>
           <X size={18} />
         </Button>
       </div>

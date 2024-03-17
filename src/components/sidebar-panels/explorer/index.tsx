@@ -23,7 +23,6 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { cn } from '~/lib/utils';
 
 import { onCreate } from '~/lib/helpers/editor';
-import SidePanelContextMenu from './ContextMenu';
 
 const ExplorerPanel = () => {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -75,7 +74,15 @@ const ExplorerPanel = () => {
     return () => window.removeEventListener('keydown', handleEnter);
   }, [name, isCreating]);
 
-  
+  const onNewFile = () => {
+    setParentFolder('/');
+    setIsCreating('file');
+  };
+
+  const onNewFolder = () => {
+    setParentFolder('/');
+    setIsCreating('folder');
+  };
 
   return (
     <div className='flex h-screen w-full flex-col gap-4 py-2'>
@@ -94,10 +101,7 @@ const ExplorerPanel = () => {
                   variant='link'
                   size='icon'
                   className='h-4 w-4'
-                  onClick={() => {
-                    setParentFolder('/');
-                    setIsCreating('file');
-                  }}
+                  onClick={onNewFile}
                 >
                   <File className='h-4 w-4 text-neutral-600 dark:text-neutral-400' />
                 </Button>
@@ -114,10 +118,7 @@ const ExplorerPanel = () => {
                   variant='link'
                   size='icon'
                   className='h-4 w-4'
-                  onClick={() => {
-                    setParentFolder('/');
-                    setIsCreating('folder');
-                  }}
+                  onClick={onNewFolder}
                 >
                   <Folder className='h-4 w-4 text-neutral-600 dark:text-neutral-400' />
                 </Button>
@@ -142,7 +143,14 @@ const ExplorerPanel = () => {
           <FilePill key={file.path} {...file} />
         ))}
         {parentFolder === '/' && (
-          <div className='ml-[1.5rem] flex flex-row items-center gap-2 px-1 '>
+          <div
+            className={cn(
+              'flex flex-row items-center gap-2 px-1',
+              rootFolders.length > 0 || rootFiles.length > 0
+                ? 'ml-[1.5rem]'
+                : ''
+            )}
+          >
             {isCreating === 'file' && (
               <>
                 {getFileIcon(name) ? (
@@ -168,9 +176,6 @@ const ExplorerPanel = () => {
           </div>
         )}
       </div>
-      <SidePanelContextMenu>
-        <div className='min-h-max w-full'></div>
-      </SidePanelContextMenu>
     </div>
   );
 };

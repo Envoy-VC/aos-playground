@@ -1,7 +1,6 @@
 import { AOS_ASCII } from '~/lib/helpers/editor';
 
 const DefaultPage = () => {
-  console.log(AOS_ASCII);
   return (
     <div className='flex h-full items-center justify-center p-12'>
       <div className='flex flex-col items-center justify-center gap-4'>

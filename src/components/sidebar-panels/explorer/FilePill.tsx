@@ -15,10 +15,10 @@ import { Input } from '~/components/ui/input';
 
 import { db } from '~/lib/db';
 import { cn } from '~/lib/utils';
-import { useCopyToClipboard, useLocalStorage } from 'usehooks-ts';
+import { useCopyToClipboard } from 'usehooks-ts';
 import { useEditor } from '~/lib/stores';
 
-const FilePill = ({ name, path, content }: EditorFile) => {
+const FilePill = ({ name, path, content, parentFolder }: EditorFile) => {
   const renameRef = React.useRef<HTMLInputElement>(null);
   const { setActivePath } = useEditor();
 
@@ -104,7 +104,9 @@ const FilePill = ({ name, path, content }: EditorFile) => {
         </div>
       </ContextMenuTrigger>
       <ContextMenuContent className='w-64'>
-        <ContextMenuItem inset>Open to the Side</ContextMenuItem>
+        <ContextMenuItem inset onClick={openFile}>
+          Open to the Side
+        </ContextMenuItem>
         <ContextMenuItem
           inset
           onClick={async () => {

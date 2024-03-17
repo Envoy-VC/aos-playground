@@ -3,12 +3,6 @@ export type Tag = {
   value: string;
 };
 
-export type Process = {
-  name: string;
-  txId: string;
-  owner: string;
-};
-
 export type AoResult = {
   cursor: string;
   node: {

@@ -11,9 +11,10 @@ import { useEditor } from '~/lib/stores';
 import { db } from '~/lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 
-import { ZoomIn, ZoomOut } from 'lucide-react';
+import { Play, ZoomIn, ZoomOut } from 'lucide-react';
 import { Button } from '../ui/button';
 import ConnectButton from '../connect-button';
+import Run from './Run';
 
 const Tabs = () => {
   const { monaco } = useEditor();
@@ -78,6 +79,7 @@ const Tabs = () => {
         </div>
       </div>
       <div className='flex flex-row items-center gap-2'>
+        <Run />
         <ThemeSwitcher />
         <ConnectButton />
       </div>

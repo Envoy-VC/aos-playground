@@ -29,6 +29,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tooltip": "^1.0.7",
     "ansi-to-react": "^6.1.6",
+    "arweave-account": "^1.4.3",
     "arweave-wallet-kit": "^1.0.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",

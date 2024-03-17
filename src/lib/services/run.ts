@@ -6,6 +6,7 @@ export const runCode = async (data: string) => {
     res.arrayBuffer()
   );
   const handle = await AoLoader(wasmBinary);
+  
   const env = {
     Process: {
       Id: 'AOS',
@@ -13,6 +14,7 @@ export const runCode = async (data: string) => {
       Tags: [{ name: 'Name', value: 'Thomas' }],
     },
   };
+
   const msg = {
     Target: 'AOS',
     Owner: 'FOOBAR',
