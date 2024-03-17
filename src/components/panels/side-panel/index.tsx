@@ -1,7 +1,15 @@
-import SidePanelContextMenu from './ContextMenu';
+import { ExplorerPanel, ProcessPanel } from '~/components/sidebar-panels';
+
+import { useSidebar } from '~/lib/stores';
 
 const SidePanel = () => {
-  return <SidePanelContextMenu>SidePanel</SidePanelContextMenu>;
+  const { activeKey } = useSidebar();
+  return (
+    <>
+      {activeKey === 'processes' && <ProcessPanel />}
+      {activeKey === 'files' && <ExplorerPanel />}
+    </>
+  );
 };
 
 export default SidePanel;
