@@ -10,6 +10,7 @@ import { useEditor } from '~/lib/stores';
 
 import { ZoomIn, ZoomOut } from 'lucide-react';
 import { Button } from '../ui/button';
+import ConnectButton from '../connect-button';
 const Tabs = () => {
   const { monaco } = useEditor();
 
@@ -64,7 +65,10 @@ const Tabs = () => {
           </Tooltip>
         </TooltipProvider>
       </div>
-      <ThemeSwitcher />
+      <div className='flex flex-row items-center gap-2'>
+        <ThemeSwitcher />
+        <ConnectButton />
+      </div>
     </div>
   );
 };
