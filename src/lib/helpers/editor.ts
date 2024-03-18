@@ -1,7 +1,21 @@
+import { toast } from 'sonner';
 import { db } from '../db';
 
-// prettier-ignore
-export const supportedExtensions = ['js', 'ts', 'tsx', 'jsx', 'json', 'md', 'lua', 'py', 'txt'];
+// import { Config } from '@johnnymorganz/stylua';
+// @ts-expect-error err
+import { formatCode, Config } from './stylua_lib_bg';
+
+export const supportedExtensions = [
+  'js',
+  'ts',
+  'tsx',
+  'jsx',
+  'json',
+  'md',
+  'lua',
+  'py',
+  'txt',
+];
 
 export const extensionToLanguage = (extension: string) => {
   switch (extension) {
@@ -85,6 +99,22 @@ export const onCreate = async (
       parentFolder,
       isCollapsed: true,
     });
+  }
+};
+
+export const formatOnSave = async (activeFilePath: string) => {
+  try {
+    const file = await db.files.get(activeFilePath);
+    if (!file) return;
+    if (file.language !== 'lua') return;
+    const config = Config.new();
+
+    const formattedCode = await formatCode(file.content, config, undefined, 1);
+    console.log(formattedCode);
+    await db.files.update(activeFilePath, { content: formattedCode });
+  } catch (error) {
+    console.log(error);
+    toast.error('Failed to format file');
   }
 };
 

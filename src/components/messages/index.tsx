@@ -34,7 +34,7 @@ const Messages = () => {
         setIsFirstRender(true);
       }
       setRerender(!rerender);
-
+      console.log(newMessages.edges);
       return newMessages.edges;
     },
     {

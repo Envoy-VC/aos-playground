@@ -4,14 +4,20 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import UnheadVite from '@unhead/addons/vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import { comlink } from 'vite-plugin-comlink';
+import wasm from 'vite-plugin-wasm';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
+
+import topLevelAwait from 'vite-plugin-top-level-await';
 
 import path from 'path';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   base: '',
   plugins: [
+    nodePolyfills({ include: ['buffer'] }),
     react(),
+    wasm(),
+    topLevelAwait(),
     tsconfigPaths(),
     comlink(),
     UnheadVite(),

@@ -1,5 +1,5 @@
 import React from 'react';
-import type * as monaco from 'monaco-editor';
+import * as Types from 'monaco-editor';
 import Editor, { useMonaco } from '@monaco-editor/react';
 
 import { useTheme } from '~/components/theme-provider';
@@ -17,6 +17,7 @@ import DefaultPage from './DefaultPage';
 
 import { Messages, Tabs } from '~/components';
 import { db } from '~/lib/db';
+import { formatOnSave } from '~/lib/helpers/editor';
 
 const MainPanel = () => {
   const { setMonaco, activePath } = useEditor();
@@ -35,17 +36,26 @@ const MainPanel = () => {
     } catch (error) {}
   };
 
-  const editorRef = React.useRef<monaco.editor.IStandaloneCodeEditor | null>(
+  const editorRef = React.useRef<Types.editor.IStandaloneCodeEditor | null>(
     null
   );
 
-  const handleMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
+  const handleMount = (editor: Types.editor.IStandaloneCodeEditor) => {
     editorRef.current = editor;
     setMonaco(editor);
     const newTheme = theme === 'dark' ? 'ao-dark' : 'ao-light';
     editorRef.current.updateOptions({
       theme: newTheme,
       fontSize: 15,
+    });
+    editorRef.current.addAction({
+      id: 'saveCommand',
+      label: 'Save',
+      keybindings: [Types.KeyMod.CtrlCmd | Types.KeyCode.KeyS],
+      run: async () => {
+        if (!activePath) return;
+        await formatOnSave(activePath);
+      },
     });
   };
 
