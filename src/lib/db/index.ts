@@ -1,4 +1,9 @@
 import Dexie, { Table } from 'dexie';
+import { AoResult } from '~/types';
+
+export interface AoResultWithProcess extends AoResult {
+  process: string;
+}
 
 export interface Process {
   id: string;
@@ -28,6 +33,7 @@ export class Database extends Dexie {
   files!: Table<EditorFile>;
   folders!: Table<EditorFolder>;
   tabs!: Table<{ path: string }>;
+  results!: Table<AoResultWithProcess, number>;
 
   constructor() {
     super('PlaygroundDB');
@@ -36,6 +42,7 @@ export class Database extends Dexie {
       files: 'path',
       folders: 'path',
       tabs: 'path',
+      results: '++id, &cursor, process',
     });
   }
 }

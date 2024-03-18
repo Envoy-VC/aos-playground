@@ -6,7 +6,8 @@ import Ansi from 'ansi-to-react';
 
 import type { AoResult, AoResults } from '~/types';
 
-import { Process } from '~/lib/db';
+import { AoResultWithProcess, Process, db } from '~/lib/db';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { useLocalStorage } from 'usehooks-ts';
 import { Button } from '../ui/button';
 import { ArrowDownToLine } from 'lucide-react';
@@ -18,23 +19,42 @@ const Messages = () => {
     undefined
   );
 
+  const messages = useLiveQuery(async () => {
+    if (!activeProcess) return [];
+    const results = await db.results
+      .where('process')
+      .equals(activeProcess.id)
+      .toArray();
+    return results;
+  }, [activeProcess]);
+
   const [rerender, setRerender] = React.useState<boolean>(false);
   const [isFirstRender, setIsFirstRender] = React.useState<boolean>(false);
 
-  const { data } = useQuery<AoResult[]>(
+  useQuery<AoResult[]>(
     ['messages', activeProcess],
     async () => {
       if (!activeProcess) return [];
       const newMessages = (await results({
-        process: activeProcess?.id ?? '',
+        process: activeProcess.id,
         limit: 100,
         sort: 'ASC',
       })) as AoResults;
+      const resultsWithProcesses: AoResultWithProcess[] = [];
+      for (const result of newMessages.edges) {
+        resultsWithProcesses.push({
+          ...result,
+          process: activeProcess.id,
+        });
+      }
+
+      try {
+        await db.results.bulkPut(resultsWithProcesses, { allKeys: true });
+      } catch (error) {}
       if (!isFirstRender) {
         setIsFirstRender(true);
       }
       setRerender(!rerender);
-      console.log(newMessages.edges);
       return newMessages.edges;
     },
     {
@@ -84,7 +104,7 @@ const Messages = () => {
     <div className='relative h-full'>
       <div className=' h-full overflow-y-scroll px-4 py-2' ref={containerRef}>
         <div className='overflow-scroll'>
-          {(data ?? []).map((e, i) => {
+          {(messages ?? []).map((e, i) => {
             const res = e.node.Output.data;
             const data = typeof res === 'string' ? res : res.output;
             return (
