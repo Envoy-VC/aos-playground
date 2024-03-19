@@ -28,7 +28,7 @@ const IconPanel = () => {
           {sidebarItems.map((item) => {
             const Icon = item.icon;
             return (
-              <TooltipProvider>
+              <TooltipProvider key={item.key}>
                 <Tooltip>
                   <TooltipTrigger>
                     <div className='relative px-4 py-2'>

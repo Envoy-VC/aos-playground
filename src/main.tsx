@@ -1,14 +1,12 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
-import { HelmetProvider } from 'react-helmet-async';
+
+import ProviderTree from './providers';
 
 const Root = (
-  <React.StrictMode>
-    <HelmetProvider>
-      <App />
-    </HelmetProvider>
-  </React.StrictMode>
+  <ProviderTree>
+    <App />
+  </ProviderTree>
 );
 
 ReactDOM.hydrateRoot(document.getElementById('root')!, Root);

@@ -44,7 +44,7 @@ const Tabs = () => {
       <div className='flex flex-row items-center'>
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Button
                 variant='ghost'
                 onClick={() => handleZoom('out')}
@@ -60,7 +60,7 @@ const Tabs = () => {
         </TooltipProvider>
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Button
                 variant='ghost'
                 onClick={() => handleZoom('in')}

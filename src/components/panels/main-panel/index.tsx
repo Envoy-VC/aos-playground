@@ -17,10 +17,10 @@ import DefaultPage from './DefaultPage';
 
 import { Messages, Tabs } from '~/components';
 import { db } from '~/lib/db';
-import { formatOnSave } from '~/lib/helpers/editor';
+import { closeTab, formatOnSave } from '~/lib/helpers/editor';
 
 const MainPanel = () => {
-  const { setMonaco, activePath } = useEditor();
+  const { setMonaco, activePath, setActivePath } = useEditor();
   const { theme } = useTheme();
   const monaco = useMonaco();
 
@@ -41,22 +41,39 @@ const MainPanel = () => {
   );
 
   const handleMount = (editor: Types.editor.IStandaloneCodeEditor) => {
-    editorRef.current = editor;
     setMonaco(editor);
     const newTheme = theme === 'dark' ? 'ao-dark' : 'ao-light';
-    editorRef.current.updateOptions({
+    editor.updateOptions({
       theme: newTheme,
       fontSize: 15,
     });
-    editorRef.current.addAction({
+    editor.addAction({
       id: 'saveCommand',
       label: 'Save',
       keybindings: [Types.KeyMod.CtrlCmd | Types.KeyCode.KeyS],
-      run: async () => {
-        if (!activePath) return;
+      run: async (editor) => {
+        const model = editor.getModel();
+        if (!model) return;
+
+        const activePath = model.uri.path;
+
         await formatOnSave(activePath);
       },
     });
+    editor.addAction({
+      id: 'closeActiveTab',
+      label: 'Close Tab',
+      keybindings: [Types.KeyMod.WinCtrl | Types.KeyCode.KeyW],
+      run: async (editor) => {
+        const model = editor.getModel();
+        if (!model) return;
+
+        const activePath = model.uri.path;
+        await closeTab(activePath);
+        setActivePath(null);
+      },
+    });
+    editorRef.current = editor;
   };
 
   React.useEffect(() => {
@@ -92,7 +109,7 @@ const MainPanel = () => {
             <Editor
               language={activeFile.language}
               value={activeFile.content}
-              path={activeFile.path}
+              path={activeFile.path.slice(1, activeFile.path.length)}
               onMount={handleMount}
               options={{
                 wordWrap: 'on',
@@ -107,9 +124,10 @@ const MainPanel = () => {
         <ResizablePanel
           defaultSize={25}
           maxSize={100}
-          minSize={20}
+          minSize={10}
           collapsible
           collapsedSize={0}
+          className='h-full'
         >
           <Messages />
         </ResizablePanel>

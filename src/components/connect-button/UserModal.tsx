@@ -27,7 +27,7 @@ const UserModal = ({ children, profile, balance }: Props) => {
 
   return (
     <Dialog>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='!rounded-3xl text-black dark:text-white'>
         <DialogHeader>
           <DialogTitle>User Profile</DialogTitle>

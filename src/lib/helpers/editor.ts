@@ -110,11 +110,19 @@ export const formatOnSave = async (activeFilePath: string) => {
     const config = Config.new();
 
     const formattedCode = await formatCode(file.content, config, undefined, 1);
-    console.log(formattedCode);
     await db.files.update(activeFilePath, { content: formattedCode });
   } catch (error) {
     console.log(error);
     toast.error('Failed to format file');
+  }
+};
+
+export const closeTab = async (activeFilePath: string) => {
+  try {
+    await db.tabs.delete(activeFilePath);
+  } catch (error) {
+    toast.error('Failed to delete tab');
+    return null;
   }
 };
 
