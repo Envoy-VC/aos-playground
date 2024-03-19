@@ -6,7 +6,7 @@ export const runCode = async (data: string) => {
     res.arrayBuffer()
   );
   const handle = await AoLoader(wasmBinary);
-  
+
   const env = {
     Process: {
       Id: 'AOS',
