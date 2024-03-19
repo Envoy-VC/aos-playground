@@ -18,7 +18,6 @@ import { sendMessage } from '~/lib/services/message';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
