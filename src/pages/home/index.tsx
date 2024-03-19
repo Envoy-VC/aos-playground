@@ -24,7 +24,7 @@ const Home = () => {
     <div>
       <div className='hidden h-full max-h-screen w-full flex-row overflow-hidden dark:bg-dark  dark:text-white lg:flex'>
         <IconPanel />
-        <ResizablePanelGroup direction='horizontal'>
+        <ResizablePanelGroup direction='horizontal' autoSaveId='side-main-group'>
           <ResizablePanel
             ref={sidebarPanel}
             minSize={10}

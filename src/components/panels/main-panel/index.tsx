@@ -97,7 +97,10 @@ const MainPanel = () => {
   return (
     <div className='flex h-screen w-full flex-col'>
       <Tabs />
-      <ResizablePanelGroup direction='vertical'>
+      <ResizablePanelGroup
+        direction='vertical'
+        autoSaveId='editor-messages=group'
+      >
         <ResizablePanel
           minSize={10}
           defaultSize={75}
