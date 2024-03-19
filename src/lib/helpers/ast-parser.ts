@@ -2,8 +2,16 @@ import traverse from 'traverse';
 import { Chunk, Node, parse } from 'luaparse';
 import { db } from '../db';
 
-export async function getRequireValuesFromAST(ast: Chunk): Promise<string[]> {
-  const requirePcallValues: string[] = [];
+export interface RequireFile {
+  filePath: string;
+  content: string;
+  exists: boolean;
+}
+
+export async function getRequireValuesFromAST(
+  ast: Chunk
+): Promise<RequireFile[]> {
+  const requirePcallValues: RequireFile[] = [];
   const visitedFiles = new Set<string>();
 
   await processRequireStatements(ast);
@@ -31,7 +39,15 @@ export async function getRequireValuesFromAST(ast: Chunk): Promise<string[]> {
         ) {
           // Push the value passed to require into the array
           const filePath = node.arguments[1].raw;
-          requirePcallValues.push(filePath);
+          const importedFilePath = getFilePath(filePath);
+          const res = await db.files.get(importedFilePath);
+          const content = res?.content ?? null;
+
+          requirePcallValues.push({
+            filePath: importedFilePath,
+            content: content ?? '',
+            exists: content !== null,
+          });
 
           // Check if the file has been visited already
           if (!visitedFiles.has(filePath)) {
@@ -54,12 +70,7 @@ export async function getRequireValuesFromAST(ast: Chunk): Promise<string[]> {
     }
   }
 
-  const files: string[] = [];
-  requirePcallValues.forEach((filePath) => {
-    files.push(getFilePath(filePath));
-  });
-
-  return files;
+  return requirePcallValues;
 }
 
 // Assuming you have a function to parse Lua content and obtain its AST
