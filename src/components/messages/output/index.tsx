@@ -10,7 +10,7 @@ import { AoResultWithProcess, Process, db } from '~/lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useLocalStorage } from 'usehooks-ts';
 import { Button } from '~/components/ui/button';
-import { ArrowDownToLine } from 'lucide-react';
+import { ArrowUpToLine } from 'lucide-react';
 
 const OutputBox = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -125,11 +125,11 @@ const OutputBox = () => {
           onClick={() => {
             const contentNode = containerRef.current;
             if (contentNode) {
-              contentNode.scrollTop = contentNode.scrollHeight;
+              contentNode.scrollTop = 0;
             }
           }}
         >
-          <ArrowDownToLine size={18} />
+          <ArrowUpToLine size={18} />
         </Button>
       )}
     </div>
