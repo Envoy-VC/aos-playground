@@ -74,24 +74,7 @@ const Run = () => {
         });
         toast.success('Messages Sent');
       } else {
-        // TODO: Handle for multiple files
         setIsModalOpen(true);
-        // // const ids = await Promise.all(
-        // //   files.reverse().map(async (path) => {
-        // //     const fileData = await db.files.get(path);
-        // //     if (!fileData) {
-        // //       throw new Error('File not found');
-        // //     }
-        // //     if (fileData.content === '') {
-        // //       throw new Error('File is empty');
-        // //     }
-        // //     const id = await sendMessage({
-        // //       process: activeProcess.id,
-        // //       data: fileData.content,
-        // //     });
-        // //     return id;
-        // //   })
-        // // );
       }
     } catch (error) {
       toast.error('', { description: (error as Error).message });
@@ -124,7 +107,6 @@ const Run = () => {
           </DialogHeader>
           <MultiFileDialog
             data={requiredFiles}
-            
             setOpen={setIsModalOpen}
             isSending={isSending}
             setIsSending={setIsSending}
