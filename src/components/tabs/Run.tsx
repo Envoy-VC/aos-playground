@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '../ui/button';
 import { Play, LoaderCircle } from 'lucide-react';
 
-import { useReadLocalStorage } from 'usehooks-ts';
+import { useReadLocalStorage, useLocalStorage } from 'usehooks-ts';
 import { db } from '~/lib/db';
 
 import { parse } from 'luaparse';
@@ -12,6 +12,7 @@ import { getRequireValuesFromAST, RequireFile } from '~/lib/helpers/ast-parser';
 import { useEditor } from '~/lib/stores';
 
 import { Process } from '~/lib/db';
+import { Tag } from '~/types';
 import { toast } from 'sonner';
 import { sendMessage } from '~/lib/services/message';
 
@@ -32,6 +33,13 @@ const Run = () => {
   const activeProcess = useReadLocalStorage<Process | undefined>(
     'activeProcess'
   );
+
+  const [tags] = useLocalStorage<Tag[]>('defaultTags', [
+    {
+      name: 'Action',
+      value: 'Eval',
+    },
+  ]);
 
   const [requiredFiles, setRequiredFiles] = React.useState<RequireFile[]>([]);
 
@@ -71,6 +79,7 @@ const Run = () => {
         sendMessage({
           process: activeProcess!.id,
           data: requiredFiles[0].content,
+          tags,
         });
         toast.success('Messages Sent');
       } else {

@@ -2,11 +2,12 @@ import { RequireFile } from '~/lib/helpers/ast-parser';
 import { Button } from '../ui/button';
 
 import { sendMessage } from '~/lib/services/message';
-import { useReadLocalStorage } from 'usehooks-ts';
+import { useReadLocalStorage, useLocalStorage } from 'usehooks-ts';
 
 import { toast } from 'sonner';
 
 import { Process } from '~/lib/db';
+import { Tag } from '~/types';
 
 import { Play, LoaderCircle } from 'lucide-react';
 
@@ -20,6 +21,13 @@ const MultiFileDialog = ({ data, isSending, setOpen, setIsSending }: Props) => {
   const activeProcess = useReadLocalStorage<Process | undefined>(
     'activeProcess'
   );
+
+  const [defaultTags] = useLocalStorage<Tag[]>('defaultTags', [
+    {
+      name: 'Action',
+      value: 'Eval',
+    },
+  ]);
 
   const resolvedFiles = data.filter((f) => f.exists);
   const unresolvedFiles = data.filter((f) => !f.exists);
@@ -40,6 +48,7 @@ const MultiFileDialog = ({ data, isSending, setOpen, setIsSending }: Props) => {
           await sendMessage({
             process: activeProcess.id,
             data: file.content,
+            tags: defaultTags,
           });
         } catch (error) {
           console.error('Error processing file:', file.filePath, error);

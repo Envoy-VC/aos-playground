@@ -1,4 +1,8 @@
-import { ExplorerPanel, ProcessPanel } from '~/components/sidebar-panels';
+import {
+  ExplorerPanel,
+  ProcessPanel,
+  RunDebugPanel,
+} from '~/components/sidebar-panels';
 
 import { useSidebar } from '~/lib/stores';
 
@@ -8,6 +12,7 @@ const SidePanel = () => {
     <>
       {activeKey === 'processes' && <ProcessPanel />}
       {activeKey === 'files' && <ExplorerPanel />}
+      {activeKey === 'run' && <RunDebugPanel />}
     </>
   );
 };

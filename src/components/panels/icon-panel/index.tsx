@@ -7,7 +7,7 @@ import {
 
 import { useSidebar } from '~/lib/stores';
 
-import { Files, Bolt, Cpu } from 'lucide-react';
+import { Files, Bolt, Cpu, BugPlay } from 'lucide-react';
 
 import PlaygroundLogo from '~/components/logo';
 import { cn } from '~/lib/utils';
@@ -82,6 +82,11 @@ export const sidebarItems = [
     title: 'Processes',
     icon: Cpu,
     key: 'processes',
+  },
+  {
+    title: 'Run & Debug',
+    icon: BugPlay,
+    key: 'run',
   },
   {
     title: 'Settings',
