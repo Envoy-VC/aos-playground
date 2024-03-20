@@ -7,7 +7,7 @@ import {
 
 import { useSidebar } from '~/lib/stores';
 
-import { Files, Bolt, Cpu, BugPlay } from 'lucide-react';
+import { Files, Cpu, BugPlay } from 'lucide-react';
 
 import PlaygroundLogo from '~/components/logo';
 import { cn } from '~/lib/utils';
@@ -88,9 +88,9 @@ export const sidebarItems = [
     icon: BugPlay,
     key: 'run',
   },
-  {
-    title: 'Settings',
-    icon: Bolt,
-    key: 'settings',
-  },
+  // {
+  //   title: 'Settings',
+  //   icon: Bolt,
+  //   key: 'settings',
+  // },
 ] as const;
