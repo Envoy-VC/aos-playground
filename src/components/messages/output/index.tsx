@@ -63,7 +63,7 @@ const OutputBox = () => {
     }
   );
 
-  const [isUserNearTop, setIsUserNearTop] = React.useState<boolean>(false);
+  const [isUserNearTop, setIsUserNearTop] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     const contentNode = containerRef.current;
