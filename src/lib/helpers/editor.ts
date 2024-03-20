@@ -1,7 +1,6 @@
 import { toast } from 'sonner';
 import { db } from '../db';
 
-// import { Config } from '@johnnymorganz/stylua';
 // @ts-expect-error err
 import { formatCode, Config } from './stylua_lib_bg';
 
@@ -71,7 +70,6 @@ export const onCreate = async (
   }
 
   const type = isCreating === 'file' ? 'file' : 'folder';
-  console.log(`Creating ${type} ${name} in ${parentFolder}`);
   if (type === 'file') {
     const extension = name.split('.').pop() ?? null;
     if (!extension) {
@@ -82,6 +80,20 @@ export const onCreate = async (
     }
     const path = `${parentFolder}${name}`;
 
+    const file = await db.files.get(path);
+
+    if (file) {
+      toast.error('File already exists');
+      return;
+    }
+
+    const regex = new RegExp('^[a-zA-Z0-9_]*\\.[a-zA-Z0-9_]*$|^[a-zA-Z0-9_]*$');
+
+    if (!regex.test(name)) {
+      toast.error('Invalid file name');
+      return;
+    }
+
     await db.files.add({
       path,
       name,
@@ -91,8 +103,21 @@ export const onCreate = async (
     });
   } else {
     const path = `${parentFolder}${name}/`;
-    // TODO: check if folder already exists
-    // TODO: check for invalid characters
+    const folder = await db.folders.get(path);
+    if (folder) {
+      toast.error('Folder already exists');
+      return;
+    }
+
+    // only alphanumeric and underscore and spaces
+    const regex = new RegExp(
+      '^[a-zA-Z0-9_ ]*\\.[a-zA-Z0-9_ ]*$|^[a-zA-Z0-9_ ]*$'
+    );
+    if (!regex.test(name)) {
+      toast.error('Invalid folder name');
+      return;
+    }
+
     await db.folders.add({
       path,
       name,
