@@ -22,6 +22,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '~/components/ui/dialog';
+import MultiFileDialog from './MultiFileDialog';
 
 const Run = () => {
   const { activePath } = useEditor();
@@ -119,44 +120,15 @@ const Run = () => {
         <DialogTrigger></DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              Imported files found. Do you want to send them as well?
-            </DialogTitle>
+            <DialogTitle></DialogTitle>
           </DialogHeader>
-          <div className='flex flex-row justify-between gap-2'>
-            <div className='flex flex-col gap-4'>
-              <div className='text-base font-medium'>Resolved Files</div>
-              <div>
-                {requiredFiles
-                  .filter((f) => f.exists)
-                  .map((file) => (
-                    <div
-                      className='text-base font-medium text-neutral-500'
-                      key={file.filePath}
-                    >
-                      {file.filePath.slice(1)}
-                    </div>
-                  ))}
-              </div>
-            </div>
-            <div className='flex flex-col gap-4'>
-              <div className='text-base font-medium'>
-                Files that could not be resolved
-              </div>
-              <div>
-                {requiredFiles
-                  .filter((f) => !f.exists)
-                  .map((file) => (
-                    <div
-                      className='text-base font-medium text-red-500'
-                      key={file.filePath}
-                    >
-                      {file.filePath.slice(1)}
-                    </div>
-                  ))}
-              </div>
-            </div>
-          </div>
+          <MultiFileDialog
+            data={requiredFiles}
+            
+            setOpen={setIsModalOpen}
+            isSending={isSending}
+            setIsSending={setIsSending}
+          />
         </DialogContent>
       </Dialog>
     </div>
