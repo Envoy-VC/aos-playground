@@ -25,15 +25,15 @@ const getDirSize = (dirPath) => {
 };
 
 const deploy = async () => {
-  const url = 'devnet';
-  const providerUrl = 'https://mumbai.rpc.thirdweb.com/';
+  const url = 'node2';
+  //const providerUrl = 'https://mumbai.rpc.thirdweb.com/';
   const token = 'matic';
 
   const irys = new Irys({
     url,
     token,
     key: process.env.WALLET_PK,
-    config: { providerUrl },
+    //config: { providerUrl },
   });
   await irys.ready();
   const folderToUpload = './dist';

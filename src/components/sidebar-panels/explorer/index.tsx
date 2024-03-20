@@ -139,9 +139,6 @@ const ExplorerPanel = () => {
             allFolders={folders ?? []}
           />
         ))}
-        {rootFiles.map((file) => (
-          <FilePill key={file.path} {...file} />
-        ))}
         {parentFolder === '/' && (
           <div
             className={cn(
@@ -175,6 +172,9 @@ const ExplorerPanel = () => {
             />
           </div>
         )}
+        {rootFiles.map((file) => (
+          <FilePill key={file.path} {...file} />
+        ))}
       </div>
     </div>
   );

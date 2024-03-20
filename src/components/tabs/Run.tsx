@@ -70,8 +70,10 @@ const Run = () => {
         filePath: activePath!,
         content: data.content,
         exists: true,
+        ast: ast,
       });
       setRequiredFiles(requiredFiles);
+      console.log(requiredFiles);
 
       if (requiredFiles.length === 0) {
         throw new Error('No required files found');

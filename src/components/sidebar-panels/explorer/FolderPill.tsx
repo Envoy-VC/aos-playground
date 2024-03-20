@@ -250,11 +250,6 @@ const FolderPill = ({
                 allFolders={subfolders}
               />
             ))}
-          {allFiles
-            .filter((file) => file.parentFolder === folderPath)
-            .map((file) => (
-              <FilePill key={file.path} {...file} />
-            ))}
           {parentFolder === path && (
             <div className='flex flex-row items-center gap-2 px-1'>
               {isCreating === 'file' && (
@@ -281,6 +276,11 @@ const FolderPill = ({
               />
             </div>
           )}
+          {allFiles
+            .filter((file) => file.parentFolder === folderPath)
+            .map((file) => (
+              <FilePill key={file.path} {...file} />
+            ))}
         </div>
       )}
     </div>

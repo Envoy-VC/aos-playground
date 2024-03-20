@@ -14,7 +14,7 @@ interface Actions {
   setResult: (res: RequireFile[]) => void;
 }
 
-export const useDebugFile = create<State & Actions>((set, get) => ({
+export const useDebugFile = create<State & Actions>((set) => ({
   filePath: undefined,
   isActive: false,
   result: [],
