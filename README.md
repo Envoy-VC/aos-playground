@@ -5,9 +5,10 @@
 <p align="center">
   <a href="#features">Features</a> •
   <a href="#how-it-works">How it works?</a> •
-  <a href="#usage">Usage</a> •
-  <a href="#tech-stack">Tech Stack</a> •
-  <a href="https://arweave.net/rCijTvsbWTdUdNB2ZjG-k55L73JlOnxCPjf_UTMnU4M">Try Now ↗️</a>
+<a href="#tech-stack">Tech Stack</a> •
+<a href="https://www.youtube.com/watch?v=1vL3MEufW9w">Demo Video ↗️</a> •
+<a href="https://arweave.net/rCijTvsbWTdUdNB2ZjG-k55L73JlOnxCPjf_UTMnU4M">Try Now ↗️</a>
+
 </p>
 
 ![Playground](https://devnet.irys.xyz/_4HXmADnGz1E0UUzKFOMKHcvX4oy1I3ubq0ZLNrrH5U)
@@ -122,10 +123,6 @@ Then the order of execution is determined and the files are executed in that ord
 > **Why pcall instead of require?**
 >
 > The reason for using pcall is to catch any errors that might occur during the execution of the file. If an error occurs, the error is caught and the error message is returned instead of the throwing the actual error.
-
-## Usage
-
-Head over to [AOS Playground](https://arweave.net/rCijTvsbWTdUdNB2ZjG-k55L73JlOnxCPjf_UTMnU4M) to try it out.
 
 ## Tech Stack
 
