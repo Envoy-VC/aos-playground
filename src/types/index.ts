@@ -25,3 +25,13 @@ export type AoResult = {
 export type AoResults = {
   edges: AoResult[];
 };
+
+export interface EditorConfig {
+  theme?: 'ao-light' | 'ao-dark';
+  fontSize?: number;
+}
+
+export const defaultConfig: EditorConfig = {
+  theme: 'ao-light',
+  fontSize: 15,
+};

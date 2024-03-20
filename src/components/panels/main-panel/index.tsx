@@ -5,12 +5,15 @@ import Editor, { useMonaco } from '@monaco-editor/react';
 import { useTheme } from '~/components/theme-provider';
 import { useEditor } from '~/lib/stores/editor';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { useLocalStorage } from 'usehooks-ts';
 
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '~/components/ui/resizable';
+
+import { EditorConfig, defaultConfig } from '~/types';
 
 import { darkTheme, lightTheme } from '~/lib/themes';
 import DefaultPage from './DefaultPage';
@@ -23,6 +26,11 @@ const MainPanel = () => {
   const { setMonaco, activePath, setActivePath } = useEditor();
   const { theme } = useTheme();
   const monaco = useMonaco();
+
+  const [editorOptions] = useLocalStorage<EditorConfig>(
+    'editorOptions',
+    defaultConfig
+  );
 
   const activeFile = useLiveQuery(async () => {
     const activeFile = await db.files.get(activePath ?? '');
@@ -43,10 +51,7 @@ const MainPanel = () => {
   const handleMount = (editor: Types.editor.IStandaloneCodeEditor) => {
     setMonaco(editor);
     const newTheme = theme === 'dark' ? 'ao-dark' : 'ao-light';
-    editor.updateOptions({
-      theme: newTheme,
-      fontSize: 15,
-    });
+    editor.updateOptions({ ...editorOptions, theme: newTheme });
     editor.addAction({
       id: 'saveCommand',
       label: 'Save',

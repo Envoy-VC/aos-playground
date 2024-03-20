@@ -10,6 +10,9 @@ import TabPill from './TabPill';
 import { useEditor } from '~/lib/stores';
 import { db } from '~/lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { useLocalStorage } from 'usehooks-ts';
+
+import { EditorConfig, defaultConfig } from '~/types';
 
 import { ZoomIn, ZoomOut } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -18,6 +21,11 @@ import Run from './Run';
 
 const Tabs = () => {
   const { monaco } = useEditor();
+
+  const [editorOptions, setEditorConfig] = useLocalStorage<EditorConfig>(
+    'editorOptions',
+    defaultConfig
+  );
 
   const tabs = useLiveQuery(async () => {
     const tabs = await db.tabs.toArray();
@@ -28,15 +36,13 @@ const Tabs = () => {
     if (!monaco) return;
     const currentSize = monaco.getRawOptions().fontSize ?? 15;
 
-    if (type === 'in') {
-      monaco.updateOptions({
-        fontSize: currentSize + 1,
-      });
-    } else {
-      monaco.updateOptions({
-        fontSize: currentSize - 1,
-      });
-    }
+    const newSize = type === 'in' ? currentSize + 1 : currentSize - 1;
+
+    monaco.updateOptions({
+      fontSize: newSize,
+    });
+
+    setEditorConfig({ ...editorOptions, fontSize: newSize });
   };
 
   return (
