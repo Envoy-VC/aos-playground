@@ -14,6 +14,7 @@ import {
 } from '~/components/ui/resizable';
 
 import { EditorConfig, defaultConfig } from '~/types';
+import { useDebugFile } from '~/lib/stores';
 
 import { darkTheme, lightTheme } from '~/lib/themes';
 import DefaultPage from './DefaultPage';
@@ -21,11 +22,13 @@ import DefaultPage from './DefaultPage';
 import { Messages, Tabs } from '~/components';
 import { db } from '~/lib/db';
 import { closeTab, formatOnSave } from '~/lib/helpers/editor';
+import DebugPanel from '../debug-panel';
 
 const MainPanel = () => {
   const { setMonaco, activePath, setActivePath } = useEditor();
   const { theme } = useTheme();
   const monaco = useMonaco();
+  const { isActive: isDebuggerActive, result } = useDebugFile();
 
   const [editorOptions] = useLocalStorage<EditorConfig>(
     'editorOptions',
@@ -113,7 +116,8 @@ const MainPanel = () => {
           collapsible
           collapsedSize={0}
         >
-          {activeFile ? (
+          {isDebuggerActive && result.length > 0 && <DebugPanel />}
+          {activeFile && !isDebuggerActive ? (
             <Editor
               language={activeFile.language}
               value={activeFile.content}

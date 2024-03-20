@@ -6,6 +6,7 @@ export interface RequireFile {
   filePath: string;
   content: string;
   exists: boolean;
+  ast: Chunk;
 }
 
 export async function getRequireValuesFromAST(
@@ -43,10 +44,13 @@ export async function getRequireValuesFromAST(
           const res = await db.files.get(importedFilePath);
           const content = res?.content ?? null;
 
+          const ast = parse(content ?? '');
+
           requirePcallValues.push({
             filePath: importedFilePath,
             content: content ?? '',
             exists: content !== null,
+            ast,
           });
 
           // Check if the file has been visited already
