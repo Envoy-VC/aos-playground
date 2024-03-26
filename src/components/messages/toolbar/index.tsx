@@ -1,3 +1,4 @@
+import { toolbarItems } from '~/lib/data';
 import { useMessagesPanel } from '~/lib/stores/messages';
 import { cn } from '~/lib/utils';
 
@@ -23,12 +24,5 @@ const Toolbar = () => {
     </div>
   );
 };
-
-export const toolbarItems = [
-  {
-    name: 'Output',
-    key: 'output',
-  },
-] as const;
 
 export default Toolbar;

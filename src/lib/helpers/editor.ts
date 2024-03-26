@@ -1,8 +1,7 @@
-import { toast } from 'sonner';
-import { db } from '../db';
-
 // @ts-expect-error err
-import { formatCode, Config } from './stylua_lib_bg';
+import { Config, formatCode } from '$/stylua_lib_bg';
+
+import { db } from '../db';
 
 export const supportedExtensions = [
   'js',
@@ -83,15 +82,13 @@ export const onCreate = async (
     const file = await db.files.get(path);
 
     if (file) {
-      toast.error('File already exists');
-      return;
+      throw new Error(`File ${name} already exists`);
     }
 
     const regex = new RegExp('^[a-zA-Z0-9_]*\\.[a-zA-Z0-9_]*$|^[a-zA-Z0-9_]*$');
 
     if (!regex.test(name)) {
-      toast.error('Invalid file name');
-      return;
+      throw new Error('Invalid file name');
     }
 
     await db.files.add({
@@ -105,8 +102,7 @@ export const onCreate = async (
     const path = `${parentFolder}${name}/`;
     const folder = await db.folders.get(path);
     if (folder) {
-      toast.error('Folder already exists');
-      return;
+      throw new Error(`Folder ${name} already exists`);
     }
 
     // only alphanumeric and underscore and spaces
@@ -114,8 +110,7 @@ export const onCreate = async (
       '^[a-zA-Z0-9_ ]*\\.[a-zA-Z0-9_ ]*$|^[a-zA-Z0-9_ ]*$'
     );
     if (!regex.test(name)) {
-      toast.error('Invalid folder name');
-      return;
+      throw new Error('Invalid folder name');
     }
 
     await db.folders.add({
@@ -137,8 +132,7 @@ export const formatOnSave = async (activeFilePath: string) => {
     const formattedCode = await formatCode(file.content, config, undefined, 1);
     await db.files.update(activeFilePath, { content: formattedCode });
   } catch (error) {
-    console.log(error);
-    toast.error('Failed to format file');
+    throw new Error(String(error));
   }
 };
 
@@ -146,8 +140,7 @@ export const closeTab = async (activeFilePath: string) => {
   try {
     await db.tabs.delete(activeFilePath);
   } catch (error) {
-    toast.error('Failed to delete tab');
-    return null;
+    throw new Error('Failed to close tab');
   }
 };
 

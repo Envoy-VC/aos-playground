@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { toolbarItems } from '~/components/messages/toolbar';
+import { toolbarItems } from '../data';
 
 type Values = (typeof toolbarItems)[number]['key'];
 

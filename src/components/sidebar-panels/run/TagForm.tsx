@@ -1,9 +1,7 @@
 import React from 'react';
-import { useLocalStorage } from 'usehooks-ts';
+import { useFieldArray, useForm } from 'react-hook-form';
 
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useTags, useToast } from '~/lib/hooks';
 
 import { Button } from '~/components/ui/button';
 import {
@@ -15,18 +13,14 @@ import {
 } from '~/components/ui/form';
 import { Input } from '~/components/ui/input';
 
-import { Trash, Plus, Save } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
-import { Tag } from '~/types';
-import { toast } from 'sonner';
+import { Plus, Save, Trash } from 'lucide-react';
 
 const TagForm = () => {
-  const [defaultTags, setDefaultTags] = useLocalStorage<Tag[]>('defaultTags', [
-    {
-      name: 'Action',
-      value: 'Eval',
-    },
-  ]);
+  const { toast } = useToast();
+  const { defaultTags, setDefaultTags } = useTags();
 
   const form = useForm<TagsForm>({
     resolver: zodResolver(formSchema),

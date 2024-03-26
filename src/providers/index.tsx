@@ -1,13 +1,13 @@
 import React from 'react';
-
-import { HelmetProvider } from 'react-helmet-async';
-import { ThemeProvider } from '~/components/theme-provider';
-import ArweaveProvider from './arweave';
-
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { ErrorBoundary } from 'react-error-boundary';
+import { HelmetProvider } from 'react-helmet-async';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+import { ThemeProvider } from '~/components/theme-provider';
 
 import ErrorPage from '~/pages/error';
+
+import ArweaveProvider from './arweave';
 
 const ProviderTree = ({ children }: React.PropsWithChildren) => {
   const queryClient = new QueryClient();

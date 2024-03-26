@@ -1,11 +1,11 @@
 import React from 'react';
-
-import { z } from 'zod';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { Input } from '~/components/ui/input';
+import { db } from '~/lib/db';
+import { useProcess, useToast } from '~/lib/hooks';
+import { spawnProcess } from '~/lib/services/spawn';
+import { cn } from '~/lib/utils';
+
 import { Button } from '~/components/ui/button';
 import {
   Form,
@@ -15,30 +15,24 @@ import {
   FormLabel,
   FormMessage,
 } from '~/components/ui/form';
+import { Input } from '~/components/ui/input';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 import { useActiveAddress } from 'arweave-wallet-kit';
-import { useLocalStorage } from 'usehooks-ts';
-
-import { spawnProcess } from '~/lib/services/spawn';
-
-import { db, Process } from '~/lib/db';
-
-import { PackagePlus, ChevronRight } from 'lucide-react';
-import { cn } from '~/lib/utils';
-import { toast } from 'sonner';
+import { ChevronRight, PackagePlus } from 'lucide-react';
 
 const CreateProcess = () => {
+  const { toast } = useToast();
+  const { setActiveProcess } = useProcess();
+
   const [showAdvanced, setShowAdvanced] = React.useState<boolean>(false);
   const address = useActiveAddress();
 
   const form = useForm<CreateProcessType>({
     resolver: zodResolver(createProcessSchema),
   });
-
-  const [, setActiveProcess] = useLocalStorage<Process | undefined>(
-    'activeProcess',
-    undefined
-  );
 
   const onSubmit = async (values: CreateProcessType) => {
     try {
@@ -50,13 +44,15 @@ const CreateProcess = () => {
       db.processes.add(res, res.id);
       setActiveProcess(res);
 
-      toast.success('Process Spawned', {
-        description: <p className='break-all'>ID: {res.id}.</p>,
-      });
+      // toast.success('Process Spawned', {
+      //   description: <p className='break-all'>ID: {res.id}.</p>,
+      // });
+
+      toast.success('Process Spawned');
       form.reset();
     } catch (error) {
       toast.error('Error', {
-        description: (error as Error).message ?? 'Something went wrong!',
+        // description: (error as Error).message ?? 'Something went wrong!',
       });
     }
   };

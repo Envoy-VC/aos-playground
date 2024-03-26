@@ -1,16 +1,14 @@
+import { sidebarItems } from '~/lib/data';
+import { useSidebar } from '~/lib/stores';
+import { cn } from '~/lib/utils';
+
+import PlaygroundLogo from '~/components/logo';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '~/components/ui/tooltip';
-
-import { useSidebar } from '~/lib/stores';
-
-import { Files, Cpu, BugPlay } from 'lucide-react';
-
-import PlaygroundLogo from '~/components/logo';
-import { cn } from '~/lib/utils';
 
 const IconPanel = () => {
   const { activeKey, panel, isCollapsed, setActiveKey, setIsCollapsed } =
@@ -71,26 +69,3 @@ const IconPanel = () => {
 };
 
 export default IconPanel;
-
-export const sidebarItems = [
-  {
-    title: 'Files',
-    icon: Files,
-    key: 'files',
-  },
-  {
-    title: 'Processes',
-    icon: Cpu,
-    key: 'processes',
-  },
-  {
-    title: 'Run & Debug',
-    icon: BugPlay,
-    key: 'run',
-  },
-  // {
-  //   title: 'Settings',
-  //   icon: Bolt,
-  //   key: 'settings',
-  // },
-] as const;

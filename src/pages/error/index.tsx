@@ -1,9 +1,10 @@
-import { Button } from '~/components/ui/button';
-import { toast } from 'sonner';
-
 import { db } from '~/lib/db';
+import { useToast } from '~/lib/hooks';
+
+import { Button } from '~/components/ui/button';
 
 const ErrorPage = () => {
+  const { toast } = useToast();
   const reset = async () => {
     try {
       await db.delete();

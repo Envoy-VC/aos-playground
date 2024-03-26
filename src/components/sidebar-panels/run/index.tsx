@@ -1,9 +1,9 @@
-import { Header, HeaderTitle, HeaderDescription } from '~/components/ui/header';
-import TagForm from './TagForm';
-import { parse } from 'luaparse';
+import { db } from '~/lib/db';
 import { getRequireValuesFromAST } from '~/lib/helpers/ast-parser';
+import { useDebugFile } from '~/lib/stores';
 
 import { Button } from '~/components/ui/button';
+import { Header, HeaderDescription, HeaderTitle } from '~/components/ui/header';
 import {
   Select,
   SelectContent,
@@ -12,12 +12,10 @@ import {
   SelectValue,
 } from '~/components/ui/select';
 
+import TagForm from './TagForm';
+
 import { useLiveQuery } from 'dexie-react-hooks';
-
 import { Bug } from 'lucide-react';
-import { db } from '~/lib/db';
-
-import { useDebugFile } from '~/lib/stores';
 
 const RunDebugPanel = () => {
   const files = useLiveQuery(async () => {
@@ -30,17 +28,8 @@ const RunDebugPanel = () => {
   const onDebug = async () => {
     try {
       if (!filePath) return;
-      const content = (await db.files.get(filePath))?.content ?? '';
-      const ast = parse(content);
-      console.log(ast);
+      const result = await getRequireValuesFromAST(filePath);
 
-      const result = await getRequireValuesFromAST(ast);
-      result.push({
-        filePath,
-        ast,
-        content,
-        exists: true,
-      });
       setResult(result);
       setIsActive(true);
     } catch (error) {

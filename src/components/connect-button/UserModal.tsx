@@ -1,5 +1,4 @@
 import React from 'react';
-import { ArAccount } from 'arweave-account';
 
 import {
   Dialog,
@@ -9,11 +8,12 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog';
 
-import { useActiveAddress, useConnection } from 'arweave-wallet-kit';
-import { useCopyToClipboard } from 'usehooks-ts';
-
-import { Clipboard, LogOut } from 'lucide-react';
 import { Button } from '../ui/button';
+
+import { ArAccount } from 'arweave-account';
+import { useActiveAddress, useConnection } from 'arweave-wallet-kit';
+import { Clipboard, LogOut } from 'lucide-react';
+import { useCopyToClipboard } from 'usehooks-ts';
 
 interface Props extends React.PropsWithChildren {
   profile: ArAccount | undefined;

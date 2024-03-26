@@ -1,4 +1,4 @@
-import { dryrun, createDataItemSigner } from '@permaweb/aoconnect';
+import { createDataItemSigner, dryrun } from '@permaweb/aoconnect';
 
 interface Props {
   address: string;

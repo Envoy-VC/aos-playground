@@ -1,7 +1,8 @@
+import { ImperativePanelHandle } from 'react-resizable-panels';
+
 import { create } from 'zustand';
 
-import { sidebarItems } from '~/components/panels/icon-panel';
-import { ImperativePanelHandle } from 'react-resizable-panels';
+import { sidebarItems } from '../data';
 
 type Values = (typeof sidebarItems)[number]['key'];
 

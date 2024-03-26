@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { EditorFile } from '~/lib/db';
+import { db } from '~/lib/db';
 import { getFileIcon } from '~/lib/helpers/editor';
-import { File } from 'lucide-react';
+import { useEditor } from '~/lib/stores';
+import { cn } from '~/lib/utils';
 
 import {
   ContextMenu,
@@ -13,10 +14,10 @@ import {
 } from '~/components/ui/context-menu';
 import { Input } from '~/components/ui/input';
 
-import { db } from '~/lib/db';
-import { cn } from '~/lib/utils';
+import { EditorFile } from '~/types';
+
+import { File } from 'lucide-react';
 import { useCopyToClipboard } from 'usehooks-ts';
-import { useEditor } from '~/lib/stores';
 
 const FilePill = ({ name, path, content }: EditorFile) => {
   const renameRef = React.useRef<HTMLInputElement>(null);

@@ -1,10 +1,10 @@
 import { HashRouter } from 'react-router-dom';
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
-import '~/assets/index.css';
+import { Toaster } from '~/components/ui/toaster';
 
 import Home from '~/pages/home';
-import { Toaster } from '~/components/ui/sonner';
+import '~/styles/index.css';
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path={'/'} element={<Home />} />
       </Routes>
-      <Toaster position='bottom-left' />
+      <Toaster />
     </HashRouter>
   );
 }

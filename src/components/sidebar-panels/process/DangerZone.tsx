@@ -1,3 +1,6 @@
+import { db } from '~/lib/db';
+import { useProcess, useToast } from '~/lib/hooks';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,22 +14,16 @@ import {
 } from '~/components/ui/alert-dialog';
 import { Button } from '~/components/ui/button';
 
-import { useLocalStorage } from 'usehooks-ts';
-
-import { db, Process } from '~/lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 
-import { toast } from 'sonner';
-
 const DangerZone = () => {
+  const { toast } = useToast();
+  const { activeProcess, setActiveProcess } = useProcess();
+
   const processes = useLiveQuery(async () => {
     const processes = await db.processes.toArray();
     return processes;
   }, []);
-
-  const [activeProcess, setActiveProcess] = useLocalStorage<
-    Process | undefined
-  >('activeProcess', undefined);
 
   const onClick = async (type: 'all' | 'active') => {
     try {
@@ -34,13 +31,13 @@ const DangerZone = () => {
         const process = activeProcess?.id ?? null;
         if (!process) {
           toast.error('Error', {
-            description: 'No active process found.',
+            //description: 'No active process found.',
           });
           return;
         }
         await db.processes.delete(process);
         toast.success('Process Deleted', {
-          description: <p className='break-all'>ID: {process}.</p>,
+          //description: <p className='break-all'>ID: {process}.</p>,
         });
       } else {
         await db.processes.bulkDelete(processes?.map((val) => val.id) ?? []);
@@ -48,7 +45,7 @@ const DangerZone = () => {
       setActiveProcess(undefined);
     } catch (error) {
       toast.error('Error', {
-        description: (error as Error).message ?? 'An error occurred',
+        //description: (error as Error).message ?? 'An error occurred',
       });
     }
   };

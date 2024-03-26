@@ -1,7 +1,7 @@
 import { useMessagesPanel } from '~/lib/stores/messages';
 
-import Toolbar from './toolbar';
 import OutputBox from './output';
+import Toolbar from './toolbar';
 
 const Messages = () => {
   const { activeKey } = useMessagesPanel();

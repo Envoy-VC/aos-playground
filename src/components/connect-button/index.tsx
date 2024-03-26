@@ -1,17 +1,16 @@
-import {
-  useProfileModal,
-  useActiveAddress,
-  useConnection,
-} from 'arweave-wallet-kit';
-
-import { Button } from '../ui/button';
-
 import { useQuery } from 'react-query';
-import Account from 'arweave-account';
-import UserModal from './UserModal';
 
 import { getBalance } from '~/lib/services/balance';
 
+import { Button } from '../ui/button';
+import UserModal from './UserModal';
+
+import Account from 'arweave-account';
+import {
+  useActiveAddress,
+  useConnection,
+  useProfileModal,
+} from 'arweave-wallet-kit';
 import { LogIn } from 'lucide-react';
 
 const ConnectButton = () => {

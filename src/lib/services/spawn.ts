@@ -1,8 +1,8 @@
+import { createDataItemSigner, spawn } from '@permaweb/aoconnect';
 import type { Tag } from '~/types';
-import { Process } from '../db';
+import { Process } from '~/types';
 
-import { AO_SCHEDULER } from '../utils';
-import { spawn, createDataItemSigner } from '@permaweb/aoconnect';
+import { AO_SCHEDULER } from '../data';
 
 interface Props {
   name?: string;

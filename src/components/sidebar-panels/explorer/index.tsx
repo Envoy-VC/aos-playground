@@ -1,7 +1,13 @@
 import React from 'react';
 
-import { Header, HeaderTitle } from '~/components/ui/header';
+import { db } from '~/lib/db';
+import { getFileIcon } from '~/lib/helpers/editor';
+import { onCreate } from '~/lib/helpers/editor';
+import { useEditor } from '~/lib/stores';
+import { cn } from '~/lib/utils';
+
 import { Button } from '~/components/ui/button';
+import { Header, HeaderTitle } from '~/components/ui/header';
 import { Input } from '~/components/ui/input';
 import {
   Tooltip,
@@ -10,19 +16,11 @@ import {
   TooltipTrigger,
 } from '~/components/ui/tooltip';
 
-import FolderPill from './FolderPill';
 import FilePill from './FilePill';
+import FolderPill from './FolderPill';
 
-import { useEditor } from '~/lib/stores';
-
-import { File, Folder } from 'lucide-react';
-import { db } from '~/lib/db';
-
-import { getFileIcon } from '~/lib/helpers/editor';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { cn } from '~/lib/utils';
-
-import { onCreate } from '~/lib/helpers/editor';
+import { File, Folder } from 'lucide-react';
 
 const ExplorerPanel = () => {
   const inputRef = React.useRef<HTMLInputElement>(null);

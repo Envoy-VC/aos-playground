@@ -1,13 +1,12 @@
+import { db } from '~/lib/db';
 import { getFileIcon } from '~/lib/helpers/editor';
-
 import { useEditor } from '~/lib/stores';
+import { cn } from '~/lib/utils';
+
+import { Button } from '../ui/button';
 
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db } from '~/lib/db';
-
 import { X } from 'lucide-react';
-import { Button } from '../ui/button';
-import { cn } from '~/lib/utils';
 
 interface Props {
   path: string;

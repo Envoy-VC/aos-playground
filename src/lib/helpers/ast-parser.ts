@@ -1,19 +1,25 @@
-import traverse from 'traverse';
-import { Chunk, Node, parse } from 'luaparse';
+import type { RequireFile } from '~/types';
+
 import { db } from '../db';
 
-export interface RequireFile {
-  filePath: string;
-  content: string;
-  exists: boolean;
-  ast: Chunk;
-}
+import { type Chunk, type Node, parse } from 'luaparse';
+import traverse from 'traverse';
 
 export async function getRequireValuesFromAST(
-  ast: Chunk
+  filePath: string
 ): Promise<RequireFile[]> {
   const requirePcallValues: RequireFile[] = [];
   const visitedFiles = new Set<string>();
+
+  const content = (await db.files.get(filePath))?.content ?? '';
+  const ast = parse(content, { luaVersion: '5.3' });
+
+  requirePcallValues.push({
+    filePath,
+    ast,
+    content,
+    exists: true,
+  });
 
   await processRequireStatements(ast);
 
@@ -42,14 +48,16 @@ export async function getRequireValuesFromAST(
           const filePath = node.arguments[1].raw;
           const importedFilePath = getFilePath(filePath);
           const res = await db.files.get(importedFilePath);
-          const content = res?.content ?? null;
+          const content = res?.content ?? '';
 
-          const ast = parse(content ?? '');
+          const ast = parse(content, {
+            luaVersion: '5.3',
+          });
 
           requirePcallValues.push({
             filePath: importedFilePath,
-            content: content ?? '',
-            exists: content !== null,
+            content,
+            exists: content !== '',
             ast,
           });
 
@@ -58,16 +66,8 @@ export async function getRequireValuesFromAST(
             // Mark the file as visited
             visitedFiles.add(filePath);
 
-            // Read the content of the imported file
-            const importedFilePath = getFilePath(filePath); // Adjust the path based on your project structure
-            const res = await db.files.get(importedFilePath);
-            const content = res?.content ?? '';
-
-            // Parse the content of the imported file
-            const importedFileAst = parseLuaContent(content); // You need to implement this function
-
             // Recursively process require statements in the imported file
-            await processRequireStatements(importedFileAst);
+            await processRequireStatements(ast);
           }
         }
       }
@@ -75,11 +75,6 @@ export async function getRequireValuesFromAST(
   }
 
   return requirePcallValues;
-}
-
-// Assuming you have a function to parse Lua content and obtain its AST
-function parseLuaContent(content: string): Chunk {
-  return parse(content);
 }
 
 export const getFilePath = (filePath: string) => {

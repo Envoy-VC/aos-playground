@@ -1,20 +1,10 @@
 import React from 'react';
 
-import { Button } from '../ui/button';
-import { Play, LoaderCircle } from 'lucide-react';
-
-import { useReadLocalStorage, useLocalStorage } from 'usehooks-ts';
 import { db } from '~/lib/db';
-
-import { parse } from 'luaparse';
-import { getRequireValuesFromAST, RequireFile } from '~/lib/helpers/ast-parser';
-
-import { useEditor } from '~/lib/stores';
-
-import { Process } from '~/lib/db';
-import { Tag } from '~/types';
-import { toast } from 'sonner';
+import { getRequireValuesFromAST } from '~/lib/helpers/ast-parser';
+import { useProcess, useTags, useToast } from '~/lib/hooks';
 import { sendMessage } from '~/lib/services/message';
+import { useEditor } from '~/lib/stores';
 
 import {
   Dialog,
@@ -23,23 +13,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '~/components/ui/dialog';
+
+import { RequireFile } from '~/types';
+
+import { Button } from '../ui/button';
 import MultiFileDialog from './MultiFileDialog';
 
+import { LoaderCircle, Play } from 'lucide-react';
+
 const Run = () => {
+  const { toast } = useToast();
   const { activePath } = useEditor();
+  const { activeProcess } = useProcess();
+  const { defaultTags: tags } = useTags();
   const [isSending, setIsSending] = React.useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
-
-  const activeProcess = useReadLocalStorage<Process | undefined>(
-    'activeProcess'
-  );
-
-  const [tags] = useLocalStorage<Tag[]>('defaultTags', [
-    {
-      name: 'Action',
-      value: 'Eval',
-    },
-  ]);
 
   const [requiredFiles, setRequiredFiles] = React.useState<RequireFile[]>([]);
 
@@ -64,14 +52,8 @@ const Run = () => {
     try {
       const data = await checks();
       setIsSending(true);
-      const ast = parse(data.content);
-      const requiredFiles = await getRequireValuesFromAST(ast);
-      requiredFiles.push({
-        filePath: activePath!,
-        content: data.content,
-        exists: true,
-        ast: ast,
-      });
+      const requiredFiles = await getRequireValuesFromAST(data.path);
+
       setRequiredFiles(requiredFiles);
       console.log(requiredFiles);
 
@@ -88,7 +70,7 @@ const Run = () => {
         setIsModalOpen(true);
       }
     } catch (error) {
-      toast.error('', { description: (error as Error).message });
+      toast.error((error as Error).message);
     } finally {
       setIsSending(false);
     }

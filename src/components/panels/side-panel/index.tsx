@@ -1,10 +1,10 @@
+import { useSidebar } from '~/lib/stores';
+
 import {
   ExplorerPanel,
   ProcessPanel,
   RunDebugPanel,
 } from '~/components/sidebar-panels';
-
-import { useSidebar } from '~/lib/stores';
 
 const SidePanel = () => {
   const { activeKey } = useSidebar();

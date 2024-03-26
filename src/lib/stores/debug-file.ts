@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-
-import { RequireFile } from '../helpers/ast-parser';
+import { RequireFile } from '~/types';
 
 type State = {
   isActive: boolean;

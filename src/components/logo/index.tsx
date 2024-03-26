@@ -1,6 +1,6 @@
-import { AOSDark, AOSLight } from '~/assets';
-
 import { cn } from '~/lib/utils';
+
+import { AOSDark, AOSLight } from '~/assets';
 
 const PlaygroundLogo = () => {
   return (

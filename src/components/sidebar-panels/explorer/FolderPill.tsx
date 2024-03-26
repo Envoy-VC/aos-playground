@@ -1,8 +1,11 @@
 import React from 'react';
 
+import { db } from '~/lib/db';
+import { getFileIcon } from '~/lib/helpers/editor';
+import { useEditor } from '~/lib/stores';
+import { cn } from '~/lib/utils';
+
 import { Button } from '~/components/ui/button';
-import { Input } from '~/components/ui/input';
-import FilePill from './FilePill';
 import {
   ContextMenu,
   ContextMenuContent,
@@ -10,16 +13,13 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from '~/components/ui/context-menu';
+import { Input } from '~/components/ui/input';
 
-import { cn } from '~/lib/utils';
+import { EditorFile, EditorFolder } from '~/types';
 
-import { EditorFolder, EditorFile, db } from '~/lib/db';
-import { useEditor } from '~/lib/stores';
+import FilePill from './FilePill';
 
-import { Folder, File } from 'lucide-react';
-import { getFileIcon } from '~/lib/helpers/editor';
-
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, File, Folder } from 'lucide-react';
 
 interface Props extends EditorFolder {
   allFiles: EditorFile[];

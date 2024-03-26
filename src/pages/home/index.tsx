@@ -1,9 +1,9 @@
 import React from 'react';
-
-import { IconPanel, MainPanel, SidePanel } from '~/components/panels';
 import { ImperativePanelHandle } from 'react-resizable-panels';
+
 import { useSidebar } from '~/lib/stores';
 
+import { IconPanel, MainPanel, SidePanel } from '~/components/panels';
 import {
   ResizableHandle,
   ResizablePanel,
@@ -22,7 +22,7 @@ const Home = () => {
 
   return (
     <div>
-      <div className='hidden h-full max-h-screen w-full flex-row overflow-hidden dark:bg-dark  dark:text-white lg:flex'>
+      <div className='h-full max-h-screen w-full flex-row overflow-hidden flex'>
         <IconPanel />
         <ResizablePanelGroup
           direction='horizontal'
@@ -45,12 +45,6 @@ const Home = () => {
             <MainPanel />
           </ResizablePanel>
         </ResizablePanelGroup>
-      </div>
-      <div className='flex lg:hidden'>
-        {/** show warning that Only on large screens  */}
-        <div className='flex h-screen w-full items-center justify-center'>
-          <p className='text-2xl'>Only on large screens</p>
-        </div>
       </div>
     </div>
   );

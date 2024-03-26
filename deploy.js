@@ -1,10 +1,10 @@
 import Irys from '@irys/sdk';
 
 import * as dotenv from 'dotenv';
-dotenv.config();
-
 import fs from 'fs';
 import path from 'path';
+
+dotenv.config();
 
 const getDirSize = (dirPath) => {
   let size = 0;

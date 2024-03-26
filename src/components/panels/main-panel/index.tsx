@@ -1,33 +1,35 @@
 import React from 'react';
-import * as Types from 'monaco-editor';
-import Editor, { useMonaco } from '@monaco-editor/react';
+
+import { db } from '~/lib/db';
+import { closeTab, formatOnSave } from '~/lib/helpers/editor';
+import { useToast } from '~/lib/hooks';
+import { useDebugFile } from '~/lib/stores';
+import { useEditor } from '~/lib/stores/editor';
+import { darkTheme, lightTheme } from '~/lib/themes';
 
 import { useTheme } from '~/components/theme-provider';
-import { useEditor } from '~/lib/stores/editor';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { useLocalStorage } from 'usehooks-ts';
-
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '~/components/ui/resizable';
 
+import Editor, { useMonaco } from '@monaco-editor/react';
+import { Messages, Tabs } from '~/components';
 import { EditorConfig, defaultConfig } from '~/types';
-import { useDebugFile } from '~/lib/stores';
 
-import { darkTheme, lightTheme } from '~/lib/themes';
+import DebugPanel from '../debug-panel';
 import DefaultPage from './DefaultPage';
 
-import { Messages, Tabs } from '~/components';
-import { db } from '~/lib/db';
-import { closeTab, formatOnSave } from '~/lib/helpers/editor';
-import DebugPanel from '../debug-panel';
+import { useLiveQuery } from 'dexie-react-hooks';
+import * as Types from 'monaco-editor';
+import { useLocalStorage } from 'usehooks-ts';
 
 const MainPanel = () => {
-  const { setMonaco, activePath, setActivePath } = useEditor();
   const { theme } = useTheme();
   const monaco = useMonaco();
+  const { toast } = useToast();
+  const { setMonaco, activePath, setActivePath } = useEditor();
   const { isActive: isDebuggerActive, result } = useDebugFile();
 
   const [editorOptions] = useLocalStorage<EditorConfig>(
@@ -64,8 +66,11 @@ const MainPanel = () => {
         if (!model) return;
 
         const activePath = model.uri.path;
-
-        await formatOnSave(activePath);
+        try {
+          await formatOnSave(activePath);
+        } catch (error) {
+          toast.error((error as Error).message);
+        }
       },
     });
     editor.addAction({

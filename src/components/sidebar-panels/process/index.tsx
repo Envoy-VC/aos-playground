@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { Header, HeaderTitle, HeaderDescription } from '~/components/ui/header';
+import { db } from '~/lib/db';
+import { useProcess, useToast } from '~/lib/hooks';
+import { getProcessById } from '~/lib/services/spawn';
+
+import { Button } from '~/components/ui/button';
+import { Header, HeaderDescription, HeaderTitle } from '~/components/ui/header';
+import { Input } from '~/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -8,33 +14,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/select';
-import { Input } from '~/components/ui/input';
-import { Button } from '~/components/ui/button';
-
-import { useCopyToClipboard, useLocalStorage } from 'usehooks-ts';
-
-import { useLiveQuery } from 'dexie-react-hooks';
-import { Process, db } from '~/lib/db';
-
-import { toast } from 'sonner';
-import { PackageSearch, Clipboard } from 'lucide-react';
-
-import { getProcessById } from '~/lib/services/spawn';
 
 import CreateProcess from './CreateProcess';
 import DangerZone from './DangerZone';
 
+import { useLiveQuery } from 'dexie-react-hooks';
+import { Clipboard, PackageSearch } from 'lucide-react';
+import { useCopyToClipboard } from 'usehooks-ts';
+
 const ProcessPanel = () => {
+  const { toast } = useToast();
+  const { activeProcess, setActiveProcess } = useProcess();
+  const [, copyToClipboard] = useCopyToClipboard();
+
   const processes = useLiveQuery(async () => {
     const processes = await db.processes.toArray();
     return processes;
   }, []);
-
-  const [activeProcess, setActiveProcess] = useLocalStorage<
-    Process | undefined
-  >('activeProcess', undefined);
-
-  const [, copyToClipboard] = useCopyToClipboard();
 
   const [processId, setProcessId] = React.useState<string>('');
   const [isImporting, setIsImporting] = React.useState<boolean>(false);
@@ -46,7 +42,7 @@ const ProcessPanel = () => {
       toast.success(`Process Changed to ${process.name}`);
     } else {
       toast.error('Error', {
-        description: 'Process not found in local storage.',
+        // description: 'Process not found in local storage.',
       });
     }
   };
@@ -68,12 +64,12 @@ const ProcessPanel = () => {
         setActiveProcess(process);
       }
       toast.success('Process Imported', {
-        description: <p className='break-all'>ID: {process.id}.</p>,
+        // description: <p className='break-all'>ID: {process.id}.</p>,
       });
       setProcessId('');
     } catch (error) {
       toast.error('Error', {
-        description: (error as Error).message ?? 'Something went wrong!',
+        // description: (error as Error).message ?? 'Something went wrong!',
       });
     } finally {
       setIsImporting(false);

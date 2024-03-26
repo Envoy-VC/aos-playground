@@ -15,7 +15,6 @@ const ArweaveProvider = ({ children }: React.PropsWithChildren) => {
       config={{
         permissions: [
           'ACCESS_ALL_ADDRESSES',
-          'DISPATCH',
           'SIGN_TRANSACTION',
           'ACCESS_ADDRESS',
         ],

@@ -1,23 +1,24 @@
+import { db } from '~/lib/db';
+import { useEditor } from '~/lib/stores';
+
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '~/components/ui/tooltip';
-import { ThemeSwitcher } from '../theme-provider';
-import TabPill from './TabPill';
-
-import { useEditor } from '~/lib/stores';
-import { db } from '~/lib/db';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { useLocalStorage } from 'usehooks-ts';
 
 import { EditorConfig, defaultConfig } from '~/types';
 
-import { ZoomIn, ZoomOut } from 'lucide-react';
-import { Button } from '../ui/button';
 import ConnectButton from '../connect-button';
+import { ThemeSwitcher } from '../theme-provider';
+import { Button } from '../ui/button';
 import Run from './Run';
+import TabPill from './TabPill';
+
+import { useLiveQuery } from 'dexie-react-hooks';
+import { ZoomIn, ZoomOut } from 'lucide-react';
+import { useLocalStorage } from 'usehooks-ts';
 
 const Tabs = () => {
   const { monaco } = useEditor();

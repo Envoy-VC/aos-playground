@@ -1,4 +1,4 @@
-import { message, createDataItemSigner } from '@permaweb/aoconnect';
+import { createDataItemSigner, message } from '@permaweb/aoconnect';
 import { Tag } from '~/types';
 
 interface Props {

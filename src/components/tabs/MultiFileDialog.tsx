@@ -1,15 +1,11 @@
-import { RequireFile } from '~/lib/helpers/ast-parser';
-import { Button } from '../ui/button';
-
+import { useProcess, useTags, useToast } from '~/lib/hooks';
 import { sendMessage } from '~/lib/services/message';
-import { useReadLocalStorage, useLocalStorage } from 'usehooks-ts';
 
-import { toast } from 'sonner';
+import { Button } from '~/components/ui/button';
 
-import { Process } from '~/lib/db';
-import { Tag } from '~/types';
+import { RequireFile } from '~/types';
 
-import { Play, LoaderCircle } from 'lucide-react';
+import { LoaderCircle, Play } from 'lucide-react';
 
 interface Props {
   data: RequireFile[];
@@ -17,17 +13,11 @@ interface Props {
   setOpen: (value: boolean) => void;
   setIsSending: (value: boolean) => void;
 }
-const MultiFileDialog = ({ data, isSending, setOpen, setIsSending }: Props) => {
-  const activeProcess = useReadLocalStorage<Process | undefined>(
-    'activeProcess'
-  );
 
-  const [defaultTags] = useLocalStorage<Tag[]>('defaultTags', [
-    {
-      name: 'Action',
-      value: 'Eval',
-    },
-  ]);
+const MultiFileDialog = ({ data, isSending, setOpen, setIsSending }: Props) => {
+  const { toast } = useToast();
+  const { activeProcess } = useProcess();
+  const { defaultTags } = useTags();
 
   const resolvedFiles = data.filter((f) => f.exists);
   const unresolvedFiles = data.filter((f) => !f.exists);
@@ -57,7 +47,7 @@ const MultiFileDialog = ({ data, isSending, setOpen, setIsSending }: Props) => {
 
       toast.success('Messages Sent');
     } catch (error) {
-      toast.error('', { description: (error as Error).message });
+      toast.error((error as Error).message);
     } finally {
       setIsSending(false);
       setOpen(false);

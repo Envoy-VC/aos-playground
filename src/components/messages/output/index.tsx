@@ -1,16 +1,22 @@
 import React from 'react';
 import { useQuery } from 'react-query';
+
+import { db } from '~/lib/db';
+
+import { Button } from '~/components/ui/button';
+
 import { results } from '@permaweb/aoconnect';
+import type {
+  AoResult,
+  AoResultWithProcess,
+  AoResults,
+  Process,
+} from '~/types';
 
 import Ansi from 'ansi-to-react';
-
-import type { AoResult, AoResults } from '~/types';
-
-import { AoResultWithProcess, Process, db } from '~/lib/db';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useLocalStorage } from 'usehooks-ts';
-import { Button } from '~/components/ui/button';
 import { ArrowUpToLine } from 'lucide-react';
+import { useLocalStorage } from 'usehooks-ts';
 
 const OutputBox = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);

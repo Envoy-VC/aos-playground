@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
 
+import App from './App.tsx';
 import ProviderTree from './providers';
 
 const Root = (
