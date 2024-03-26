@@ -37,10 +37,7 @@ const Home = () => {
           >
             <SidePanel />
           </ResizablePanel>
-          <ResizableHandle
-            className='bg-neutral-200 dark:bg-neutral-700'
-            withHandle
-          />
+          <ResizableHandle withHandle />
           <ResizablePanel defaultSize={80} maxSize={100} minSize={20}>
             <MainPanel />
           </ResizablePanel>

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { db } from '~/lib/db';
 import { getFileIcon } from '~/lib/helpers/editor';
+import { useKeyPress } from '~/lib/hooks';
 import { useEditor } from '~/lib/stores';
 import { cn } from '~/lib/utils';
 
@@ -20,6 +21,7 @@ import { EditorFile, EditorFolder } from '~/types';
 import FilePill from './FilePill';
 
 import { ChevronRight, File, Folder } from 'lucide-react';
+import { useOnClickOutside } from 'usehooks-ts';
 
 interface Props extends EditorFolder {
   allFiles: EditorFile[];
@@ -44,18 +46,20 @@ const FolderPill = ({
     setName: setFileName,
   } = useEditor();
 
+  const folderRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const renameRef = React.useRef<HTMLInputElement>(null);
 
   const [newName, setNewName] = React.useState(name);
   const [isRenaming, setIsRenaming] = React.useState(false);
+  const [rerender, setRerender] = React.useState(false);
 
   const subfolders = allFolders.filter((f) =>
     f.parentFolder.startsWith(folderPath)
   );
   const subFiles = allFiles.filter((f) => f.path.startsWith(folderPath));
 
-  const onRename = async () => {
+  const onRename = async (e: KeyboardEvent) => {
     const newFolderName = newName.trim();
     const oldRootPath = folderPath;
     const newRootPath = parent + newFolderName + '/';
@@ -76,7 +80,7 @@ const FolderPill = ({
       });
     });
 
-    // rename subfiles
+    // rename sub-files
     subFiles.forEach(async (f) => {
       const newPath = f.path.replace(oldRootPath, newRootPath);
       const newParent = f.parentFolder.replace(oldRootPath, newRootPath);
@@ -85,6 +89,9 @@ const FolderPill = ({
         parentFolder: newParent,
       });
     });
+
+    setNewName(name);
+    setIsRenaming(false);
   };
 
   const onDelete = async () => {
@@ -97,24 +104,15 @@ const FolderPill = ({
     });
   };
 
-  React.useEffect(() => {
-    if (isRenaming) {
-      const handleRename = async (e: KeyboardEvent) => {
-        if (e.key === 'Enter') {
-          await onRename();
-          setNewName(name);
-          setIsRenaming(false);
-        } else if (e.key === 'Escape') {
-          setNewName(name);
-          setIsRenaming(false);
-        }
-      };
-      window.addEventListener('keydown', handleRename);
-      return () => {
-        window.removeEventListener('keydown', handleRename);
-      };
-    }
-  }, [isRenaming, newName]);
+  const onEscape = () => {
+    setNewName(name);
+    setIsRenaming(false);
+    setRerender(false);
+  };
+
+  useKeyPress('Enter', onRename, { target: folderRef.current });
+  useKeyPress('Escape', onEscape, { target: folderRef.current });
+  useOnClickOutside(folderRef, onEscape);
 
   React.useEffect(() => {
     if (isCreating && inputRef.current) {
@@ -122,17 +120,24 @@ const FolderPill = ({
     }
   }, [isCreating, inputRef, parentFolder, isCollapsed]);
 
+  React.useEffect(() => {
+    if (isRenaming) {
+      setRerender(true);
+    }
+  }, [isRenaming]);
+
+  React.useEffect(() => {
+    if (rerender) {
+      renameRef.current?.focus();
+    }
+  }, [rerender]);
+
   return (
-    <div>
+    <div ref={folderRef}>
       <ContextMenu>
         <ContextMenuTrigger>
           <div className='group flex cursor-pointer select-none flex-row items-center justify-between gap-2 px-1'>
-            <div
-              className={cn(
-                'flex flex-row items-center gap-2',
-                isRenaming ? 'border' : ''
-              )}
-            >
+            <div className={cn('flex flex-row items-center gap-2')}>
               <Button
                 variant='link'
                 size='icon'
@@ -150,19 +155,21 @@ const FolderPill = ({
                   )}
                 />
               </Button>
-              <Folder className='h-4 w-4 text-neutral-600 dark:text-neutral-400' />
-              {!isRenaming && <div>{name}</div>}
-              {isRenaming && (
-                <Input
-                  ref={renameRef}
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
-                  placeholder=''
-                  className={cn(
-                    'm-0 h-6 rounded-none border-none p-0 text-base focus-visible:ring-offset-0'
-                  )}
-                />
-              )}
+              <Folder className='max-h-4 max-w-4 w-full h-full text-neutral-600 dark:text-neutral-400' />
+              <div className={cn(isRenaming ? 'hidden' : 'visible')}>
+                {name}
+              </div>
+
+              <Input
+                ref={renameRef}
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                placeholder=''
+                className={cn(
+                  '!m-0 h-6 rounded-none !p-0 text-base border-none ',
+                  isRenaming ? 'visible' : 'invisible'
+                )}
+              />
             </div>
 
             <div className='mr-1 flex  flex-row items-center gap-2 opacity-0 transition-all duration-100 ease-in group-hover:opacity-100'>
@@ -219,7 +226,6 @@ const FolderPill = ({
               }
               setParentFolder(folderPath);
               setIsCreating('folder');
-              inputRef.current?.focus();
             }}
           >
             New Folder

@@ -10,8 +10,8 @@ const SidePanel = () => {
   const { activeKey } = useSidebar();
   return (
     <>
-      {activeKey === 'processes' && <ProcessPanel />}
       {activeKey === 'files' && <ExplorerPanel />}
+      {activeKey === 'processes' && <ProcessPanel />}
       {activeKey === 'run' && <RunDebugPanel />}
     </>
   );

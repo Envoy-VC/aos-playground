@@ -3,6 +3,7 @@ import React from 'react';
 import { db } from '~/lib/db';
 import { getFileIcon } from '~/lib/helpers/editor';
 import { onCreate } from '~/lib/helpers/editor';
+import { useKeyPress } from '~/lib/hooks';
 import { useEditor } from '~/lib/stores';
 import { cn } from '~/lib/utils';
 
@@ -23,6 +24,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { File, Folder } from 'lucide-react';
 
 const ExplorerPanel = () => {
+  const explorerRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const {
     isCreating,
@@ -55,22 +57,21 @@ const ExplorerPanel = () => {
     }
   }, [isCreating, inputRef, parentFolder]);
 
-  React.useEffect(() => {
-    const handleEnter = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        if (isCreating) {
-          onCreate(parentFolder, name, isCreating);
-          setIsCreating(null);
-          setName('');
-        }
-      } else if (e.key === 'Escape') {
-        setIsCreating(null);
-        setName('');
-      }
-    };
-    window.addEventListener('keydown', handleEnter);
-    return () => window.removeEventListener('keydown', handleEnter);
-  }, [name, isCreating]);
+  const handleEnter = async (_e: KeyboardEvent) => {
+    if (isCreating) {
+      await onCreate(parentFolder, name, isCreating);
+      setIsCreating(null);
+      setName('');
+    }
+  };
+
+  const handleEscape = (_e: KeyboardEvent) => {
+    setIsCreating(null);
+    setName('');
+  };
+
+  useKeyPress('Enter', handleEnter);
+  useKeyPress('Escape', handleEscape);
 
   const onNewFile = () => {
     setParentFolder('/');
@@ -83,11 +84,11 @@ const ExplorerPanel = () => {
   };
 
   return (
-    <div className='flex h-screen w-full flex-col gap-4 py-2'>
+    <div className='flex h-screen w-full flex-col gap-4 py-2' ref={explorerRef}>
       <Header>
         <HeaderTitle className='px-2'>File Explorer</HeaderTitle>
       </Header>
-      <div className='flex w-full flex-row items-center justify-between gap-2 border-b border-neutral-200 px-2 pt-2 dark:border-neutral-600'>
+      <div className='flex w-full flex-row items-center justify-between gap-2 border-b px-2 pt-2'>
         <div className='text-sm font-medium uppercase text-neutral-700 dark:text-neutral-200'>
           Playground
         </div>
@@ -165,7 +166,7 @@ const ExplorerPanel = () => {
               placeholder=''
               className={cn(
                 'm-0 h-6 rounded-none border-none p-0 text-sm focus-visible:ring-offset-0',
-                isCreating ? 'opacity-100' : 'hidden'
+                !isCreating && 'hidden'
               )}
             />
           </div>

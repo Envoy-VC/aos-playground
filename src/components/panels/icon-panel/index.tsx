@@ -16,7 +16,7 @@ const IconPanel = () => {
   return (
     <div
       className={cn(
-        'h-screen border-neutral-200 bg-[#f9f9f9] dark:border-neutral-700 dark:bg-[#21232f]',
+        'h-screen border-border',
         isCollapsed ? 'border-none' : 'border-r'
       )}
     >

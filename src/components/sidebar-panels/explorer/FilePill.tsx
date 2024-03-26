@@ -2,6 +2,7 @@ import React from 'react';
 
 import { db } from '~/lib/db';
 import { getFileIcon } from '~/lib/helpers/editor';
+import { useKeyPress } from '~/lib/hooks';
 import { useEditor } from '~/lib/stores';
 import { cn } from '~/lib/utils';
 
@@ -17,9 +18,11 @@ import { Input } from '~/components/ui/input';
 import { EditorFile } from '~/types';
 
 import { File } from 'lucide-react';
+import { useOnClickOutside } from 'usehooks-ts';
 import { useCopyToClipboard } from 'usehooks-ts';
 
 const FilePill = ({ name, path, content }: EditorFile) => {
+  const fileRef = React.useRef<HTMLDivElement>(null);
   const renameRef = React.useRef<HTMLInputElement>(null);
   const { setActivePath } = useEditor();
 
@@ -27,6 +30,7 @@ const FilePill = ({ name, path, content }: EditorFile) => {
 
   const [newName, setNewName] = React.useState(name);
   const [isRenaming, setIsRenaming] = React.useState(false);
+  const [rerender, setRerender] = React.useState(false);
 
   const onDelete = async () => {
     await db.files.delete(path);
@@ -38,6 +42,7 @@ const FilePill = ({ name, path, content }: EditorFile) => {
 
   const onRename = async () => {
     await db.files.update(path, { name: newName });
+    setIsRenaming(false);
   };
 
   const openFile = async () => {
@@ -55,33 +60,35 @@ const FilePill = ({ name, path, content }: EditorFile) => {
     }
   };
 
+  const onEscape = () => {
+    setRerender(false);
+    setNewName(name);
+    setIsRenaming(false);
+  };
+
+  useKeyPress('Enter', onRename, { target: fileRef.current });
+  useKeyPress('Escape', onEscape, { target: fileRef.current });
+  useOnClickOutside(fileRef, onEscape);
+
   React.useEffect(() => {
     if (isRenaming) {
-      const handleRename = (e: KeyboardEvent) => {
-        if (e.key === 'Enter') {
-          onRename();
-          setIsRenaming(false);
-        } else if (e.key === 'Escape') {
-          setNewName(name);
-          setIsRenaming(false);
-        }
-      };
-      window.addEventListener('keydown', handleRename);
-      return () => {
-        window.removeEventListener('keydown', handleRename);
-      };
+      setRerender(true);
     }
-  }, [isRenaming, newName]);
+  }, [isRenaming]);
+
+  React.useEffect(() => {
+    if (rerender) {
+      renameRef.current?.focus();
+    }
+  }, [rerender]);
 
   return (
     <ContextMenu>
       <ContextMenuTrigger>
         <div
+          ref={fileRef}
           className={cn(
-            'flex cursor-pointer select-none flex-row items-center gap-2 px-7',
-            isRenaming
-              ? 'border border-neutral-300 dark:border-neutral-600'
-              : ''
+            'flex cursor-pointer select-none flex-row items-center gap-2 px-7'
           )}
           onClick={openFile}
         >
