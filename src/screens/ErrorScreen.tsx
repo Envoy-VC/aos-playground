@@ -3,7 +3,7 @@ import { useToast } from '~/lib/hooks';
 
 import { Button } from '~/components/ui/button';
 
-const ErrorPage = () => {
+const ErrorScreen = () => {
   const { toast } = useToast();
   const reset = async () => {
     try {
@@ -40,4 +40,4 @@ const ErrorPage = () => {
   );
 };
 
-export default ErrorPage;
+export default ErrorScreen;

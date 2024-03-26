@@ -1,6 +1,7 @@
 import { db } from '~/lib/db';
 import { useEditor } from '~/lib/stores';
 
+import ThemeSwitcher from '~/components/ui/theme-switch';
 import {
   Tooltip,
   TooltipContent,
@@ -11,7 +12,6 @@ import {
 import { EditorConfig, defaultConfig } from '~/types';
 
 import ConnectButton from '../connect-button';
-import { ThemeSwitcher } from '../theme-provider';
 import { Button } from '../ui/button';
 import Run from './Run';
 import TabPill from './TabPill';

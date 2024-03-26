@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useTheme } from '~/components/theme-provider';
+import { useTheme } from '~/lib/hooks';
 
 import { ArweaveWalletKit } from 'arweave-wallet-kit';
 

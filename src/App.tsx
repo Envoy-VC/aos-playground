@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { Toaster } from '~/components/ui/toaster';
 
-import Home from '~/pages/home';
+import Home from '~/pages';
 import '~/styles/index.css';
 
 function App() {

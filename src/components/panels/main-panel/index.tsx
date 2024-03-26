@@ -3,11 +3,11 @@ import React from 'react';
 import { db } from '~/lib/db';
 import { closeTab, formatOnSave } from '~/lib/helpers/editor';
 import { useToast } from '~/lib/hooks';
+import { useTheme } from '~/lib/hooks';
 import { useDebugFile } from '~/lib/stores';
 import { useEditor } from '~/lib/stores/editor';
 import { darkTheme, lightTheme } from '~/lib/themes';
 
-import { useTheme } from '~/components/theme-provider';
 import {
   ResizableHandle,
   ResizablePanel,

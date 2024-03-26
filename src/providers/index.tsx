@@ -1,31 +1,20 @@
-import React from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { HelmetProvider } from 'react-helmet-async';
-import { QueryClient, QueryClientProvider } from 'react-query';
-
-import { ThemeProvider } from '~/components/theme-provider';
-
-import ErrorPage from '~/pages/error';
-
-import ArweaveProvider from './arweave';
+import ArweaveProvider from './ArweaveProvider';
+import ErrorProvider from './ErrorProvider';
+import QueryProvider from './QueryProvider';
+import SEOProvider from './SEOProvider';
+import ThemeProvider from './ThemeProvider';
 
 const ProviderTree = ({ children }: React.PropsWithChildren) => {
-  const queryClient = new QueryClient();
-
   return (
-    <div>
-      <ErrorBoundary fallback={<ErrorPage />}>
-        <ThemeProvider defaultTheme='light' storageKey='theme'>
-          <ArweaveProvider>
-            <HelmetProvider>
-              <QueryClientProvider client={queryClient}>
-                {children}
-              </QueryClientProvider>
-            </HelmetProvider>
-          </ArweaveProvider>
-        </ThemeProvider>
-      </ErrorBoundary>
-    </div>
+    <ErrorProvider>
+      <ThemeProvider defaultTheme='light' storageKey='theme'>
+        <ArweaveProvider>
+          <SEOProvider>
+            <QueryProvider>{children}</QueryProvider>
+          </SEOProvider>
+        </ArweaveProvider>
+      </ThemeProvider>
+    </ErrorProvider>
   );
 };
 
