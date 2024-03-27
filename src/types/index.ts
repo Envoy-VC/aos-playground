@@ -12,9 +12,9 @@ export type AoResult = {
     Output: {
       data:
         | {
-            json: string;
-            output: string;
-            prompt: string;
+            json?: string;
+            output?: string;
+            prompt?: string;
           }
         | string;
       prompt: string;

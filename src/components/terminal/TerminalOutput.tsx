@@ -33,7 +33,10 @@ const TerminalOutput = () => {
           );
         } else {
           const res = out.output.node.Output.data;
-          const data = typeof res === 'string' ? res : res.output;
+          const data =
+            typeof res === 'string'
+              ? res
+              : res.output ?? res.json ?? 'undefined';
           return <MessageRenderer key={idx} message={data} prompt='' />;
         }
       })}

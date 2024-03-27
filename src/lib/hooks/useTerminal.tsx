@@ -1,6 +1,9 @@
 import React from 'react';
 
+import { AOSHelp } from '~/components/terminal/Commands';
+
 import { db } from '../db';
+import { safeRenderToString } from '../helpers/rehype';
 import { sendMessage } from '../services/message';
 import { useTerminalStore } from '../stores';
 import useProcess from './useProcess';
@@ -25,17 +28,24 @@ const useTerminal = () => {
 
   const handleCommand = async () => {
     try {
+      if (!activeProcess) {
+        throw new Error('No active process');
+      }
+
       if (text.startsWith('aos')) {
-        // TODO: handle aos commands
+        const string = safeRenderToString(<AOSHelp />);
+        await db.results.put({
+          type: 'command',
+          cursor: crypto.randomUUID(),
+          command: string,
+          process: activeProcess.id,
+        });
       } else if (text === 'clear') {
         // TODO: handle clear
         const last = await db.results.count();
         setLastCursor(last);
       } else {
         setIsExecuting(true);
-        if (!activeProcess) {
-          throw new Error('No active process');
-        }
         await send();
         await db.results.put({
           type: 'command',

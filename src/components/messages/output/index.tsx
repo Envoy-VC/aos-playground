@@ -26,6 +26,8 @@ const OutputBox = () => {
       })
       .reverse()
       .toArray();
+
+    //console.log(results);
     return results;
   }, [activeProcess]);
 
@@ -75,7 +77,11 @@ const OutputBox = () => {
           {(messages ?? []).map((e, i) => {
             if (e.type === 'output') {
               const res = e.output.node.Output.data;
-              const data = typeof res === 'string' ? res : res.output;
+              const data =
+                typeof res === 'string'
+                  ? res
+                  : res.output ?? res.json ?? 'undefined';
+
               return (
                 <MessageRenderer key={i} message={data} prompt='aos&gt; ' />
               );
