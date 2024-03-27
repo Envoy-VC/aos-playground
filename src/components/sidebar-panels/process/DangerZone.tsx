@@ -15,6 +15,7 @@ import {
 import { Button } from '~/components/ui/button';
 
 import { useLiveQuery } from 'dexie-react-hooks';
+import { TriangleAlert } from 'lucide-react';
 
 const DangerZone = () => {
   const { toast } = useToast();
@@ -59,6 +60,7 @@ const DangerZone = () => {
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button className='w-full' variant='destructive'>
+              <TriangleAlert size={18} className='mr-2' />
               Delete Active Process
             </Button>
           </AlertDialogTrigger>
@@ -82,6 +84,7 @@ const DangerZone = () => {
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button className='w-full' variant='destructive'>
+              <TriangleAlert size={18} className='mr-2' />
               Delete All Process
             </Button>
           </AlertDialogTrigger>

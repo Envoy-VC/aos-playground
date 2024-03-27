@@ -94,7 +94,7 @@ const ProcessPanel = () => {
             value={activeProcess ? activeProcess.id : undefined}
             onValueChange={(txId) => onValChange(txId)}
           >
-            <SelectTrigger className='w-[300px] !bg-white dark:!bg-transparent'>
+            <SelectTrigger>
               <SelectValue placeholder='Select Process' />
             </SelectTrigger>
             <SelectContent className=''>

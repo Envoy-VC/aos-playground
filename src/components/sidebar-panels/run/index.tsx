@@ -1,5 +1,6 @@
 import { db } from '~/lib/db';
 import { getRequireValuesFromAST } from '~/lib/helpers/ast-parser';
+import { useToast } from '~/lib/hooks';
 import { useDebugFile } from '~/lib/stores';
 
 import { Button } from '~/components/ui/button';
@@ -18,6 +19,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { Bug } from 'lucide-react';
 
 const RunDebugPanel = () => {
+  const { toast } = useToast();
   const files = useLiveQuery(async () => {
     const files = await db.files.toArray();
     return files;
@@ -27,13 +29,17 @@ const RunDebugPanel = () => {
 
   const onDebug = async () => {
     try {
-      if (!filePath) return;
+      if (!filePath) {
+        throw new Error('No file selected to debug!');
+      }
+      // TODO: Wrap around a web worker
       const result = await getRequireValuesFromAST(filePath);
-
       setResult(result);
       setIsActive(true);
     } catch (error) {
-      console.error(error);
+      toast.error({
+        description: (error as Error).message ?? 'An error occurred',
+      });
     }
   };
 
