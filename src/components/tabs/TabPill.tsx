@@ -38,26 +38,32 @@ const TabPill = ({ path }: Props) => {
       console.log(error);
     }
   };
+
   if (file)
     return (
       <div
         className={cn(
-          'flex h-[4dvh] min-w-[160px] cursor-pointer flex-row items-center justify-between gap-2 border-r border-neutral-200 px-2 dark:border-neutral-600',
-          activePath === path
-            ? 'bg-blue-100 dark:bg-blue-500/10'
-            : 'bg-transparent'
+          'h-[4dvh] min-w-[160px] cursor-pointer border-r flex flex-col',
+          activePath === path ? 'bg-blue-500/5' : ''
         )}
       >
-        <div
-          className='flex w-full flex-row items-center gap-1'
-          onClick={onSetActiveTab}
-        >
-          <img src={getFileIcon(file.name) ?? ''} className='h-5 w-5'></img>
-          <div className='text-base'>{file.name}</div>
+        {activePath === path && <div className='w-full h-1 bg-blue-500'></div>}
+        <div className='flex flex-row items-center justify-between gap-2 h-full'>
+          <div
+            className='flex w-full flex-row items-center gap-1 px-2'
+            onClick={onSetActiveTab}
+          >
+            <img src={getFileIcon(file.name) ?? ''} className='h-5 w-5'></img>
+            <div className='text-base'>{file.name}</div>
+          </div>
+          <Button
+            variant='link'
+            className='!m-0 h-4 w-4 !p-0'
+            onClick={onRemove}
+          >
+            <X size={18} />
+          </Button>
         </div>
-        <Button variant='link' className='!m-0 h-4 w-4 !p-0' onClick={onRemove}>
-          <X size={18} />
-        </Button>
       </div>
     );
 };

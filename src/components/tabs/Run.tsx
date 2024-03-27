@@ -6,13 +6,7 @@ import { useProcess, useTags, useToast } from '~/lib/hooks';
 import { sendMessage } from '~/lib/services/message';
 import { useEditor } from '~/lib/stores';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '~/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '~/components/ui/dialog';
 
 import { RequireFile } from '~/types';
 
@@ -52,10 +46,11 @@ const Run = () => {
     try {
       const data = await checks();
       setIsSending(true);
+
+      // TODO: Use web worker to send message
       const requiredFiles = await getRequireValuesFromAST(data.path);
 
       setRequiredFiles(requiredFiles);
-      console.log(requiredFiles);
 
       if (requiredFiles.length === 0) {
         throw new Error('No required files found');
@@ -99,9 +94,6 @@ const Run = () => {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogTrigger></DialogTrigger>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle></DialogTitle>
-          </DialogHeader>
           <MultiFileDialog
             data={requiredFiles}
             setOpen={setIsModalOpen}

@@ -29,24 +29,26 @@ const MultiFileDialog = ({ data, isSending, setOpen, setIsSending }: Props) => {
         throw new Error('No active process found');
       }
 
-      // reverse data
+      // reverse data for proper sending order
       const sequentialFiles = data;
       [...sequentialFiles].reverse();
 
-      for (const file of sequentialFiles) {
-        try {
-          await sendMessage({
-            process: activeProcess.id,
-            data: file.content,
-            tags: defaultTags,
-          });
-        } catch (error) {
-          toast.error({
-            title: `Error processing file: ${file.filePath.slice(1)}`,
-            description: (error as Error).message,
-          });
-        }
-      }
+      await Promise.allSettled(
+        sequentialFiles.map(async (file) => {
+          try {
+            await sendMessage({
+              process: activeProcess.id,
+              data: file.content,
+              tags: defaultTags,
+            });
+          } catch (error) {
+            toast.error({
+              title: `Error processing file: ${file.filePath.slice(1)}`,
+              description: (error as Error).message,
+            });
+          }
+        })
+      );
 
       toast.success({
         title: 'Files sent successfully',

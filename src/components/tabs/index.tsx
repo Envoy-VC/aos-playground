@@ -1,4 +1,5 @@
 import { db } from '~/lib/db';
+import { useEditorConfig } from '~/lib/hooks';
 import { useEditor } from '~/lib/stores';
 
 import ThemeSwitcher from '~/components/ui/theme-switch';
@@ -9,8 +10,6 @@ import {
   TooltipTrigger,
 } from '~/components/ui/tooltip';
 
-import { EditorConfig, defaultConfig } from '~/types';
-
 import ConnectButton from '../connect-button';
 import { Button } from '../ui/button';
 import Run from './Run';
@@ -18,15 +17,11 @@ import TabPill from './TabPill';
 
 import { useLiveQuery } from 'dexie-react-hooks';
 import { ZoomIn, ZoomOut } from 'lucide-react';
-import { useLocalStorage } from 'usehooks-ts';
 
 const Tabs = () => {
   const { monaco } = useEditor();
 
-  const [editorOptions, setEditorConfig] = useLocalStorage<EditorConfig>(
-    'editorOptions',
-    defaultConfig
-  );
+  const { editorOptions, setEditorConfig } = useEditorConfig();
 
   const tabs = useLiveQuery(async () => {
     const tabs = await db.tabs.toArray();
@@ -47,8 +42,8 @@ const Tabs = () => {
   };
 
   return (
-    <div className='flex h-[4dvh] flex-row items-center justify-between border-b border-neutral-200 px-4 dark:border-neutral-700'>
-      <div className='flex flex-row items-center'>
+    <div className='flex h-[4dvh] flex-row items-center justify-between border-b px-4'>
+      <div className='flex flex-row items-center overflow-x-scroll hide-scrollbar'>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -81,11 +76,13 @@ const Tabs = () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        <div className='flex flex-row items-center'>
-          {tabs?.map((tab) => <TabPill key={tab.path} path={tab.path} />)}
+        <div className='overflow-scroll max-w-fit flex hide-scrollbar'>
+          <div className='flex flex-row items-center'>
+            {tabs?.map((tab) => <TabPill key={tab.path} path={tab.path} />)}
+          </div>
         </div>
       </div>
-      <div className='flex flex-row items-center gap-2'>
+      <div className='flex flex-row items-center gap-2 pl-4'>
         <Run />
         <ThemeSwitcher />
         <ConnectButton />
