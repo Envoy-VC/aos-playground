@@ -13,7 +13,7 @@ const TerminalOutput = () => {
     if (!activeProcess) return [];
     const results = await db.results
       .where('process')
-      .equals(activeProcess.id)
+      .anyOf(activeProcess.id, 'output')
       .and((x) => x.id! > lastCursor)
       .toArray();
 

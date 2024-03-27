@@ -45,6 +45,7 @@ const TerminalInput = React.forwardRef<HTMLTextAreaElement, {}>(
         event.preventDefault();
         const commands = await db.results
           .where({ type: 'command' })
+          .filter((x) => x.process !== 'output')
           .reverse()
           .toArray();
 

@@ -1,19 +1,15 @@
 import React from 'react';
 
-import { AOSHelp } from '~/components/terminal/Commands';
-
-import { db } from '../db';
-import { safeRenderToString } from '../helpers/rehype';
-import { sendMessage } from '../services/message';
-import { useTerminalStore } from '../stores';
-import useProcess from './useProcess';
-import useTags from './useTags';
-import useToast from './useToast';
+import { db } from '~/lib/db';
+import { useCommands, useProcess, useTags, useToast } from '~/lib/hooks';
+import { sendMessage } from '~/lib/services/message';
+import { useTerminalStore } from '~/lib/stores';
 
 import { useActiveAddress } from 'arweave-wallet-kit';
 import { useLocalStorage } from 'usehooks-ts';
 
 const useTerminal = () => {
+  const { commands } = useCommands();
   const address = useActiveAddress();
   const { toast } = useToast();
   const { text, refocus, setText, setIsExecuting, setRefocus } =
@@ -31,19 +27,13 @@ const useTerminal = () => {
       if (!activeProcess) {
         throw new Error('No active process');
       }
+      const t = text;
 
-      if (text.startsWith('aos')) {
-        const string = safeRenderToString(<AOSHelp />);
-        await db.results.put({
-          type: 'command',
-          cursor: crypto.randomUUID(),
-          command: string,
-          process: activeProcess.id,
-        });
-      } else if (text === 'clear') {
-        // TODO: handle clear
-        const last = await db.results.count();
-        setLastCursor(last);
+      const command = commands.filter((c) => t.startsWith(c.name)).at(0);
+
+      if (command) {
+        const args = t.replace(command.name, '').split(' ').slice(1);
+        await command.handler(args);
       } else {
         setIsExecuting(true);
         await send();

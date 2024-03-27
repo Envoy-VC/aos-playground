@@ -1,3 +1,4 @@
+import { useCommands } from './useCommands';
 import useEditorConfig from './useEditorConfig';
 import { useKeyPress } from './useKeyPress';
 import useProcess from './useProcess';
@@ -14,4 +15,5 @@ export {
   useKeyPress,
   useEditorConfig,
   useTerminal,
+  useCommands,
 };
