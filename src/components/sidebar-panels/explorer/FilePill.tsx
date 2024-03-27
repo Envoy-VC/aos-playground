@@ -88,7 +88,7 @@ const FilePill = ({ name, path, content }: EditorFile) => {
         <div
           ref={fileRef}
           className={cn(
-            'flex cursor-pointer select-none flex-row items-center gap-2 px-7'
+            'flex cursor-pointer select-none flex-row items-center gap-2 px-2'
           )}
           onClick={openFile}
         >
@@ -97,7 +97,9 @@ const FilePill = ({ name, path, content }: EditorFile) => {
           ) : (
             <File className='h-4 w-4 text-neutral-600 dark:text-neutral-400' />
           )}
-          {!isRenaming && <span>{name}</span>}
+          {!isRenaming && (
+            <span className='text-black dark:text-white'>{name}</span>
+          )}
           {isRenaming && (
             <Input
               ref={renameRef}
@@ -105,7 +107,7 @@ const FilePill = ({ name, path, content }: EditorFile) => {
               onChange={(e) => setNewName(e.target.value)}
               placeholder=''
               className={cn(
-                'm-0 h-6 rounded-none border-none p-0 text-base focus-visible:ring-offset-0'
+                'm-0 h-6 rounded-none border-none p-0 text-base focus-visible:ring-offset-0 text-black dark:text-white'
               )}
             />
           )}

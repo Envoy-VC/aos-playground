@@ -141,10 +141,8 @@ const ExplorerPanel = () => {
         {parentFolder === '/' && (
           <div
             className={cn(
-              'flex flex-row items-center gap-2 px-1',
-              rootFolders.length > 0 || rootFiles.length > 0
-                ? 'ml-[1.5rem]'
-                : ''
+              'flex flex-row items-center gap-2 px-1 ml-1',
+              rootFolders.length > 0 && 'ml-4'
             )}
           >
             {isCreating === 'file' && (
@@ -171,9 +169,11 @@ const ExplorerPanel = () => {
             />
           </div>
         )}
-        {rootFiles.map((file) => (
-          <FilePill key={file.path} {...file} />
-        ))}
+        <div className={cn(rootFolders.length > 0 && 'px-5')}>
+          {rootFiles.map((file) => (
+            <FilePill key={file.path} {...file} />
+          ))}
+        </div>
       </div>
     </div>
   );

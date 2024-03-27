@@ -133,7 +133,7 @@ const FolderPill = ({
   }, [rerender]);
 
   return (
-    <div ref={folderRef}>
+    <div ref={folderRef} className='text-neutral-600 dark:text-neutral-400'>
       <ContextMenu>
         <ContextMenuTrigger>
           <div className='group flex cursor-pointer select-none flex-row items-center justify-between gap-2 px-1'>
@@ -155,8 +155,13 @@ const FolderPill = ({
                   )}
                 />
               </Button>
-              <Folder className='max-h-4 max-w-4 w-full h-full text-neutral-600 dark:text-neutral-400' />
-              <div className={cn(isRenaming ? 'hidden' : 'visible')}>
+              <Folder className='max-h-4 max-w-4 w-full h-full' />
+              <div
+                className={cn(
+                  'text-black dark:text-white',
+                  isRenaming ? 'hidden' : 'visible'
+                )}
+              >
                 {name}
               </div>
 
@@ -257,7 +262,7 @@ const FolderPill = ({
               />
             ))}
           {parentFolder === path && (
-            <div className='flex flex-row items-center gap-2 px-1'>
+            <div className='flex flex-row items-center gap-2 px-5'>
               {isCreating === 'file' && (
                 <>
                   {getFileIcon(name) ? (
@@ -276,17 +281,19 @@ const FolderPill = ({
                 onChange={(e) => setFileName(e.target.value)}
                 placeholder=''
                 className={cn(
-                  'm-0 h-6 rounded-none border-none p-0 text-sm focus-visible:ring-offset-0',
+                  'm-0 h-6 rounded-none border-none p-0 text-sm focus-visible:ring-offset-0 text-black dark:text-white',
                   isCreating ? 'opacity-100' : 'hidden'
                 )}
               />
             </div>
           )}
-          {allFiles
-            .filter((file) => file.parentFolder === folderPath)
-            .map((file) => (
-              <FilePill key={file.path} {...file} />
-            ))}
+          <div className={cn('px-5')}>
+            {allFiles
+              .filter((file) => file.parentFolder === folderPath)
+              .map((file) => (
+                <FilePill key={file.path} {...file} />
+              ))}
+          </div>
         </div>
       )}
     </div>
