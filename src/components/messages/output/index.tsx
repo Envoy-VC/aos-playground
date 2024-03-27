@@ -1,13 +1,10 @@
 import React from 'react';
-import { useQuery } from 'react-query';
 
 import { db } from '~/lib/db';
 import { useProcess } from '~/lib/hooks';
+import { useMessagesPanel } from '~/lib/stores/messages';
 
 import { Button } from '~/components/ui/button';
-
-import { results } from '@permaweb/aoconnect';
-import type { AoResult, AoResultWithProcess, AoResults } from '~/types';
 
 import MessageRenderer from './MessageRenderer';
 
@@ -16,52 +13,21 @@ import { ArrowUpToLine } from 'lucide-react';
 
 const OutputBox = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const { rerender, isFirstRender } = useMessagesPanel();
 
   const { activeProcess } = useProcess();
 
   const messages = useLiveQuery(async () => {
     if (!activeProcess) return [];
     const results = await db.results
-      .where('process')
-      .equals(activeProcess.id)
+      .where({
+        process: activeProcess.id,
+        type: 'output',
+      })
       .reverse()
       .toArray();
     return results;
   }, [activeProcess]);
-
-  const [rerender, setRerender] = React.useState<boolean>(false);
-  const [isFirstRender, setIsFirstRender] = React.useState<boolean>(false);
-
-  useQuery<AoResult[]>(
-    ['messages', activeProcess],
-    async () => {
-      if (!activeProcess) return [];
-      const newMessages = (await results({
-        process: activeProcess.id,
-        limit: 100,
-        sort: 'DESC',
-      })) as AoResults;
-      const resultsWithProcesses: AoResultWithProcess[] = [];
-      for (const result of newMessages.edges) {
-        resultsWithProcesses.push({
-          ...result,
-          process: activeProcess.id,
-        });
-      }
-
-      try {
-        await db.results.bulkPut(resultsWithProcesses, { allKeys: true });
-      } catch (error) {}
-      if (!isFirstRender) {
-        setIsFirstRender(true);
-      }
-      setRerender(!rerender);
-      return newMessages.edges;
-    },
-    {
-      refetchInterval: 3000,
-    }
-  );
 
   const [isUserNearTop, setIsUserNearTop] = React.useState<boolean>(true);
 
@@ -107,9 +73,13 @@ const OutputBox = () => {
       <div className='h-full overflow-y-scroll px-4' ref={containerRef}>
         <div className='overflow-scroll'>
           {(messages ?? []).map((e, i) => {
-            const res = e.node.Output.data;
-            const data = typeof res === 'string' ? res : res.output;
-            return <MessageRenderer key={i} message={data} prompt='aos&gt; ' />;
+            if (e.type === 'output') {
+              const res = e.output.node.Output.data;
+              const data = typeof res === 'string' ? res : res.output;
+              return (
+                <MessageRenderer key={i} message={data} prompt='aos&gt; ' />
+              );
+            }
           })}
         </div>
       </div>

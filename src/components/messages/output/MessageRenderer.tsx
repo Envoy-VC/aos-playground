@@ -8,7 +8,7 @@ interface Props {
 const MessageRenderer = ({ message, prompt }: Props) => {
   return (
     <div className='font-mono'>
-      {prompt && <span>{prompt}</span>}
+      {prompt && <span className='text-blue-600'>{prompt}</span>}
       <Ansi className=' whitespace-pre-line'>{String(message)}</Ansi>
     </div>
   );

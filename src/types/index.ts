@@ -41,6 +41,22 @@ export interface Process {
   scheduler: string;
 }
 
+export type Result =
+  | {
+      id?: number;
+      type: 'command';
+      process: string;
+      cursor: string;
+      command: string;
+    }
+  | {
+      id?: number;
+      type: 'output';
+      process: string;
+      cursor: string;
+      output: AoResult;
+    };
+
 export interface EditorFile {
   path: string;
   name: string;
