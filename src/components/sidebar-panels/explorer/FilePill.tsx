@@ -2,7 +2,7 @@ import React from 'react';
 
 import { db } from '~/lib/db';
 import { getFileIcon } from '~/lib/helpers/editor';
-import { useKeyPress } from '~/lib/hooks';
+import { useKeyPress, useToast } from '~/lib/hooks';
 import { useEditor } from '~/lib/stores';
 import { cn } from '~/lib/utils';
 
@@ -21,7 +21,8 @@ import { File } from 'lucide-react';
 import { useOnClickOutside } from 'usehooks-ts';
 import { useCopyToClipboard } from 'usehooks-ts';
 
-const FilePill = ({ name, path, content }: EditorFile) => {
+const FilePill = ({ name, path, content, parentFolder }: EditorFile) => {
+  const { toast } = useToast();
   const fileRef = React.useRef<HTMLDivElement>(null);
   const renameRef = React.useRef<HTMLInputElement>(null);
   const { setActivePath } = useEditor();
@@ -41,8 +42,25 @@ const FilePill = ({ name, path, content }: EditorFile) => {
   };
 
   const onRename = async () => {
-    await db.files.update(path, { name: newName });
-    setIsRenaming(false);
+    try {
+      if (newName === name) {
+        throw new Error('Name is the same');
+      }
+
+      const newPath = `${parentFolder}${newName}`;
+
+      const exists = await db.files.get(newPath);
+      if (exists) {
+        throw new Error('File already exists');
+      }
+
+      await db.files.update(path, { name: newName, path: newPath });
+    } catch (error) {
+      toast.error({ description: (error as Error).message });
+      setIsRenaming(false);
+    } finally {
+      setIsRenaming(false);
+    }
   };
 
   const openFile = async () => {

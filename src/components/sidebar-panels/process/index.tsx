@@ -39,10 +39,12 @@ const ProcessPanel = () => {
     const process = await db.processes.filter((val) => val.id === id).first();
     if (process) {
       setActiveProcess(process);
-      toast.success(`Process Changed to ${process.name}`);
+      toast.success({
+        title: `Process Changed to ${process.name}`,
+      });
     } else {
-      toast.error('Error', {
-        // description: 'Process not found in local storage.',
+      toast.error({
+        description: 'Process not found in local storage.',
       });
     }
   };
@@ -63,13 +65,14 @@ const ProcessPanel = () => {
         await db.processes.add(process, process.id);
         setActiveProcess(process);
       }
-      toast.success('Process Imported', {
-        // description: <p className='break-all'>ID: {process.id}.</p>,
+      toast.success({
+        title: 'Process Imported',
+        description: <p className='break-all'>ID: {process.id}.</p>,
       });
       setProcessId('');
     } catch (error) {
-      toast.error('Error', {
-        // description: (error as Error).message ?? 'Something went wrong!',
+      toast.error({
+        description: (error as Error).message ?? 'An error occurred',
       });
     } finally {
       setIsImporting(false);

@@ -9,10 +9,14 @@ const ErrorScreen = () => {
     try {
       await db.delete();
       window.localStorage.clear();
-      toast.success('Cache reset successfully');
+      toast.success({
+        title: 'Cache reset successfully',
+      });
       window.location.reload();
     } catch (error) {
-      toast.error('Failed to reset cache');
+      toast.error({
+        description: (error as Error).message ?? 'An error occurred',
+      });
     }
   };
   return (

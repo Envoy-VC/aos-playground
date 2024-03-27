@@ -41,13 +41,20 @@ const MultiFileDialog = ({ data, isSending, setOpen, setIsSending }: Props) => {
             tags: defaultTags,
           });
         } catch (error) {
-          console.error('Error processing file:', file.filePath, error);
+          toast.error({
+            title: `Error processing file: ${file.filePath.slice(1)}`,
+            description: (error as Error).message,
+          });
         }
       }
 
-      toast.success('Messages Sent');
+      toast.success({
+        title: 'Files sent successfully',
+      });
     } catch (error) {
-      toast.error((error as Error).message);
+      toast.error({
+        description: (error as Error).message,
+      });
     } finally {
       setIsSending(false);
       setOpen(false);

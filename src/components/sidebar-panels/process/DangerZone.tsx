@@ -30,22 +30,23 @@ const DangerZone = () => {
       if (type === 'active') {
         const process = activeProcess?.id ?? null;
         if (!process) {
-          toast.error('Error', {
-            //description: 'No active process found.',
+          toast.error({
+            description: 'No active process found.',
           });
           return;
         }
         await db.processes.delete(process);
-        toast.success('Process Deleted', {
-          //description: <p className='break-all'>ID: {process}.</p>,
+        toast.success({
+          title: 'Process Deleted',
+          description: <p className='break-all'>ID: {process}.</p>,
         });
       } else {
         await db.processes.bulkDelete(processes?.map((val) => val.id) ?? []);
       }
       setActiveProcess(undefined);
     } catch (error) {
-      toast.error('Error', {
-        //description: (error as Error).message ?? 'An error occurred',
+      toast.error({
+        description: (error as Error).message ?? 'An error occurred',
       });
     }
   };

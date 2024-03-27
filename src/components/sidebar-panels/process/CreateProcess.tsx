@@ -44,15 +44,15 @@ const CreateProcess = () => {
       db.processes.add(res, res.id);
       setActiveProcess(res);
 
-      // toast.success('Process Spawned', {
-      //   description: <p className='break-all'>ID: {res.id}.</p>,
-      // });
+      toast.success({
+        title: 'Process Spawned',
+        description: <p className='break-all'>ID: {res.id}.</p>,
+      });
 
-      toast.success('Process Spawned');
       form.reset();
     } catch (error) {
-      toast.error('Error', {
-        // description: (error as Error).message ?? 'Something went wrong!',
+      toast.error({
+        description: (error as Error).message ?? 'Something went wrong!',
       });
     }
   };

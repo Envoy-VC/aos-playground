@@ -2,7 +2,7 @@ import React from 'react';
 
 import { db } from '~/lib/db';
 import { getFileIcon } from '~/lib/helpers/editor';
-import { useKeyPress } from '~/lib/hooks';
+import { useKeyPress, useToast } from '~/lib/hooks';
 import { useEditor } from '~/lib/stores';
 import { cn } from '~/lib/utils';
 
@@ -36,6 +36,7 @@ const FolderPill = ({
   isCollapsed,
   parentFolder: parent,
 }: Props) => {
+  const { toast } = useToast();
   const folderPath = path;
   const {
     isCreating,
@@ -59,39 +60,54 @@ const FolderPill = ({
   );
   const subFiles = allFiles.filter((f) => f.path.startsWith(folderPath));
 
-  const onRename = async (e: KeyboardEvent) => {
-    const newFolderName = newName.trim();
-    const oldRootPath = folderPath;
-    const newRootPath = parent + newFolderName + '/';
+  const onRename = async () => {
+    try {
+      if (newName === name) {
+        throw new Error('Name is the same');
+      }
+      const newFolderName = newName.trim();
+      const oldRootPath = folderPath;
+      const newRootPath = parent + newFolderName + '/';
 
-    // rename folder first
-    await db.folders.update(folderPath, {
-      name: newFolderName,
-      path: newRootPath,
-    });
+      if (allFolders.find((f) => f.path === newRootPath)) {
+        throw new Error('Folder already exists');
+      }
 
-    // rename subfolders
-    subfolders.forEach(async (f) => {
-      const newPath = f.path.replace(oldRootPath, newRootPath);
-      const newParent = f.parentFolder.replace(oldRootPath, newRootPath);
-      await db.folders.update(f.path, {
-        path: newPath,
-        parentFolder: newParent,
+      // rename folder first
+      await db.folders.update(folderPath, {
+        name: newFolderName,
+        path: newRootPath,
       });
-    });
 
-    // rename sub-files
-    subFiles.forEach(async (f) => {
-      const newPath = f.path.replace(oldRootPath, newRootPath);
-      const newParent = f.parentFolder.replace(oldRootPath, newRootPath);
-      await db.files.update(f.path, {
-        path: newPath,
-        parentFolder: newParent,
+      // rename subfolders
+      subfolders.forEach(async (f) => {
+        const newPath = f.path.replace(oldRootPath, newRootPath);
+        const newParent = f.parentFolder.replace(oldRootPath, newRootPath);
+        await db.folders.update(f.path, {
+          path: newPath,
+          parentFolder: newParent,
+        });
       });
-    });
 
-    setNewName(name);
-    setIsRenaming(false);
+      // rename sub-files
+      subFiles.forEach(async (f) => {
+        const newPath = f.path.replace(oldRootPath, newRootPath);
+        const newParent = f.parentFolder.replace(oldRootPath, newRootPath);
+        await db.files.update(f.path, {
+          path: newPath,
+          parentFolder: newParent,
+        });
+      });
+
+      setNewName(name);
+    } catch (error) {
+      toast.error({
+        description: (error as Error).message,
+      });
+      setIsRenaming(false);
+    } finally {
+      setIsRenaming(false);
+    }
   };
 
   const onDelete = async () => {

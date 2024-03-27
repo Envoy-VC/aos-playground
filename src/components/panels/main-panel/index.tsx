@@ -69,7 +69,7 @@ const MainPanel = () => {
         try {
           await formatOnSave(activePath);
         } catch (error) {
-          toast.error((error as Error).message);
+          toast.error({ description: (error as Error).message });
         }
       },
     });

@@ -65,12 +65,16 @@ const Run = () => {
           data: requiredFiles[0].content,
           tags,
         });
-        toast.success('Messages Sent');
+        toast.success({
+          title: 'Message sent successfully',
+        });
       } else {
         setIsModalOpen(true);
       }
     } catch (error) {
-      toast.error((error as Error).message);
+      toast.error({
+        description: (error as Error).message,
+      });
     } finally {
       setIsSending(false);
     }

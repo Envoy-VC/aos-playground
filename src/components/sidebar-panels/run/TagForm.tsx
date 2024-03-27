@@ -53,13 +53,17 @@ const TagForm = () => {
     );
 
     if (duplicate) {
-      toast.error(`Duplicate Tag Name: ${duplicate}`);
+      toast.error({
+        description: `Duplicate tag name: ${duplicate}`,
+      });
       return;
     }
 
     setDefaultTags(tags);
 
-    toast.success('Tags added successfully');
+    toast.success({
+      description: 'Tags saved successfully',
+    });
   };
 
   return (

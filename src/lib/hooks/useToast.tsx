@@ -1,19 +1,19 @@
-import { useToast as useReactToast } from '~/components/ui/use-toast';
+import { Toast, useToast as useReactToast } from '~/components/ui/use-toast';
 
 const useToast = () => {
   const { toast: reactToast } = useReactToast();
 
-  const successToast = (message: string) => {
+  const successToast = ({ ...props }: Toast) => {
     reactToast({
-      title: message,
       variant: 'default',
+      ...props,
     });
   };
 
-  const errorToast = (message: string) => {
+  const errorToast = ({ ...props }: Toast) => {
     reactToast({
-      title: message,
       variant: 'destructive',
+      ...props,
     });
   };
 
