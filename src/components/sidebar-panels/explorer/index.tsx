@@ -142,20 +142,23 @@ const ExplorerPanel = () => {
           <div
             className={cn(
               'flex flex-row items-center gap-2 px-1 ml-1',
-              rootFolders.length > 0 && 'ml-4'
+              rootFolders.length > 0 && 'ml-6'
             )}
           >
             {isCreating === 'file' && (
               <>
                 {getFileIcon(name) ? (
-                  <img src={getFileIcon(name) ?? ''} className='h-4 w-4' />
+                  <img
+                    src={getFileIcon(name) ?? ''}
+                    className='h-full w-full max-h-4 max-w-4'
+                  />
                 ) : (
-                  <File className='h-4 w-4 text-neutral-600 dark:text-neutral-400' />
+                  <File className='h-full w-full max-h-4 max-w-4 text-neutral-600 dark:text-neutral-400' />
                 )}
               </>
             )}
             {isCreating === 'folder' && (
-              <Folder className='h-4 w-4 text-neutral-600 dark:text-neutral-400' />
+              <Folder className='h-full w-full max-h-4 max-w-4 text-neutral-600 dark:text-neutral-400' />
             )}
             <Input
               ref={inputRef}

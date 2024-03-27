@@ -37,7 +37,6 @@ const FolderPill = ({
   parentFolder: parent,
 }: Props) => {
   const { toast } = useToast();
-  const folderPath = path;
   const {
     isCreating,
     name: fileName,
@@ -55,10 +54,8 @@ const FolderPill = ({
   const [isRenaming, setIsRenaming] = React.useState(false);
   const [rerender, setRerender] = React.useState(false);
 
-  const subfolders = allFolders.filter((f) =>
-    f.parentFolder.startsWith(folderPath)
-  );
-  const subFiles = allFiles.filter((f) => f.path.startsWith(folderPath));
+  const subfolders = allFolders.filter((f) => f.parentFolder.startsWith(path));
+  const subFiles = allFiles.filter((f) => f.path.startsWith(path));
 
   const onRename = async () => {
     try {
@@ -66,7 +63,7 @@ const FolderPill = ({
         throw new Error('Name is the same');
       }
       const newFolderName = newName.trim();
-      const oldRootPath = folderPath;
+      const oldRootPath = path;
       const newRootPath = parent + newFolderName + '/';
 
       if (allFolders.find((f) => f.path === newRootPath)) {
@@ -74,7 +71,7 @@ const FolderPill = ({
       }
 
       // rename folder first
-      await db.folders.update(folderPath, {
+      await db.folders.update(path, {
         name: newFolderName,
         path: newRootPath,
       });
@@ -111,7 +108,7 @@ const FolderPill = ({
   };
 
   const onDelete = async () => {
-    await db.folders.delete(folderPath);
+    await db.folders.delete(path);
     subfolders.forEach(async (f) => {
       await db.folders.delete(f.path);
     });
@@ -159,7 +156,7 @@ const FolderPill = ({
                 size='icon'
                 className='h-4 w-4'
                 onClick={async () => {
-                  await db.folders.update(folderPath, {
+                  await db.folders.update(path, {
                     isCollapsed: !isCollapsed,
                   });
                 }}
@@ -193,16 +190,16 @@ const FolderPill = ({
               />
             </div>
 
-            <div className='mr-1 flex  flex-row items-center gap-2 opacity-0 transition-all duration-100 ease-in group-hover:opacity-100'>
+            <div className='mr-1 flex flex-row items-center gap-2 opacity-0 transition-all duration-100 ease-in group-hover:opacity-100'>
               <Button
                 variant='link'
                 size='icon'
                 className='h-4 w-4'
                 onClick={async () => {
                   if (isCollapsed) {
-                    await db.folders.update(folderPath, { isCollapsed: false });
+                    await db.folders.update(path, { isCollapsed: false });
                   }
-                  setParentFolder(folderPath);
+                  setParentFolder(path);
                   setIsCreating('file');
                 }}
               >
@@ -214,9 +211,9 @@ const FolderPill = ({
                 className='h-4 w-4'
                 onClick={async () => {
                   if (isCollapsed) {
-                    await db.folders.update(folderPath, { isCollapsed: false });
+                    await db.folders.update(path, { isCollapsed: false });
                   }
-                  setParentFolder(folderPath);
+                  setParentFolder(path);
                   setIsCreating('folder');
                   inputRef.current?.focus();
                 }}
@@ -231,9 +228,9 @@ const FolderPill = ({
             inset
             onClick={async () => {
               if (isCollapsed) {
-                await db.folders.update(folderPath, { isCollapsed: false });
+                await db.folders.update(path, { isCollapsed: false });
               }
-              setParentFolder(folderPath);
+              setParentFolder(path);
               setIsCreating('file');
             }}
           >
@@ -243,9 +240,9 @@ const FolderPill = ({
             inset
             onClick={async () => {
               if (isCollapsed) {
-                await db.folders.update(folderPath, { isCollapsed: false });
+                await db.folders.update(path, { isCollapsed: false });
               }
-              setParentFolder(folderPath);
+              setParentFolder(path);
               setIsCreating('folder');
             }}
           >
@@ -268,7 +265,7 @@ const FolderPill = ({
       {!isCollapsed && (
         <div className='ml-[1.5rem]'>
           {subfolders
-            .filter((subfolder) => subfolder.parentFolder === folderPath)
+            .filter((subfolder) => subfolder.parentFolder === path)
             .map((subfolder) => (
               <FolderPill
                 key={subfolder.path}
@@ -278,18 +275,21 @@ const FolderPill = ({
               />
             ))}
           {parentFolder === path && (
-            <div className='flex flex-row items-center gap-2 px-5'>
+            <div className='flex flex-row items-center gap-2 px-7'>
               {isCreating === 'file' && (
                 <>
                   {getFileIcon(name) ? (
-                    <img src={getFileIcon(name) ?? ''} className='h-4 w-4' />
+                    <img
+                      src={getFileIcon(name) ?? ''}
+                      className='h-full w-full max-h-4 max-w-4'
+                    />
                   ) : (
-                    <File className='h-4 w-4 text-neutral-600 dark:text-neutral-400' />
+                    <File className='h-full w-full max-h-4 max-w-4 text-neutral-600 dark:text-neutral-400' />
                   )}
                 </>
               )}
               {isCreating === 'folder' && (
-                <Folder className='h-4 w-4 text-neutral-600 dark:text-neutral-400' />
+                <Folder className='h-full w-full max-h-4 max-w-4 text-neutral-600 dark:text-neutral-400' />
               )}
               <Input
                 ref={inputRef}
@@ -305,7 +305,7 @@ const FolderPill = ({
           )}
           <div className={cn('px-5')}>
             {allFiles
-              .filter((file) => file.parentFolder === folderPath)
+              .filter((file) => file.parentFolder === path)
               .map((file) => (
                 <FilePill key={file.path} {...file} />
               ))}
