@@ -7,6 +7,10 @@ export const toolbarItems = [
     name: 'Output',
     key: 'output',
   },
+  {
+    name: 'Terminal',
+    key: 'terminal',
+  },
 ] as const;
 
 export const sidebarItems = [

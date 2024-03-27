@@ -1,0 +1,58 @@
+import React from 'react';
+
+import { useTerminal } from '~/lib/hooks';
+import { useTerminalStore } from '~/lib/stores';
+
+import { Textarea } from '~/components/ui/textarea';
+
+const TerminalInput = () => {
+  const { text, setText } = useTerminalStore();
+  const { handleCommand } = useTerminal();
+
+  const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(event.target.value);
+  };
+
+  const calculateTextAreaHeight = () => {
+    const rows = text.split('\n').length;
+    const minHeight = 24;
+    const rowHeight = 24;
+    return `${Math.max(minHeight, rows * rowHeight)}px`;
+  };
+
+  const handleKeyPress = async (
+    event: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (
+      event.key === 'Enter' &&
+      !event.shiftKey &&
+      !event.ctrlKey &&
+      !event.altKey &&
+      !event.metaKey
+    ) {
+      event.preventDefault();
+      await handleCommand();
+    } else if (event.key === 'Enter' && event.shiftKey) {
+      const newText = text + '\n';
+      setText(newText);
+      event.preventDefault();
+    }
+  };
+
+  return (
+    <div className='flex flex-row items-start gap-1 text-base font-mono'>
+      <div className='text-blue-600'>aos&gt;</div>
+      <Textarea
+        autoFocus
+        value={text}
+        onChange={handleTextChange}
+        className='w-full text-base p-0 rounded-none resize-none border-none'
+        spellCheck={false}
+        onKeyDown={handleKeyPress}
+        style={{ height: calculateTextAreaHeight() }}
+      />
+    </div>
+  );
+};
+
+export default TerminalInput;

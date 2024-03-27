@@ -2,7 +2,7 @@ import { sidebarItems } from '~/lib/data';
 import { useSidebar } from '~/lib/stores';
 import { cn } from '~/lib/utils';
 
-import PlaygroundLogo from '~/components/logo';
+import PlaygroundLogo from '~/components/icons/logo';
 import {
   Tooltip,
   TooltipContent,
