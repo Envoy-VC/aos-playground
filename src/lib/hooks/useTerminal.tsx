@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { db } from '../db';
 import { sendMessage } from '../services/message';
 import { useTerminalStore } from '../stores';
@@ -13,6 +15,8 @@ const useTerminal = () => {
   const { toast } = useToast();
   const { text, refocus, setText, setIsExecuting, setRefocus } =
     useTerminalStore();
+
+  const [commandIdx, setCommandIdx] = React.useState<number>(-1);
 
   const [lastCursor, setLastCursor] = useLocalStorage<number>('lastCursor', 0);
 
@@ -48,6 +52,7 @@ const useTerminal = () => {
       setText('');
       setRefocus(!refocus);
       setIsExecuting(false);
+      setCommandIdx(-1);
     }
   };
 
@@ -65,7 +70,13 @@ const useTerminal = () => {
       tags: defaultTags,
     });
   };
-  return { handleCommand, lastCursor, setLastCursor };
+  return {
+    handleCommand,
+    lastCursor,
+    setLastCursor,
+    commandIdx,
+    setCommandIdx,
+  };
 };
 
 export default useTerminal;

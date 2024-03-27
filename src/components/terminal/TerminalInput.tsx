@@ -1,14 +1,15 @@
 import React from 'react';
 
+import { db } from '~/lib/db';
 import { useTerminal } from '~/lib/hooks';
 import { useTerminalStore } from '~/lib/stores';
 
 import { Textarea } from '~/components/ui/textarea';
 
 const TerminalInput = React.forwardRef<HTMLTextAreaElement, {}>(
-  (props, ref) => {
+  (_props, ref) => {
     const { text, setText, executing } = useTerminalStore();
-    const { handleCommand } = useTerminal();
+    const { handleCommand, commandIdx, setCommandIdx } = useTerminal();
 
     const handleTextChange = (
       event: React.ChangeEvent<HTMLTextAreaElement>
@@ -39,6 +40,32 @@ const TerminalInput = React.forwardRef<HTMLTextAreaElement, {}>(
         const newText = text + '\n';
         setText(newText);
         event.preventDefault();
+        // now handle arrow up and down events
+      } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+        event.preventDefault();
+        const commands = await db.results
+          .where({ type: 'command' })
+          .reverse()
+          .toArray();
+
+        if (commands.length === 0) return;
+
+        let newIndex: number;
+
+        if (event.key === 'ArrowUp') {
+          newIndex = commandIdx + 1;
+        } else {
+          newIndex = commandIdx - 1;
+        }
+
+        if (newIndex >= commands.length || newIndex < 0) return;
+
+        setCommandIdx(newIndex);
+
+        const command = commands[newIndex];
+        if (command.type === 'command') {
+          setText(command.command);
+        }
       }
     };
 
