@@ -3,7 +3,7 @@ import React from 'react';
 import { db } from '~/lib/db';
 import { getFileIcon } from '~/lib/helpers/editor';
 import { onCreate } from '~/lib/helpers/editor';
-import { useKeyPress } from '~/lib/hooks';
+import { useKeyPress, useToast } from '~/lib/hooks';
 import { useEditor } from '~/lib/stores';
 import { cn } from '~/lib/utils';
 
@@ -24,6 +24,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { File, Folder } from 'lucide-react';
 
 const ExplorerPanel = () => {
+  const { toast } = useToast();
   const explorerRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const {
@@ -58,8 +59,15 @@ const ExplorerPanel = () => {
   }, [isCreating, inputRef, parentFolder]);
 
   const handleEnter = async (_e: KeyboardEvent) => {
-    if (isCreating) {
-      await onCreate(parentFolder, name, isCreating);
+    try {
+      if (isCreating) {
+        await onCreate(parentFolder, name, isCreating);
+      }
+    } catch (error) {
+      toast.error({
+        description: (error as Error).message,
+      });
+    } finally {
       setIsCreating(null);
       setName('');
     }
