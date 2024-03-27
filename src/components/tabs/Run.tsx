@@ -13,11 +13,13 @@ import { RequireFile } from '~/types';
 import { Button } from '../ui/button';
 import MultiFileDialog from './MultiFileDialog';
 
+import { useActiveAddress } from 'arweave-wallet-kit';
 import { LoaderCircle, Play } from 'lucide-react';
 
 const Run = () => {
   const { toast } = useToast();
   const { activePath } = useEditor();
+  const address = useActiveAddress();
   const { activeProcess } = useProcess();
   const { defaultTags: tags } = useTags();
   const [isSending, setIsSending] = React.useState<boolean>(false);
@@ -38,6 +40,9 @@ const Run = () => {
     }
     if (!activePath) {
       throw new Error('No active file found');
+    }
+    if (!address) {
+      throw new Error('Connect Arweave wallet to send messages');
     }
     return data;
   };

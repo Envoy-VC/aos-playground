@@ -2,28 +2,22 @@ import React from 'react';
 import { useQuery } from 'react-query';
 
 import { db } from '~/lib/db';
+import { useProcess } from '~/lib/hooks';
 
 import { Button } from '~/components/ui/button';
 
 import { results } from '@permaweb/aoconnect';
-import type {
-  AoResult,
-  AoResultWithProcess,
-  AoResults,
-  Process,
-} from '~/types';
+import type { AoResult, AoResultWithProcess, AoResults } from '~/types';
 
-import Ansi from 'ansi-to-react';
+import MessageRenderer from './MessageRenderer';
+
 import { useLiveQuery } from 'dexie-react-hooks';
 import { ArrowUpToLine } from 'lucide-react';
-import { useLocalStorage } from 'usehooks-ts';
 
 const OutputBox = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const [activeProcess] = useLocalStorage<Process | undefined>(
-    'activeProcess',
-    undefined
-  );
+
+  const { activeProcess } = useProcess();
 
   const messages = useLiveQuery(async () => {
     if (!activeProcess) return [];
@@ -115,12 +109,7 @@ const OutputBox = () => {
           {(messages ?? []).map((e, i) => {
             const res = e.node.Output.data;
             const data = typeof res === 'string' ? res : res.output;
-            return (
-              <div key={i}>
-                aos&gt;{` `}
-                <Ansi className=' whitespace-pre-line'>{String(data)}</Ansi>
-              </div>
-            );
+            return <MessageRenderer key={i} message={data} prompt='aos&gt; ' />;
           })}
         </div>
       </div>

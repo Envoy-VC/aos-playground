@@ -48,9 +48,9 @@ const TabPill = ({ path }: Props) => {
         )}
       >
         {activePath === path && <div className='w-full h-1 bg-blue-500'></div>}
-        <div className='flex flex-row items-center justify-between gap-2 h-full'>
+        <div className='flex flex-row items-center justify-between gap-2 h-full px-2'>
           <div
-            className='flex w-full flex-row items-center gap-1 px-2'
+            className='flex w-full flex-row items-center gap-1'
             onClick={onSetActiveTab}
           >
             <img src={getFileIcon(file.name) ?? ''} className='h-5 w-5'></img>
