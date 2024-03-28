@@ -4,7 +4,7 @@ import { ImperativePanelHandle } from 'react-resizable-panels';
 import { db } from '~/lib/db';
 import { closeTab, formatOnSave } from '~/lib/helpers/editor';
 import { useToast } from '~/lib/hooks';
-import { useTheme } from '~/lib/hooks';
+import { useEditorConfig, useTheme } from '~/lib/hooks';
 import { useDebugFile } from '~/lib/stores';
 import { useEditor } from '~/lib/stores/editor';
 import { editorThemes } from '~/lib/themes';
@@ -19,14 +19,12 @@ import Editor, { useMonaco } from '@monaco-editor/react';
 import { shikiToMonaco } from '@shikijs/monaco';
 import { getHighlighter } from 'shiki';
 import { Messages, Tabs } from '~/components';
-import { EditorConfig, defaultConfig } from '~/types';
 
 import DefaultPage from '../../../screens/DefaultPage';
 import DebugPanel from '../debug-panel';
 
 import { useLiveQuery } from 'dexie-react-hooks';
 import * as Types from 'monaco-editor';
-import { useLocalStorage } from 'usehooks-ts';
 
 const MainPanel = () => {
   const { theme } = useTheme();
@@ -36,10 +34,7 @@ const MainPanel = () => {
   const { isActive: isDebuggerActive, result } = useDebugFile();
   const terminalPanelRef = React.useRef<ImperativePanelHandle | null>(null);
 
-  const [editorOptions] = useLocalStorage<EditorConfig>(
-    'editorOptions',
-    defaultConfig
-  );
+  const { editorOptions } = useEditorConfig();
 
   React.useEffect(() => {
     const handle = (e: KeyboardEvent) => {
@@ -136,12 +131,22 @@ const MainPanel = () => {
     if (editorRef.current) {
       const newTheme =
         theme === 'dark' ? editorOptions.darkTheme : editorOptions.lightTheme;
-      console.log(newTheme);
       editorRef.current.updateOptions({
         theme: newTheme,
       });
     }
   }, [theme]);
+
+  React.useEffect(() => {
+    if (editorRef.current) {
+      const newTheme =
+        theme === 'dark' ? editorOptions.darkTheme : editorOptions.lightTheme;
+      editorRef.current.updateOptions({
+        theme: newTheme,
+        fontSize: editorOptions.fontSize,
+      });
+    }
+  }, [editorOptions]);
 
   return (
     <div className='flex h-screen w-full flex-col'>

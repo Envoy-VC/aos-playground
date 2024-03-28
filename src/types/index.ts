@@ -84,7 +84,7 @@ export interface RequireFile {
 export interface EditorConfig {
   lightTheme: (typeof lightThemes)[number]['name'];
   darkTheme: (typeof darkThemes)[number]['name'];
-  fontSize?: number;
+  fontSize: number;
 }
 
 export const defaultConfig: EditorConfig = {

@@ -21,7 +21,7 @@ var plugins = [
   UnheadVite(),
   ViteImageOptimizer(),
 ];
-plugins.unshift(MillionLint.vite());
+//plugins.unshift(MillionLint.vite());
 export default defineConfig({
   base: '',
   plugins: plugins,
