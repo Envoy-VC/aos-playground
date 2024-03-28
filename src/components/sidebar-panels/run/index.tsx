@@ -2,6 +2,7 @@ import { db } from '~/lib/db';
 import { getRequireValuesFromAST } from '~/lib/helpers/ast-parser';
 import { useToast } from '~/lib/hooks';
 import { useDebugFile } from '~/lib/stores';
+import { useEditor } from '~/lib/stores';
 
 import { Button } from '~/components/ui/button';
 import { Header, HeaderDescription, HeaderTitle } from '~/components/ui/header';
@@ -20,12 +21,13 @@ import { Bug } from 'lucide-react';
 
 const RunDebugPanel = () => {
   const { toast } = useToast();
+  const { setActivePath } = useEditor();
+  const { filePath, setFilePath, setIsActive, setResult } = useDebugFile();
+
   const files = useLiveQuery(async () => {
     const files = await db.files.toArray();
     return files;
   });
-
-  const { filePath, setFilePath, setIsActive, setResult } = useDebugFile();
 
   const onDebug = async () => {
     try {
@@ -34,7 +36,7 @@ const RunDebugPanel = () => {
       }
       const result = await getRequireValuesFromAST(filePath);
 
-      console.log(result);
+      setActivePath(null);
       setResult(result);
       setIsActive(true);
     } catch (error) {

@@ -4,6 +4,7 @@ import { db } from '~/lib/db';
 import { getFileIcon } from '~/lib/helpers/editor';
 import { useKeyPress, useToast } from '~/lib/hooks';
 import { useEditor } from '~/lib/stores';
+import { useDebugFile } from '~/lib/stores';
 import { cn } from '~/lib/utils';
 
 import {
@@ -23,6 +24,7 @@ import { useCopyToClipboard } from 'usehooks-ts';
 
 const FilePill = ({ name, path, content, parentFolder }: EditorFile) => {
   const { toast } = useToast();
+  const { setIsActive: setIsDebugActive } = useDebugFile();
   const fileRef = React.useRef<HTMLDivElement>(null);
   const renameRef = React.useRef<HTMLInputElement>(null);
   const { setActivePath } = useEditor();
@@ -72,6 +74,7 @@ const FilePill = ({ name, path, content, parentFolder }: EditorFile) => {
       if (!exists) {
         await db.tabs.add(file, path);
       }
+      setIsDebugActive(false);
       setActivePath(path);
     } catch (error) {
       console.error(error);

@@ -1,5 +1,6 @@
 // @ts-expect-error err
 import { Config, formatCode } from '$/stylua_lib_bg';
+import { languageIcons } from '~/assets';
 
 import { db } from '../db';
 
@@ -34,29 +35,17 @@ export const extensionToLanguage = (extension: string) => {
     case 'py':
       return 'python';
     case 'txt':
-      return 'plaintext';
+      return 'text';
     default:
-      return 'plaintext';
+      return 'text';
   }
 };
 
 export const getFileIcon = (fileName: string) => {
-  const extension = fileName.split('.').pop();
+  const extension = fileName.split('.').pop() ?? '';
 
-  switch (extension) {
-    case 'js':
-      return 'https://cdn-icons-png.flaticon.com/512/5968/5968292.png';
-    case 'lua':
-      return 'https://icons.veryicon.com/png/o/file-type/file-type-icon-library/lua.png';
-    case 'ts':
-      return 'https://cdn-icons-png.flaticon.com/512/5968/5968381.png';
-    case 'jsx':
-      return 'https://cdn-icons-png.flaticon.com/512/875/875209.png';
-    case 'tsx':
-      return 'https://cdn-icons-png.flaticon.com/512/3459/3459528.png';
-    default:
-      return null;
-  }
+  const icon = languageIcons[extension] ?? null;
+  return icon;
 };
 
 export const onCreate = async (

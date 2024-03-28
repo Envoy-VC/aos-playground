@@ -124,7 +124,7 @@ const TagForm = () => {
                 <Button
                   type='button'
                   size='icon'
-                  variant='secondary'
+                  variant='outline'
                   className='!h-10 min-w-10'
                   onClick={() => onRemoveTag(index)}
                 >

@@ -7,6 +7,7 @@ import { useTheme } from '~/lib/hooks';
 import { useDebugFile } from '~/lib/stores';
 import { useEditor } from '~/lib/stores/editor';
 import { editorThemes } from '~/lib/themes';
+import { cn } from '~/lib/utils';
 
 // import { darkTheme, lightTheme } from '~/lib/themes';
 import {
@@ -66,8 +67,6 @@ const MainPanel = () => {
       langs: ['javascript', 'typescript', 'lua', 'markdown', 'json'],
     });
 
-    console.log(editorOptions);
-
     if (monaco) {
       monaco.languages.register({ id: 'lua' });
       monaco.languages.register({ id: 'typescript' });
@@ -77,12 +76,8 @@ const MainPanel = () => {
       shikiToMonaco(highlighter, monaco);
     }
 
-    console.log(theme);
-
     const newTheme =
       theme === 'dark' ? editorOptions.darkTheme : editorOptions.lightTheme;
-
-    console.log(newTheme);
 
     editor.updateOptions({
       ...editorOptions,
@@ -146,8 +141,9 @@ const MainPanel = () => {
           collapsible
           collapsedSize={0}
         >
-          {isDebuggerActive && result.length > 0 && <DebugPanel />}
-          {activeFile && !isDebuggerActive ? (
+          {isDebuggerActive && result.length > 0 ? (
+            <DebugPanel />
+          ) : activeFile ? (
             <Editor
               language={activeFile.language}
               value={activeFile.content}

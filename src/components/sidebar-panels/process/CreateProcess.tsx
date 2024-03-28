@@ -89,7 +89,7 @@ const CreateProcess = () => {
               disabled={form.formState.isSubmitting}
               size='icon'
               className='h-9 w-full max-w-9'
-              variant='secondary'
+              variant='link'
             >
               <PackagePlus className='h-5 w-5 text-neutral-700 dark:text-neutral-100' />
             </Button>

@@ -1,6 +1,7 @@
 import { db } from '~/lib/db';
 import { getFileIcon } from '~/lib/helpers/editor';
 import { useEditor } from '~/lib/stores';
+import { useDebugFile } from '~/lib/stores';
 import { cn } from '~/lib/utils';
 
 import { Button } from '../ui/button';
@@ -14,6 +15,8 @@ interface Props {
 
 const TabPill = ({ path }: Props) => {
   const { activePath, setActivePath } = useEditor();
+  const { isActive: isDebugActive, setIsActive: setIsDebugActive } =
+    useDebugFile();
 
   const file = useLiveQuery(async () => {
     const file = await db.files.get(path);
@@ -34,6 +37,7 @@ const TabPill = ({ path }: Props) => {
   const onSetActiveTab = async () => {
     try {
       setActivePath(path);
+      setIsDebugActive(false);
     } catch (error) {
       console.log(error);
     }

@@ -116,6 +116,9 @@ const ProcessPanel = () => {
             onClick={() => {
               if (activeProcess) {
                 copyToClipboard(activeProcess.id);
+                toast.success({
+                  title: 'Process ID Copied',
+                });
               }
             }}
             className='h-9 w-full max-w-9'
@@ -141,7 +144,7 @@ const ProcessPanel = () => {
             disabled={isImporting}
             className='h-9 w-full max-w-9'
             onClick={onImportProcess}
-            variant='secondary'
+            variant='link'
           >
             <PackageSearch className='h-5 w-5 text-neutral-700 dark:text-neutral-100' />
           </Button>

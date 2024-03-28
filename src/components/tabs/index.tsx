@@ -12,6 +12,7 @@ import {
 
 import ConnectButton from '../connect-button';
 import { Button } from '../ui/button';
+import DebugFilePill from './DebugFilePill';
 import Run from './Run';
 import TabPill from './TabPill';
 
@@ -78,6 +79,7 @@ const Tabs = () => {
         </TooltipProvider>
         <div className='overflow-scroll max-w-fit flex hide-scrollbar'>
           <div className='flex flex-row items-center'>
+            <DebugFilePill />
             {tabs?.map((tab) => <TabPill key={tab.path} path={tab.path} />)}
           </div>
         </div>

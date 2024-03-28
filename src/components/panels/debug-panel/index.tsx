@@ -7,36 +7,25 @@ import { Button } from '~/components/ui/button';
 import { ScrollArea } from '~/components/ui/scroll-area';
 
 import { codeToHtml } from 'shiki';
+import { RequireFile } from '~/types';
 
-import { X } from 'lucide-react';
+import FileModal from './FileModal';
+
+import { Maximize2 } from 'lucide-react';
 
 const DebugPanel = () => {
-  const { result, setIsActive, setResult } = useDebugFile();
+  const { result } = useDebugFile();
+  const [activeResult, setActiveResult] = React.useState<RequireFile | null>(
+    null
+  );
 
-  const onClose = () => {
-    setIsActive(false);
-    setResult([]);
-  };
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
 
   const resolvedFiles = result.filter((f) => f.exists);
   const unresolvedFiles = result.filter((f) => !f.exists);
 
   return (
-    <div className='flex h-full flex-col overflow-scroll'>
-      <div className='flex items-center justify-between px-4 py-2'>
-        <div className='text-lg font-semibold text-neutral-700 dark:text-neutral-300'>
-          Debug Panel
-        </div>
-        <Button
-          className='w=10 h-10'
-          variant='link'
-          size='icon'
-          onClick={onClose}
-        >
-          <X size={22} />
-        </Button>
-      </div>
-
+    <div className='flex h-full flex-col overflow-scroll  p-6'>
       <div className='flex flex-row justify-between gap-2 px-4'>
         <div className='flex flex-row gap-2'>
           <div className='text-base font-medium dark:text-neutral-300'>
@@ -61,24 +50,38 @@ const DebugPanel = () => {
         </div>
       )}
 
-      <div className='flex flex-col gap-4 p-2'>
+      <div className='flex flex-col gap-4 py-4'>
         {resolvedFiles.map((res) => {
           return (
-            <div className='flex flex-col gap-1 px-4'>
-              <div className='text-sm font-semibold text-neutral-700 dark:text-neutral-300'>
-                File:{' '}
-                <span className='font-semibold'>{res.filePath.slice(1)}</span>
+            <div className='flex flex-col gap-1 px-4 max-w-3xl'>
+              <div className='flex flex-row gap-2 items-center justify-between font-medium text-neutral-700 dark:text-neutral-300'>
+                <span>
+                  File: <span>{res.filePath.slice(1)}</span>
+                </span>
+                <Button
+                  size='icon'
+                  variant='link'
+                  onClick={() => {
+                    setActiveResult(res);
+                    setIsOpen(true);
+                  }}
+                >
+                  <Maximize2 size={16} />
+                </Button>
               </div>
-              <RenderJSON code={JSON.stringify(res.ast, null, 2)} />
+              <ScrollArea className='h-[16rem] w-full rounded-sm border border-neutral-200 p-1 dark:border-neutral-700'>
+                <RenderJSON code={JSON.stringify(res.ast, null, 2)} />
+              </ScrollArea>
             </div>
           );
         })}
       </div>
+      <FileModal onOpenChange={setIsOpen} isOpen={isOpen} file={activeResult} />
     </div>
   );
 };
 
-const RenderJSON = ({ code }: { code: string }) => {
+export const RenderJSON = ({ code }: { code: string }) => {
   const { editorOptions } = useEditorConfig();
   const [html, setHTML] = React.useState<string>('');
 
@@ -97,13 +100,11 @@ const RenderJSON = ({ code }: { code: string }) => {
   }, [code, editorOptions]);
 
   return (
-    <ScrollArea className='h-[16rem] w-full max-w-3xl rounded-xl border border-neutral-200 p-1 dark:border-neutral-700'>
-      <div
-        dangerouslySetInnerHTML={{
-          __html: html,
-        }}
-      />
-    </ScrollArea>
+    <div
+      dangerouslySetInnerHTML={{
+        __html: html,
+      }}
+    />
   );
 };
 
