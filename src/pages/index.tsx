@@ -21,7 +21,7 @@ const Home = () => {
   }, [sidebarPanel]);
 
   return (
-    <div className='font-sans'>
+    <div className='font-sans bg-background'>
       <div className='h-full max-h-screen w-full flex-row overflow-hidden flex'>
         <IconPanel />
         <ResizablePanelGroup

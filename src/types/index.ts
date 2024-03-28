@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { darkThemes, lightThemes } from '~/lib/themes';
+
 import type { Chunk } from 'luaparse';
 
 export type Tag = {
@@ -80,11 +82,13 @@ export interface RequireFile {
 }
 
 export interface EditorConfig {
-  theme?: 'ao-light' | 'ao-dark';
+  lightTheme: (typeof lightThemes)[number]['name'];
+  darkTheme: (typeof darkThemes)[number]['name'];
   fontSize?: number;
 }
 
 export const defaultConfig: EditorConfig = {
-  theme: 'ao-light',
+  darkTheme: 'poimandres',
+  lightTheme: 'slack-ochin',
   fontSize: 15,
 };

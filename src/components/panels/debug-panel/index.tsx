@@ -1,7 +1,11 @@
+import React from 'react';
+
 import { useDebugFile } from '~/lib/stores';
 
 import { Button } from '~/components/ui/button';
 import { ScrollArea } from '~/components/ui/scroll-area';
+
+import { codeToHtml } from 'shiki';
 
 import { X } from 'lucide-react';
 
@@ -64,16 +68,42 @@ const DebugPanel = () => {
                 File:{' '}
                 <span className='font-semibold'>{res.filePath.slice(1)}</span>
               </div>
-              <ScrollArea className='h-[16rem] w-full max-w-3xl rounded-xl border border-neutral-200 p-1 dark:border-neutral-700'>
+              {/* <ScrollArea className='h-[16rem] w-full max-w-3xl rounded-xl border border-neutral-200 p-1 dark:border-neutral-700'>
                 <pre className='h-full w-full overflow-auto font-mono text-xs text-neutral-700 dark:text-neutral-300'>
                   {JSON.stringify(res.ast, null, 2)}
                 </pre>
-              </ScrollArea>
+              </ScrollArea> */}
+              <RenderJSON code={JSON.stringify(res.ast, null, 2)} />
             </div>
           );
         })}
       </div>
     </div>
+  );
+};
+
+const RenderJSON = ({ code }: { code: string }) => {
+  const [html, setHTML] = React.useState<string>('');
+
+  React.useEffect(() => {
+    const run = async () => {
+      const html = await codeToHtml(code, {
+        lang: 'json',
+        theme: 'vitesse-dark',
+      });
+      setHTML(html);
+    };
+    void run();
+  }, [code]);
+
+  return (
+    <ScrollArea className='h-[16rem] w-full max-w-3xl rounded-xl border border-neutral-200 p-1 dark:border-neutral-700'>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: html,
+        }}
+      />
+    </ScrollArea>
   );
 };
 

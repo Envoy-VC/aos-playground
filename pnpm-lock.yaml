@@ -125,6 +125,9 @@ dependencies:
   tailwindcss-animate:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.4.1)
+  tm-themes:
+    specifier: ^1.3.2
+    version: 1.3.2
   traverse:
     specifier: ^0.6.8
     version: 0.6.8
@@ -148,6 +151,9 @@ dependencies:
     version: 4.5.2(@types/react@18.2.66)(react@18.2.0)
 
 devDependencies:
+  '@shikijs/monaco':
+    specifier: ^1.2.1
+    version: 1.2.1
   '@trivago/prettier-plugin-sort-imports':
     specifier: ^4.3.0
     version: 4.3.0(prettier@3.2.5)
@@ -205,6 +211,9 @@ devDependencies:
   sharp:
     specifier: ^0.33.2
     version: 0.33.2
+  shiki:
+    specifier: ^1.2.1
+    version: 1.2.1
   svgo:
     specifier: ^3.2.0
     version: 3.2.0
@@ -3261,6 +3270,16 @@ packages:
     os: [win32]
     requiresBuild: true
     optional: true
+
+  /@shikijs/core@1.2.1:
+    resolution: {integrity: sha512-KaIS0H4EQ3KI2d++TjYqRNgwp8E3M/68e9veR4QtInzA7kKFgcjeiJqb80fuXW+blDy5fmd11PN9g9soz/3ANQ==}
+    dev: true
+
+  /@shikijs/monaco@1.2.1:
+    resolution: {integrity: sha512-1Jhi8E8LQzMR9GXS2TufQPim78Zidv9Yr9LevI2vAIo9xdNEq3hMBZ8QTFr4wFZc2mMLMGGlO491fMohcJMTLQ==}
+    dependencies:
+      '@shikijs/core': 1.2.1
+    dev: true
 
   /@socket.io/component-emitter@3.1.0:
     resolution: {integrity: sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==}
@@ -7951,6 +7970,12 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
+  /shiki@1.2.1:
+    resolution: {integrity: sha512-u+XW6o0vCkUNlneZb914dLO+AayEIwK5tI62WeS//R5HIXBFiYaj/Hc5xcq27Yh83Grr4JbNtUBV8W6zyK4hWg==}
+    dependencies:
+      '@shikijs/core': 1.2.1
+    dev: true
+
   /side-channel@1.0.6:
     resolution: {integrity: sha512-fDW/EZ6Q9RiO8eFG8Hj+7u/oW+XrPTIChwCOM2+th2A6OblDtYYIpve9m+KvI9Z4C9qSEXlaGR6bTEYHReuglA==}
     engines: {node: '>= 0.4'}
@@ -8275,6 +8300,10 @@ packages:
     dependencies:
       setimmediate: 1.0.5
     dev: true
+
+  /tm-themes@1.3.2:
+    resolution: {integrity: sha512-FDHLKK0ybFnpc3875ufwWP06WjGefzLAKBspDbO2KxIZb8nVb3dTvg6r7t39tP+G1FvbPOg341mFRH+6CR000g==}
+    dev: false
 
   /tmp@0.0.33:
     resolution: {integrity: sha512-jRCJlojKnZ3addtTOjdIqoRuPEKBvNXcGYqzO6zWZX8KfKEpnGY5jfggJQ3EjKuu8D4bJRr0y+cYJFmYbImXGw==}

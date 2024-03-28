@@ -6,8 +6,9 @@ import { useToast } from '~/lib/hooks';
 import { useTheme } from '~/lib/hooks';
 import { useDebugFile } from '~/lib/stores';
 import { useEditor } from '~/lib/stores/editor';
-import { darkTheme, lightTheme } from '~/lib/themes';
+import { editorThemes } from '~/lib/themes';
 
+// import { darkTheme, lightTheme } from '~/lib/themes';
 import {
   ResizableHandle,
   ResizablePanel,
@@ -15,6 +16,8 @@ import {
 } from '~/components/ui/resizable';
 
 import Editor, { useMonaco } from '@monaco-editor/react';
+import { shikiToMonaco } from '@shikijs/monaco';
+import { getHighlighter } from 'shiki';
 import { Messages, Tabs } from '~/components';
 import { EditorConfig, defaultConfig } from '~/types';
 
@@ -53,10 +56,39 @@ const MainPanel = () => {
     null
   );
 
-  const handleMount = (editor: Types.editor.IStandaloneCodeEditor) => {
+  const handleMount = async (editor: Types.editor.IStandaloneCodeEditor) => {
     setMonaco(editor);
-    const newTheme = theme === 'dark' ? 'ao-dark' : 'ao-light';
-    editor.updateOptions({ ...editorOptions, theme: newTheme });
+
+    const themes = editorThemes.map((theme) => theme.name);
+
+    const highlighter = await getHighlighter({
+      themes,
+      langs: ['javascript', 'typescript', 'lua', 'markdown', 'json'],
+    });
+
+    console.log(editorOptions);
+
+    if (monaco) {
+      monaco.languages.register({ id: 'lua' });
+      monaco.languages.register({ id: 'typescript' });
+      monaco.languages.register({ id: 'javascript' });
+      monaco.languages.register({ id: 'json' });
+      monaco.languages.register({ id: 'markdown' });
+      shikiToMonaco(highlighter, monaco);
+    }
+
+    console.log(theme);
+
+    const newTheme =
+      theme === 'dark' ? editorOptions.darkTheme : editorOptions.lightTheme;
+
+    console.log(newTheme);
+
+    editor.updateOptions({
+      ...editorOptions,
+      theme: newTheme,
+    });
+
     editor.addAction({
       id: 'saveCommand',
       label: 'Save',
@@ -90,22 +122,15 @@ const MainPanel = () => {
   };
 
   React.useEffect(() => {
-    if (monaco) {
-      monaco.editor.defineTheme('ao-dark', darkTheme);
-      monaco.editor.defineTheme('ao-light', lightTheme);
-    }
-  }, [monaco]);
-
-  React.useEffect(() => {
-    if (editorRef.current && monaco) {
-      monaco.editor.defineTheme('ao-dark', darkTheme);
-      monaco.editor.defineTheme('ao-light', lightTheme);
-      const newTheme = theme === 'dark' ? 'ao-dark' : 'ao-light';
+    if (editorRef.current) {
+      const newTheme =
+        theme === 'dark' ? editorOptions.darkTheme : editorOptions.lightTheme;
+      console.log(newTheme);
       editorRef.current.updateOptions({
         theme: newTheme,
       });
     }
-  }, [theme, monaco]);
+  }, [theme]);
 
   return (
     <div className='flex h-screen w-full flex-col'>
