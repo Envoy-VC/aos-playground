@@ -17,7 +17,9 @@ const Terminal = () => {
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
 
   const { rerender, isFirstRender } = useMessagesPanel();
-  const { refocus, isNearBottom, setIsNearBottom } = useTerminalStore();
+
+  const { refocus, isNearBottom, setIsNearBottom, executing } =
+    useTerminalStore();
 
   const handleClick = () => {
     if (inputRef.current) {
@@ -87,7 +89,7 @@ const Terminal = () => {
         </span>
       </div>
       <TerminalOutput />
-      <TerminalInput ref={inputRef} />
+      {!executing && <TerminalInput ref={inputRef} />}
       <CommandLoading />
       {!isNearBottom && (
         <Button
