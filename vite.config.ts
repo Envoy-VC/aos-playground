@@ -1,3 +1,4 @@
+import MillionLint from '@million/lint';
 import UnheadVite from '@unhead/addons/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
@@ -9,19 +10,21 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 import path from 'path';
 
+var plugins = [
+  react(),
+  tsconfigPaths(),
+  wasm(),
+  nodePolyfills({
+    include: ['buffer'],
+  }),
+  topLevelAwait(),
+  UnheadVite(),
+  ViteImageOptimizer(),
+];
+plugins.unshift(MillionLint.vite());
 export default defineConfig({
   base: '',
-  plugins: [
-    react(),
-
-    tsconfigPaths(),
-    wasm(),
-    nodePolyfills({ include: ['buffer'] }),
-    topLevelAwait(),
-    UnheadVite(),
-    ViteImageOptimizer(),
-  ],
-
+  plugins: plugins,
   server: {
     port: 3000,
   },
