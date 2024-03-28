@@ -13,7 +13,7 @@ import { TerminalCommand } from '~/types/terminal';
 
 export const useCommands = () => {
   const { toast } = useToast();
-  const { activeProcess } = useProcess();
+  const { activeProcess, setActiveProcess } = useProcess();
   const { defaultTags } = useTags();
   const { setIsExecuting } = useTerminalStore();
   const [, setLastCursor] = useLocalStorage<number>('lastCursor', 0);
@@ -89,6 +89,25 @@ export const useCommands = () => {
       handler: async () => {
         const processes = await db.processes.toArray();
         printToConsole(<ProcessList processes={processes} />);
+      },
+    },
+    {
+      name: 'aos set-active',
+      params: ['process_id'],
+      flags: [],
+      description: 'Sets the active process in the Playground',
+      usage: 'aos set-active <process_id>',
+      handler: async (args) => {
+        const processId = args[0];
+        const processes = await db.processes.toArray();
+        const process = processes.find((p) => p.id === processId);
+        if (!process) {
+          throw new Error(`Process ${processId} not found, Import it first`);
+        }
+        setActiveProcess(process);
+        toast.success({
+          title: 'Active Process Set',
+        });
       },
     },
   ];
