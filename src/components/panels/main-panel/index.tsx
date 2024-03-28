@@ -1,4 +1,5 @@
 import React from 'react';
+import { ImperativePanelHandle } from 'react-resizable-panels';
 
 import { db } from '~/lib/db';
 import { closeTab, formatOnSave } from '~/lib/helpers/editor';
@@ -20,8 +21,8 @@ import { getHighlighter } from 'shiki';
 import { Messages, Tabs } from '~/components';
 import { EditorConfig, defaultConfig } from '~/types';
 
+import DefaultPage from '../../../screens/DefaultPage';
 import DebugPanel from '../debug-panel';
-import DefaultPage from './DefaultPage';
 
 import { useLiveQuery } from 'dexie-react-hooks';
 import * as Types from 'monaco-editor';
@@ -33,11 +34,28 @@ const MainPanel = () => {
   const { toast } = useToast();
   const { setMonaco, activePath, setActivePath } = useEditor();
   const { isActive: isDebuggerActive, result } = useDebugFile();
+  const terminalPanelRef = React.useRef<ImperativePanelHandle | null>(null);
 
   const [editorOptions] = useLocalStorage<EditorConfig>(
     'editorOptions',
     defaultConfig
   );
+
+  React.useEffect(() => {
+    const handle = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === '`') {
+        terminalPanelRef.current?.isCollapsed()
+          ? terminalPanelRef.current?.expand()
+          : terminalPanelRef.current?.collapse();
+      }
+    };
+
+    window.addEventListener('keydown', handle);
+
+    return () => {
+      window.removeEventListener('keydown', handle);
+    };
+  }, []);
 
   const activeFile = useLiveQuery(async () => {
     const activeFile = await db.files.get(activePath ?? '');
@@ -158,6 +176,7 @@ const MainPanel = () => {
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel
+          ref={terminalPanelRef}
           defaultSize={25}
           maxSize={100}
           minSize={10}
