@@ -1,5 +1,4 @@
 import MillionLint from '@million/lint';
-import UnheadVite from '@unhead/addons/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
@@ -18,7 +17,6 @@ var plugins = [
     include: ['buffer'],
   }),
   topLevelAwait(),
-  UnheadVite(),
   ViteImageOptimizer(),
 ];
 //plugins.unshift(MillionLint.vite());
