@@ -46,7 +46,7 @@ const MessageRenderer = ({ message, prompt }: Props) => {
 
   return (
     <div className='font-mono'>
-      {prompt && <span className='text-blue-600'>{prompt}</span>}
+      {prompt && <span className='text-blue-600 font-medium'>{prompt}</span>}
       {typeof Content === 'object' ? (
         <>{Content}</>
       ) : (

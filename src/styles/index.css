@@ -92,3 +92,7 @@
   font-family: 'Geist Mono';
   src: url(../../public/GeistMonoVariableVF.ttf);
 }
+
+.custom-caret {
+  caret-shape: block !important;
+}

@@ -1,12 +1,17 @@
 import React from 'react';
 
+
+
 import { db } from '~/lib/db';
 import { useCommands, useProcess, useTags, useToast } from '~/lib/hooks';
 import { sendMessage } from '~/lib/services/message';
 import { useTerminalStore } from '~/lib/stores';
 
+
+
 import { useActiveAddress } from 'arweave-wallet-kit';
 import { useLocalStorage } from 'usehooks-ts';
+
 
 const useTerminal = () => {
   const { commands } = useCommands();
@@ -33,7 +38,15 @@ const useTerminal = () => {
 
       if (command) {
         const args = t.replace(command.name, '').split(' ').slice(1);
-        await command.handler(args);
+        if (command.name !== 'clear') {
+          await db.results.put({
+            type: 'command',
+            cursor: crypto.randomUUID(),
+            command: text,
+            process: activeProcess!.id,
+          });
+        }
+        await command.handler(args, text);
       } else {
         setIsExecuting(true);
         await send();

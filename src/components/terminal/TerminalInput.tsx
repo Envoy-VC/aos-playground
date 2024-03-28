@@ -72,14 +72,14 @@ const TerminalInput = React.forwardRef<HTMLTextAreaElement, {}>(
 
     return (
       <div className='flex flex-row items-start gap-1 text-base font-mono'>
-        <div className='text-blue-600'>aos&gt;</div>
+        <div className='text-blue-600 font-medium'>aos&gt;</div>
         <Textarea
           ref={ref}
           autoFocus
           value={text}
           disabled={executing}
           onChange={handleTextChange}
-          className='w-full text-base p-0 rounded-none resize-none border-none'
+          className='w-full text-base p-0 rounded-none resize-none border-none custom-caret caret-blue-500'
           spellCheck={false}
           onKeyDown={handleKeyPress}
           style={{ height: calculateTextAreaHeight() }}

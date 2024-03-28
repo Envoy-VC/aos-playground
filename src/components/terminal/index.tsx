@@ -16,9 +16,8 @@ const Terminal = () => {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
 
-  const [isNearBottom, setIsNearBottom] = React.useState<boolean>(false);
   const { rerender, isFirstRender } = useMessagesPanel();
-  const { refocus } = useTerminalStore();
+  const { refocus, isNearBottom, setIsNearBottom } = useTerminalStore();
 
   const handleClick = () => {
     if (inputRef.current) {
@@ -41,7 +40,8 @@ const Terminal = () => {
 
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = contentNode;
-      const isNearBottom = scrollTop + clientHeight >= scrollHeight - 400;
+      // isNearBottom is true if the user is within 50% of the bottom
+      const isNearBottom = scrollTop + clientHeight >= scrollHeight * 0.5;
       setIsNearBottom(isNearBottom);
     };
 
@@ -75,7 +75,17 @@ const Terminal = () => {
       className='h-full p-2 font-mono overflow-y-scroll pb-12'
       ref={containerRef}
     >
-      <div>Welcome message</div>
+      <div className='flex flex-col pb-3'>
+        <span className='text-lg'>Welcome to AOS Terminal!</span>
+        <span className='text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl font-medium'>
+          This is a terminal emulator that allows you to interact with the AOS.
+          Start by using the{' '}
+          <code className='text-black bg-neutral-200/60 px-1 py-[1px] rounded-md'>
+            aos help
+          </code>{' '}
+          command to see all available commands.
+        </span>
+      </div>
       <TerminalOutput />
       <TerminalInput ref={inputRef} />
       <CommandLoading />

@@ -1,9 +1,12 @@
+
 import { db } from '~/lib/db';
 import { useProcess, useTerminal } from '~/lib/hooks';
 
 import MessageRenderer from '../messages/output/MessageRenderer';
 
 import { useLiveQuery } from 'dexie-react-hooks';
+
+
 
 const TerminalOutput = () => {
   const { lastCursor } = useTerminal();
@@ -15,7 +18,9 @@ const TerminalOutput = () => {
       .where('process')
       .anyOf(activeProcess.id, 'output')
       .and((x) => x.id! > lastCursor)
-      .toArray();
+      .sortBy('id');
+
+   
 
     return results;
   }, [lastCursor, activeProcess]);

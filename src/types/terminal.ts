@@ -4,5 +4,5 @@ export type TerminalCommand = {
   flags: string[];
   description: string;
   usage: string;
-  handler: (args: string[]) => Promise<void> | void;
+  handler: (args: string[], command: string) => Promise<void> | void;
 };
