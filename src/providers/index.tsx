@@ -1,7 +1,6 @@
 import ArweaveProvider from './ArweaveProvider';
 import ErrorProvider from './ErrorProvider';
 import QueryProvider from './QueryProvider';
-import SEOProvider from './SEOProvider';
 import ThemeProvider from './ThemeProvider';
 
 const ProviderTree = ({ children }: React.PropsWithChildren) => {
@@ -9,9 +8,7 @@ const ProviderTree = ({ children }: React.PropsWithChildren) => {
     <ErrorProvider>
       <ThemeProvider defaultTheme='light' storageKey='theme'>
         <ArweaveProvider>
-          <SEOProvider>
-            <QueryProvider>{children}</QueryProvider>
-          </SEOProvider>
+          <QueryProvider>{children}</QueryProvider>
         </ArweaveProvider>
       </ThemeProvider>
     </ErrorProvider>

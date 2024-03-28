@@ -82,7 +82,7 @@ const Terminal = () => {
         <span className='text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl font-medium'>
           This is a terminal emulator that allows you to interact with the AOS.
           Start by using the{' '}
-          <code className='text-black bg-neutral-200/60 px-1 py-[1px] rounded-md'>
+          <code className='text-black bg-neutral-100 px-1 py-[1px] rounded-md dark:bg-black/15 dark:text-neutral-300'>
             aos help
           </code>{' '}
           command to see all available commands.

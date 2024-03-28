@@ -18,7 +18,7 @@ export const useTerminalStore = create<State & Actions>((set) => ({
   text: '',
   executing: false,
   refocus: false,
-  isNearBottom: false,
+  isNearBottom: true,
   setText: (text) => set({ text }),
   setIsExecuting: (executing) => set({ executing }),
   setRefocus: (refocus) => set({ refocus }),
