@@ -7,9 +7,7 @@ import { useTheme } from '~/lib/hooks';
 import { useDebugFile } from '~/lib/stores';
 import { useEditor } from '~/lib/stores/editor';
 import { editorThemes } from '~/lib/themes';
-import { cn } from '~/lib/utils';
 
-// import { darkTheme, lightTheme } from '~/lib/themes';
 import {
   ResizableHandle,
   ResizablePanel,

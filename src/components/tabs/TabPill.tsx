@@ -15,8 +15,7 @@ interface Props {
 
 const TabPill = ({ path }: Props) => {
   const { activePath, setActivePath } = useEditor();
-  const { isActive: isDebugActive, setIsActive: setIsDebugActive } =
-    useDebugFile();
+  const { setIsActive: setIsDebugActive } = useDebugFile();
 
   const file = useLiveQuery(async () => {
     const file = await db.files.get(path);
