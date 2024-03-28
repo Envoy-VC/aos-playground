@@ -25,6 +25,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/sw/worker.ts", "public/stylua_lib_bg.js"],
+  "include": ["src", "public/stylua_lib_bg.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

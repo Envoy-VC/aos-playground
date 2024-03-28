@@ -32,8 +32,9 @@ const RunDebugPanel = () => {
       if (!filePath) {
         throw new Error('No file selected to debug!');
       }
-      // TODO: Wrap around a web worker
       const result = await getRequireValuesFromAST(filePath);
+
+      console.log(result);
       setResult(result);
       setIsActive(true);
     } catch (error) {

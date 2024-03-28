@@ -65,6 +65,9 @@ dependencies:
   clsx:
     specifier: ^2.1.0
     version: 2.1.0
+  comlink:
+    specifier: ^4.4.1
+    version: 4.4.1
   dexie:
     specifier: ^3.2.6
     version: 3.2.6(karma@6.4.3)
@@ -134,9 +137,6 @@ dependencies:
   vaul:
     specifier: ^0.9.0
     version: 0.9.0(@types/react-dom@18.2.22)(@types/react@18.2.66)(react-dom@18.2.0)(react@18.2.0)
-  vite-plugin-comlink:
-    specifier: ^4.0.2
-    version: 4.0.2(comlink@4.4.1)(vite@5.1.6)
   vite-tsconfig-paths:
     specifier: ^4.3.2
     version: 4.3.2(typescript@5.4.2)(vite@5.1.6)
@@ -6372,13 +6372,6 @@ packages:
       magic-string: 0.30.8
     dev: true
 
-  /magic-string@0.30.5:
-    resolution: {integrity: sha512-7xlpfBaQaP/T6Vh8MO/EqXSW5En6INHEvEXQiuff7Gku0PWjU3uf6w/j9o7O+SpB5fOAkrI5HeoNgwjEO0pFsA==}
-    engines: {node: '>=12'}
-    dependencies:
-      '@jridgewell/sourcemap-codec': 1.4.15
-    dev: false
-
   /magic-string@0.30.8:
     resolution: {integrity: sha512-ISQTe55T2ao7XtlAStud6qwYPZjE4GK1S/BeVPus4jrq6JuOnQ00YKQC581RWhR122W7msZV263KzVeLoqidyQ==}
     engines: {node: '>=12'}
@@ -8701,19 +8694,6 @@ packages:
       '@types/unist': 3.0.2
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
-    dev: false
-
-  /vite-plugin-comlink@4.0.2(comlink@4.4.1)(vite@5.1.6):
-    resolution: {integrity: sha512-3XZmJ7hqLj4ZdDCfbUSyjnCZVrXpah2wDhHaoJw3gUIfh6bDYzli7ptpPnjnLWG4SptLCxSneGC7ARTP5+u1Wg==}
-    peerDependencies:
-      comlink: ^4.3.1
-      vite: '>=2.9.6'
-    dependencies:
-      comlink: 4.4.1
-      json5: 2.2.3
-      magic-string: 0.30.5
-      source-map: 0.7.4
-      vite: 5.1.6(@types/node@20.11.27)
     dev: false
 
   /vite-plugin-image-optimizer@1.1.7(vite@5.1.6):

@@ -1,11 +1,13 @@
+import { WorkerModule } from '~/sw/worker';
 import type { RequireFile } from '~/types';
 
 import { db } from '../db';
 
+import { wrap } from 'comlink';
 import { type Chunk, type Node, parse } from 'luaparse';
 import traverse from 'traverse';
 
-export async function getRequireValuesFromAST(
+export async function extractRequireFiles(
   filePath: string
 ): Promise<RequireFile[]> {
   const requirePcallValues: RequireFile[] = [];
@@ -81,4 +83,12 @@ export const getFilePath = (filePath: string) => {
   filePath = filePath.replace(/['"]+/g, '');
   const path = filePath.replace(/\./g, '/');
   return `${path}.lua`;
+};
+
+export const getRequireValuesFromAST = async (filePath: string) => {
+  const url = new URL('../../sw/worker', import.meta.url);
+  const worker = new Worker(url, { type: 'module' });
+  const instance = wrap<WorkerModule>(worker);
+  const res = await instance.extractRequireFiles(filePath);
+  return res;
 };
