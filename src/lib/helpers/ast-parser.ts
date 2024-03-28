@@ -86,8 +86,9 @@ export const getFilePath = (filePath: string) => {
 };
 
 export const getRequireValuesFromAST = async (filePath: string) => {
-  const url = new URL('../../sw/worker', import.meta.url);
-  const worker = new Worker(url, { type: 'module' });
+  const worker = new Worker(new URL('../../sw/worker', import.meta.url), {
+    type: 'module',
+  });
   const instance = wrap<WorkerModule>(worker);
   const res = await instance.extractRequireFiles(filePath);
   return res;
