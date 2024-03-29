@@ -43,7 +43,6 @@ const deploy = async () => {
   console.log('Current size: ', size);
   const cost = irys.utils.fromAtomic(await irys.getPrice(size));
   console.log('Cost to Upload: ', cost);
-  return;
   try {
     const receipt = await irys.uploadFolder(folderToUpload, {
       indexFile: 'index.html',
