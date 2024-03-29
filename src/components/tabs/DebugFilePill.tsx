@@ -18,10 +18,9 @@ const DebugFilePill = () => {
           'h-[4dvh] min-w-[160px] cursor-pointer border-r flex flex-col',
           isActive
             ? 'bg-[var(--tab-activeBackground)]'
-            : 'bg-[var(---tab-inactiveBackground)]'
+            : 'bg-[var(--tab-inactiveBackground)]'
         )}
       >
-        {isActive && <div className='w-full h-1 bg-blue-500'></div>}
         <div className='flex flex-row items-center justify-between gap-2 h-full px-2'>
           <div
             className='flex w-full flex-row items-center gap-2'
