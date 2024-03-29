@@ -62,6 +62,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@irys/sdk": "^0.1.21",
     "@shikijs/monaco": "^1.2.1",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/luaparse": "^0.2.12",

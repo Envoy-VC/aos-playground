@@ -73,7 +73,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Geist', 'sans-serif'],
-        mono: ['Geist Mono', 'monospace'],
+        mono: ['Fira Code', 'monospace'],
       },
     },
   },

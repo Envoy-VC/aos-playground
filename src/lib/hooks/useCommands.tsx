@@ -93,7 +93,7 @@ export const useCommands = () => {
     },
     {
       name: 'aos set-active',
-      params: ['process_id'],
+      params: ['pid'],
       flags: [],
       description: 'Sets the active process in the Playground',
       usage: 'aos set-active <process_id>',
@@ -127,61 +127,55 @@ const printToConsole = async (Element: JSX.Element) => {
 
 export const AOSHelp = ({ commands }: { commands: TerminalCommand[] }) => {
   return (
-    <div className='flex flex-col font-sans gap-4 max-w-screen-lg select-none py-3'>
-      <div className='text-sm text-neutral-600 dark:text-neutral-300'>
-        Here are some commands to get you started.
+    <div className='flex flex-col font-mono gap-4 max-w-screen-md select-text py-3 w-full'>
+      <div className='flex flex-col text-base'>
+        <div className='font-medium'>Version: 0.0.1</div>
+        <div className='font-medium'>
+          Usage: <span className='font-normal'>aos [command] [options]</span>
+        </div>
       </div>
-      <table className='table-auto w-full border'>
-        <thead>
-          <tr>
-            <th className='px-4 py-2 font-medium text-sm text-start'>Name</th>
-            <th className='px-4 py-2 font-medium text-sm'>Parameters</th>
-            <th className='px-4 py-2 font-medium text-sm '>Flags</th>
-            <th className='px-4 py-2 font-medium text-sm '>Description</th>
-            <th className='px-4 py-2 font-medium text-sm '>Usage</th>
-          </tr>
-        </thead>
-        <tbody>
-          {commands.map((command, index) => (
-            <tr key={index}>
-              <td className='border px-4 py-2'>{command.name}</td>
-              <td className='border px-4 py-2'>
-                {command.params.join(', ') === ''
-                  ? '-'
-                  : command.params.join(', ')}
-              </td>
-              <td className='border px-4 py-2'>
-                {command.flags.join(', ') === ''
-                  ? '-'
-                  : command.flags.join(', ')}
-              </td>
-              <td className='border px-4 py-2'>{command.description}</td>
-              <td className='border px-4 py-2'>
-                <pre className='font-mono'>{command.usage}</pre>
-              </td>
-            </tr>
+
+      <div className='flex flex-col w-full'>
+        {commands
+          .filter((c) => c.name.startsWith('aos'))
+          .map((command) => (
+            <div className='flex flex-row items-center'>
+              <div className='basis-1/3 w-full'>
+                <div className='flex flex-row items-center gap-1'>
+                  <div>{command.name}</div>
+                  <div className='text-blue-400'>
+                    {command.params.join(' ')}
+                  </div>
+                </div>
+              </div>
+              <div className='basis-2/3 w-full'>
+                <div>{command.description}</div>
+              </div>
+            </div>
           ))}
-        </tbody>
-      </table>
+      </div>
     </div>
   );
 };
 
 export const ProcessList = ({ processes }: { processes: Process[] }) => {
   return (
-    <div className='flex flex-col gap-4 max-w-xl w-full'>
-      <table className='table-auto w-full'>
-        <tbody>
-          {processes.map((process, index) => (
-            <tr key={index}>
-              <td className='py-2'>{process.name}</td>
-              <td className='py-2'>
-                {process.id.slice(0, 8)}...{process.id.slice(-8)}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className='flex flex-col gap-4 max-w-xl w-full font-mono'>
+      <div className='flex flex-col text-base font-medium'>
+        List of Imported Processes
+      </div>
+      <div className='flex flex-col w-full'>
+        {processes.map((process) => (
+          <div className='flex flex-row items-center'>
+            <div className='basis-1/3 w-full'>
+              <div>{process.name}</div>
+            </div>
+            <div className='basis-2/3 w-full'>
+              <div>{process.id}</div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

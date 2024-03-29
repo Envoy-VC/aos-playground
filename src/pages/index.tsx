@@ -1,7 +1,9 @@
 import React from 'react';
 import { ImperativePanelHandle } from 'react-resizable-panels';
 
+import { useEditorConfig, useTheme } from '~/lib/hooks';
 import { useSidebar } from '~/lib/stores';
+import { editorThemes } from '~/lib/themes';
 
 import { IconPanel, MainPanel, SidePanel } from '~/components/panels';
 import {
@@ -12,6 +14,8 @@ import {
 
 const Home = () => {
   const { setPanel } = useSidebar();
+  const { theme } = useTheme();
+  const { editorOptions } = useEditorConfig();
   const sidebarPanel = React.useRef<ImperativePanelHandle | null>(null);
 
   React.useEffect(() => {
@@ -19,6 +23,15 @@ const Home = () => {
       setPanel(sidebarPanel.current);
     }
   }, [sidebarPanel]);
+
+  React.useEffect(() => {
+    const root = document.documentElement;
+    const editorTheme =
+      theme === 'dark' ? editorOptions.darkTheme : editorOptions.lightTheme;
+    const backgroundColor = editorThemes.find((t) => t.name === editorTheme)
+      ?.colors?.['editor.background']!;
+    root.style.setProperty('--background', backgroundColor);
+  }, [editorOptions, theme]);
 
   return (
     <div className='font-sans bg-background'>

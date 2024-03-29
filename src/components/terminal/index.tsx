@@ -78,9 +78,10 @@ const Terminal = () => {
       ref={containerRef}
     >
       <div className='flex flex-col pb-3'>
-        <span className='text-lg'>Welcome to AOS Terminal!</span>
-        <span className='text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl font-medium'>
-          This is a terminal emulator that allows you to interact with the AOS.
+        <span className='text-lg font-medium text-neutral-600 dark:text-neutral-300'>
+          Welcome to AOS Terminal!
+        </span>
+        <span className='text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl'>
           Start by using the{' '}
           <code className='text-black bg-neutral-100 px-1 py-[1px] rounded-md dark:bg-black/15 dark:text-neutral-300'>
             aos help
@@ -88,6 +89,7 @@ const Terminal = () => {
           command to see all available commands.
         </span>
       </div>
+
       <TerminalOutput />
       {!executing && <TerminalInput ref={inputRef} />}
       <CommandLoading />

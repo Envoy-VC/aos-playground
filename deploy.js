@@ -15,7 +15,8 @@ const getDirSize = (dirPath) => {
     const stats = fs.statSync(filePath);
 
     if (stats.isFile()) {
-      size += stats.size;
+      // only add if greater than  because uploads less than 100kb are free
+      if (stats.size > 102400) size += stats.size;
     } else if (stats.isDirectory()) {
       size += getDirSize(filePath);
     }
@@ -25,12 +26,11 @@ const getDirSize = (dirPath) => {
 };
 
 const deploy = async () => {
-  const url = 'node2';
   //const providerUrl = 'https://mumbai.rpc.thirdweb.com/';
   const token = 'matic';
 
   const irys = new Irys({
-    url,
+    network: 'mainnet',
     token,
     key: process.env.WALLET_PK,
     //config: { providerUrl },
@@ -43,6 +43,7 @@ const deploy = async () => {
   console.log('Current size: ', size);
   const cost = irys.utils.fromAtomic(await irys.getPrice(size));
   console.log('Cost to Upload: ', cost);
+  return;
   try {
     const receipt = await irys.uploadFolder(folderToUpload, {
       indexFile: 'index.html',
