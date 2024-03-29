@@ -47,7 +47,9 @@ const TabPill = ({ path }: Props) => {
       <div
         className={cn(
           'h-[4dvh] min-w-[160px] cursor-pointer border-r flex flex-col',
-          activePath === path ? 'bg-blue-500/5' : ''
+          activePath === path
+            ? 'bg-[var(--tab-activeBackground)]'
+            : 'bg-[var(---tab-inactiveBackground)]'
         )}
       >
         {activePath === path && <div className='w-full h-1 bg-blue-500'></div>}

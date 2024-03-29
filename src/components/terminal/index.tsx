@@ -74,7 +74,7 @@ const Terminal = () => {
 
   return (
     <div
-      className='h-full p-2 font-mono overflow-y-scroll pb-12'
+      className='h-full p-2 font-mono overflow-y-scroll pb-12 text-[var(--terminal-foreground)]'
       ref={containerRef}
     >
       <div className='flex flex-col pb-3'>

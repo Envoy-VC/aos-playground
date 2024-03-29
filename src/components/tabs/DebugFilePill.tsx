@@ -16,7 +16,9 @@ const DebugFilePill = () => {
       <div
         className={cn(
           'h-[4dvh] min-w-[160px] cursor-pointer border-r flex flex-col',
-          isActive ? 'bg-blue-500/5' : ''
+          isActive
+            ? 'bg-[var(--tab-activeBackground)]'
+            : 'bg-[var(---tab-inactiveBackground)]'
         )}
       >
         {isActive && <div className='w-full h-1 bg-blue-500'></div>}

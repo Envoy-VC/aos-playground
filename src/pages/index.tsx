@@ -28,9 +28,20 @@ const Home = () => {
     const root = document.documentElement;
     const editorTheme =
       theme === 'dark' ? editorOptions.darkTheme : editorOptions.lightTheme;
-    const backgroundColor = editorThemes.find((t) => t.name === editorTheme)
-      ?.colors?.['editor.background']!;
+    const currentEditorTheme = editorThemes.find((t) => t.name === editorTheme);
+    if (!currentEditorTheme) return;
+    const backgroundColor = currentEditorTheme.colors['editor.background'];
+    const popoverColor = currentEditorTheme.colors['activityBar.background'];
+    const accentBg = currentEditorTheme.colors['activityBarBadge.background'];
+
+    Object.entries(currentEditorTheme.colors).forEach(([key, value]) => {
+      const variable = '--' + key.split('.').join('-');
+      root.style.setProperty(variable, value);
+    });
+
     root.style.setProperty('--background', backgroundColor);
+    root.style.setProperty('--popover', popoverColor);
+    root.style.setProperty('--accent', accentBg);
   }, [editorOptions, theme]);
 
   return (
