@@ -32,13 +32,16 @@
     --muted: hsl(0 0% 96.1%);
     --muted-foreground: hsl(0 0% 45.1%);
 
+    --ghost-background: #ffffff00;
+    --ghost-foreground: hsl(0 0% 9%);
+
     --accent: var(--activityBarBadge-background);
     --accent-foreground: var(--activityBarBadge-foreground);
 
     --destructive: hsl(0 84.2% 60.2%);
     --destructive-foreground: hsl(0 0% 98%);
 
-    --border: var(--editorGroup-border);
+    --border: var(--dropdown-border);
     --input: hsl(0 0% 89.8%);
     --ring: hsla(0, 0%, 4%, 0);
 
@@ -63,6 +66,9 @@
 
     --muted: hsl(0 0% 14.9%);
     --muted-foreground: hsl(0 0% 63.9%);
+
+    --ghost-background: #ffffff00;
+    --ghost-foreground: hsl(0 0% 98%);
 
     --accent: var(--activityBarBadge-background);
     --accent-foreground: var(--activityBarBadge-foreground);
