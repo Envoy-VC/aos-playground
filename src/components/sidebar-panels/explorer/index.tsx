@@ -169,6 +169,7 @@ const ExplorerPanel = () => {
               <Folder className='h-full w-full max-h-4 max-w-4 text-neutral-600 dark:text-neutral-400' />
             )}
             <Input
+              spellCheck={false}
               ref={inputRef}
               value={name}
               onChange={(e) => setName(e.target.value)}

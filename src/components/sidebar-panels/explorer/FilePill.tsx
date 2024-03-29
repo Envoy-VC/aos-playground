@@ -123,6 +123,7 @@ const FilePill = ({ name, path, content, parentFolder }: EditorFile) => {
           )}
           {isRenaming && (
             <Input
+              spellCheck={false}
               ref={renameRef}
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
