@@ -30,23 +30,16 @@ const Home = () => {
       theme === 'dark' ? editorOptions.darkTheme : editorOptions.lightTheme;
     const currentEditorTheme = editorThemes.find((t) => t.name === editorTheme);
     if (!currentEditorTheme) return;
-    const backgroundColor = currentEditorTheme.colors['editor.background'];
-    const popoverColor = currentEditorTheme.colors['activityBar.background'];
-    const accentBg = currentEditorTheme.colors['activityBarBadge.background'];
 
     Object.entries(currentEditorTheme.colors).forEach(([key, value]) => {
       const variable = '--' + key.split('.').join('-');
       root.style.setProperty(variable, value);
     });
-
-    root.style.setProperty('--background', backgroundColor);
-    root.style.setProperty('--popover', popoverColor);
-    root.style.setProperty('--accent', accentBg);
   }, [editorOptions, theme]);
 
   return (
     <div className='font-sans bg-background'>
-      <div className='h-full max-h-screen w-full flex-row overflow-hidden flex'>
+      <div className='h-full max-h-screen w-full flex-row overflow-hidden flex tet-[#d0679d]'>
         <IconPanel />
         <ResizablePanelGroup
           direction='horizontal'
