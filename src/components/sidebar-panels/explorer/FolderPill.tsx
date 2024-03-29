@@ -60,7 +60,7 @@ const FolderPill = ({
   const onRename = async () => {
     try {
       if (newName === name) {
-        throw new Error('Name is the same');
+        return;
       }
       const newFolderName = newName.trim();
       const oldRootPath = path;
