@@ -54,17 +54,17 @@ export const onCreate = async (
   isCreating: 'file' | 'folder'
 ) => {
   if (name.trim() === '') {
-    return;
+    throw new Error('Name cannot be empty');
   }
 
   const type = isCreating === 'file' ? 'file' : 'folder';
   if (type === 'file') {
     const extension = name.split('.').pop() ?? null;
     if (!extension) {
-      return;
+      throw new Error('Invalid file name');
     }
     if (!supportedExtensions.includes(extension)) {
-      return;
+      throw new Error('Unsupported file extension');
     }
     const path = `${parentFolder}${name}`;
 
