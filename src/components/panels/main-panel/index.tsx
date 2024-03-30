@@ -8,6 +8,7 @@ import { useEditorConfig, useTheme } from '~/lib/hooks';
 import { useDebugFile } from '~/lib/stores';
 import { useEditor } from '~/lib/stores/editor';
 import { editorThemes } from '~/lib/themes';
+import { cn } from '~/lib/utils';
 
 import {
   ResizableHandle,
@@ -33,6 +34,8 @@ const MainPanel = () => {
   const { setMonaco, activePath, setActivePath } = useEditor();
   const { isActive: isDebuggerActive, result } = useDebugFile();
   const terminalPanelRef = React.useRef<ImperativePanelHandle | null>(null);
+
+  const [editorMounted, setEditorMounted] = React.useState<boolean>(false);
 
   const { editorOptions } = useEditorConfig();
 
@@ -69,6 +72,8 @@ const MainPanel = () => {
   );
 
   const handleMount = async (editor: Types.editor.IStandaloneCodeEditor) => {
+    setEditorMounted(false);
+
     setMonaco(editor);
 
     const themes = editorThemes.map((theme) => theme.name);
@@ -125,6 +130,7 @@ const MainPanel = () => {
       },
     });
     editorRef.current = editor;
+    setEditorMounted(true);
   };
 
   React.useEffect(() => {
@@ -162,22 +168,23 @@ const MainPanel = () => {
           collapsible
           collapsedSize={0}
         >
-          {isDebuggerActive && result.length > 0 ? (
-            <DebugPanel />
-          ) : activeFile ? (
+          {isDebuggerActive && result.length > 0 && <DebugPanel />}
+
+          {activeFile && !isDebuggerActive && (
             <Editor
               language={activeFile.language}
               value={activeFile.content}
               path={activeFile.path.slice(1, activeFile.path.length)}
-              onMount={handleMount}
+              onMount={async (e) => await handleMount(e)}
               options={{
                 wordWrap: 'on',
               }}
+              className={cn(editorMounted ? 'visible' : 'invisible')}
               onChange={(v) => onCodeChange(v ?? '')}
             />
-          ) : (
-            <DefaultPage />
           )}
+
+          {(!editorMounted || !activeFile) && <DefaultPage />}
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel

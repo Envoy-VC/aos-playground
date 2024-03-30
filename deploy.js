@@ -26,14 +26,14 @@ const getDirSize = (dirPath) => {
 };
 
 const deploy = async () => {
-  //const providerUrl = 'https://mumbai.rpc.thirdweb.com/';
-  const token = 'matic';
+  const providerUrl = 'https://sepolia.infura.io/v3/';
+  const token = 'ethereum';
 
   const irys = new Irys({
-    network: 'mainnet',
+    network: 'devnet',
     token,
     key: process.env.WALLET_PK,
-    //config: { providerUrl },
+    config: { providerUrl },
   });
   await irys.ready();
   const folderToUpload = './dist';
@@ -43,6 +43,10 @@ const deploy = async () => {
   console.log('Current size: ', size);
   const cost = irys.utils.fromAtomic(await irys.getPrice(size));
   console.log('Cost to Upload: ', cost);
+  if (balance.lt(cost)) {
+    console.log('Insufficient balance to upload');
+    return;
+  }
   try {
     const receipt = await irys.uploadFolder(folderToUpload, {
       indexFile: 'index.html',

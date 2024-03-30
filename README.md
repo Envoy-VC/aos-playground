@@ -1,7 +1,7 @@
 <p align="center">
   <picture aligh="center">
-    <source media="(prefers-color-scheme: dark)" srcset="./logo-dark.png">
-    <img alt="AOS Playground Logo" src="./logo-light.png" width="400px">
+    <source media="(prefers-color-scheme: dark)" srcset="./public/logo-dark.png">
+    <img alt="AOS Playground Logo" src="./public/logo-light.png" width="400px">
   </picture>
 </p>
 
